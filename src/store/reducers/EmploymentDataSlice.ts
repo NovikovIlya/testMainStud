@@ -19,19 +19,12 @@ const EmploymentDataSlice = createSlice({
 		},
 		setHasRequisites: (state, action: PayloadAction<string>) => {
 			state.empData.stages = state.empData.stages.map(stage => {
-				return stage.type === action.payload
-					? { ...stage, hasRequisites: !stage.hasRequisites }
-					: stage
+				return stage.type === action.payload ? { ...stage, hasRequisites: !stage.hasRequisites } : stage
 			})
 		},
-		setBank: (
-			state,
-			action: PayloadAction<{ stage: string; bank: 'SBER' | 'VTB' | undefined }>
-		) => {
+		setBank: (state, action: PayloadAction<{ stage: string; bank: 'SBER' | 'VTB' | undefined }>) => {
 			state.empData.stages = state.empData.stages.map(stage => {
-				return stage.type === action.payload.stage
-					? { ...stage, bank: action.payload.bank }
-					: stage
+				return stage.type === action.payload.stage ? { ...stage, bank: action.payload.bank } : stage
 			})
 		},
 		setPartialData: (
@@ -42,42 +35,29 @@ const EmploymentDataSlice = createSlice({
 				id: number
 				name: string
 				size: number
+				mustUpload: boolean
 			}>
 		) => {
-			state.empData.stages.find(
-				stage => stage.type === action.payload.stageName
-			)!.documents = [
-				...state.empData.stages.find(
-					stage => stage.type === action.payload.stageName
-				)!.documents,
+			state.empData.stages.find(stage => stage.type === action.payload.stageName)!.documents = [
+				...state.empData.stages.find(stage => stage.type === action.payload.stageName)!.documents,
 				{
 					docType: action.payload.docType,
 					id: action.payload.id,
 					status: 'ATTACHED',
 					name: action.payload.name,
-					size: action.payload.size
+					size: action.payload.size,
+					mustUpload: action.payload.mustUpload
 				}
 			]
 		},
-		removePartialData: (
-			state,
-			action: PayloadAction<{ stageName: string; docId: number }>
-		) => {
-			state.empData.stages.find(
-				stage => stage.type === action.payload.stageName
-			)!.documents = state.empData.stages
+		removePartialData: (state, action: PayloadAction<{ stageName: string; docId: number }>) => {
+			state.empData.stages.find(stage => stage.type === action.payload.stageName)!.documents = state.empData.stages
 				.find(stage => stage.type === action.payload.stageName)!
 				.documents.filter(doc => doc.id !== action.payload.docId)
 		}
 	}
 })
 
-export const {
-	setAllData,
-	setHasRequisites,
-	setBank,
-	setPartialData,
-	removePartialData
-} = EmploymentDataSlice.actions
+export const { setAllData, setHasRequisites, setBank, setPartialData, removePartialData } = EmploymentDataSlice.actions
 
 export default EmploymentDataSlice.reducer

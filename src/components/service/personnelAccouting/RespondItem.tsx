@@ -5,11 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { setCurrentVacancyName } from '../../../store/reducers/CurrentVacancyNameSlice'
 import { VacancyGroupedResponcesType } from '../../../store/reducers/type'
 
-export const RespondItem = ({
-	vacancyId,
-	vacancyTitle,
-	respondsCount
-}: VacancyGroupedResponcesType) => {
+export const RespondItem = ({ vacancyId, vacancyTitle, respondsCount }: VacancyGroupedResponcesType) => {
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
 
@@ -20,9 +16,7 @@ export const RespondItem = ({
 			<Button
 				onClick={() => {
 					dispatch(setCurrentVacancyName(vacancyTitle))
-					navigate(
-						`/services/personnelaccounting/responds/byvacancy/?vacancy=${vacancyTitle}&id=${vacancyId}`
-					)
+					navigate(`/services/personnelaccounting/responds/byvacancy/?vacancy=${vacancyTitle}&id=${vacancyId}`)
 				}}
 				className="ml-[15%] max-w-[15%] font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"
 			>

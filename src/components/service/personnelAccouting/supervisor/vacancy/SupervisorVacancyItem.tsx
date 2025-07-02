@@ -1,4 +1,5 @@
 import { Button, ConfigProvider, Modal } from 'antd'
+import { t } from 'i18next'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -13,12 +14,11 @@ import {
 } from '../../../../../store/api/serviceApi'
 import { setCurrentVacancy } from '../../../../../store/reducers/CurrentVacancySlice'
 import { VacancyItemType } from '../../../../../store/reducers/type'
-import { useAlert } from '../../../../../utils/Alert/AlertMessage'
 import styles from '../../../../../utils/deleteOverwriteAntButton.module.css'
 
-export default function VacancyItem(props: VacancyItemType) {
-	const { openAlert } = useAlert()
-
+export default function VacancyItem(
+	props: VacancyItemType & { handleAlert: (text: string, type: 'SUCCESS' | 'ERROR') => void }
+) {
 	const [getVacancy, result] = useLazyGetVacancyViewQuery()
 	const navigate = useNavigate()
 	const [isModalOpen, setModalOpen] = useState(false)
@@ -109,34 +109,64 @@ export default function VacancyItem(props: VacancyItemType) {
 							</Button>
 							<Button
 								className={`${styles.customAntButton}`}
-								onClick={async () => {
-									try {
-										await getAllRequests('DELETE')
-											.unwrap()
-											.then(requests => {
-												let alreadyRequest = requests.content.find(req => {
-													return req.vacancy.id === props.id && req.status === 'VERIFYING'
-												})
-												alreadyRequest
-													? (setModalOpen(false),
-													  setSuccessModalText(
-															'Вы уже отправляли заявку на удаление данной вакансии. Она будет удалена, как только ваша заявка будет рассмотрена.'
-													  ),
-													  setIsSuccessModalOpen(true))
-													: requestDeleteVacancy(props.id)
-															.unwrap()
-															.then(() => {
-																setModalOpen(false)
-																setSuccessModalText(
-																	'Ваша заявка на удаление вакансии успешно отправлена. Вакансия будет удалена после рассмотрения заявки кадрами.'
-																)
-																setIsSuccessModalOpen(true)
-															})
+								// onClick={async () => {
+								// 	try {
+								// 		await getAllRequests('DELETE')
+								// 			.unwrap()
+								// 			.then(requests => {
+								// 				let alreadyRequest = requests.content.find(req => {
+								// 					return req.vacancy.id === props.id && req.status === 'VERIFYING'
+								// 				})
+								// 				alreadyRequest
+								// 					? (setModalOpen(false),
+								// 					  setSuccessModalText(
+								// 							'Вы уже отправляли заявку на удаление данной вакансии. Она будет удалена, как только ваша заявка будет рассмотрена.'
+								// 					  ),
+								// 					  setIsSuccessModalOpen(true))
+								// 					: requestDeleteVacancy(props.id)
+								// 							.unwrap()
+								// 							.then(() => {
+								// 								setModalOpen(false)
+								// 								setSuccessModalText(
+								// 									'Ваша заявка на удаление вакансии успешно отправлена. Вакансия будет удалена после рассмотрения заявки кадрами.'
+								// 								)
+								// 								setIsSuccessModalOpen(true)
+								// 							})
+								// 			})
+								// 	} catch (error: any) {
+								// 		let errorStr = error.status + ' ' + error.data.message
+								// 		props.handleAlert(t('errorAlert'), 'ERROR')
+								// 	}
+								// }}
+								onClick={() => {
+									getAllRequests('DELETE')
+										.unwrap()
+										.then(requests => {
+											let alreadyRequest = requests.content.find(req => {
+												return req.vacancy.id === props.id && req.status === 'VERIFYING'
 											})
-									} catch (error: any) {
-										let errorStr = error.status + ' ' + error.data.message
-										openAlert({ type: 'error', text: errorStr })
-									}
+											alreadyRequest
+												? (setModalOpen(false),
+												  setSuccessModalText(
+														'Вы уже отправляли заявку на удаление данной вакансии. Она будет удалена, как только ваша заявка будет рассмотрена.'
+												  ),
+												  setIsSuccessModalOpen(true))
+												: requestDeleteVacancy(props.id)
+														.unwrap()
+														.then(() => {
+															setModalOpen(false)
+															setSuccessModalText(
+																'Ваша заявка на удаление вакансии успешно отправлена. Вакансия будет удалена после рассмотрения заявки кадрами.'
+															)
+															setIsSuccessModalOpen(true)
+														})
+														.catch(() => {
+															props.handleAlert(t('alertError'), 'ERROR')
+														})
+										})
+										.catch(() => {
+											props.handleAlert(t('alertError'), 'ERROR')
+										})
 								}}
 								loading={deleteRequestLoading}
 							>
@@ -147,16 +177,14 @@ export default function VacancyItem(props: VacancyItemType) {
 				</Modal>
 			</ConfigProvider>
 			<div className="flex w-full bg-white pl-[20px] pr-[55px] pt-[20px] pb-[20px] items-center shadow-custom-shadow">
-				<p className="w-[238px] shrink-0 font-content-font font-normal text-[16px]/[19px] text-black">{props.title}</p>
-				<div className="ml-[30px] flex gap-[40px] justify-between">
-					<p className="w-[104px] font-content-font font-normal text-[16px]/[19px] text-black whitespace-nowrap">
-						{props.experience}
-					</p>
-					<p className="w-[104px] font-content-font font-normal text-[16px]/[19px] text-black whitespace-nowrap">
-						{props.employment}
-					</p>
-				</div>
-				<p className="ml-[140px] w-[150px] font-content-font font-normal text-[16px]/[19px] text-black text-balance">
+				<p className="w-[30%] shrink-0 font-content-font font-normal text-[16px]/[19px] text-black">{props.title}</p>
+				<p className="ml-[5%] w-[10%] font-content-font font-normal text-[16px]/[19px] text-black whitespace-nowrap">
+					{props.experience}
+				</p>
+				<p className="ml-[40px] w-[10%] font-content-font font-normal text-[16px]/[19px] text-black whitespace-nowrap">
+					{props.employment}
+				</p>
+				<p className="ml-[5%] w-[8%] font-content-font font-normal text-[16px]/[19px] text-black text-balance">
 					{props.salary}
 				</p>
 				<Button
@@ -170,12 +198,12 @@ export default function VacancyItem(props: VacancyItemType) {
 								navigate(`/services/personnelaccounting/supervisor/vacancyview/${props.id}`)
 							})
 					}}
-					className="ml-[60px] font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"
+					className="ml-[10%] max-w-[15%] font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"
 				>
 					Подробнее
 				</Button>
 				<Button
-					className="ml-[90px]"
+					className="ml-auto max-w-[5%]"
 					onClick={() => {
 						setModalOpen(true)
 					}}

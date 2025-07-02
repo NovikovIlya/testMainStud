@@ -1,6 +1,6 @@
-import { Collapse, CollapseProps, ConfigProvider } from 'antd'
+import { Collapse, CollapseProps, ConfigProvider, notification } from 'antd'
 import clsx from 'clsx'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 
 import { BriefcaseSvg } from '../../../assets/svg/BriefcaseSvg'
 import { SignedIconSvg } from '../../../assets/svg/SignedIconSvg'
@@ -45,8 +45,16 @@ export const NavPesonnelAccounting = () => {
 	const { pathname } = useLocation()
 	const navigate = useNavigate()
 
+	const [api, contextHolder] = notification.useNotification()
+
 	const handleNavigate = (url: string) => {
 		navigate(url)
+	}
+
+	const handleAlert = (text: string, type: 'SUCCESS' | 'ERROR') => {
+		type === 'SUCCESS'
+			? api.success({ message: text, placement: 'bottomRight' })
+			: api.error({ message: text, placement: 'bottomRight' })
 	}
 
 	const { data: rolesData = undefined } = useGetEmploymentPossibleRolesQuery()
@@ -59,12 +67,12 @@ export const NavPesonnelAccounting = () => {
 
 	const navEmployeeList = [
 		{
-			id: '/services/personnelaccounting/responds',
+			id: 'personnelaccounting/responds',
 			icon: <RespondsIcon />,
 			name: 'Отклики'
 		},
 		{
-			id: '/services/personnelaccounting/chat',
+			id: 'personnelaccounting/chat/*',
 			icon: <ChatIcon />,
 			name: 'Сообщения'
 		},
@@ -582,43 +590,58 @@ export const NavPesonnelAccounting = () => {
 
 	return (
 		<>
+			{contextHolder}
 			<Header type="service" service="Трудоустройство" />
-			<div className="shadowNav">
-				<ul className="min-w-[230px] pt-14 flex flex-col gap-4 sticky top-[80px]">
+			<div className="shadowNav bg-white relative">
+				<ul className="w-[230px] pt-14 flex flex-col gap-4 sticky top-[80px]">
 					{isPersonnelDepartment ? handleList : <></>}
 					{isSupervisor ? handleSupervisorList : <></>}
 					{isAccounting ? handleAccountingList : <></>}
 					{isLaborProtection ? handleLaborProtectionList : <></>}
 				</ul>
 			</div>
-			<div className="bg-[#F5F8FB] flex w-full">
-				{pathname === navEmployeeList[0].id && <Responds />}
+			<div className="bg-[#F5F8FB] flex w-[calc(100%-230px)]">
+				<Routes>
+					<Route path={navEmployeeList[0].id} element={<Responds />}></Route>
+					{/* <Route
+						path="personnelaccounting/responds/byvacancy/:vacancyTitle/:vacancyId"
+						element={<VacancyResponces />}
+					></Route> */}
+					<Route
+						path="personnelaccounting/responds/fullinfo/:respondId"
+						element={<RespondInfo type="PERSONNEL_DEPARTMENT" />}
+					></Route>
+					<Route
+						path="personnelaccounting/supervisor/responds/fullinfo/:respondId"
+						element={<RespondInfo type="SUPERVISOR" />}
+					></Route>
+					<Route path={navEmployeeList[1].id} element={<ChatEmpDemp />}></Route>
+				</Routes>
+				{/* {pathname === navEmployeeList[0].id && <Responds />} */}
 				{pathname.match('services/personnelaccounting/responds/byvacancy/*') && <VacancyResponces />}
-				{pathname.match('services/personnelaccounting/responds/fullinfo') && (
+				{/* {pathname.match('services/personnelaccounting/responds/fullinfo') && (
 					<RespondInfo type="PERSONNEL_DEPARTMENT" />
-				)}
-				{pathname.match(/\/services\/personnelaccounting\/supervisor\/responds\/fullinfo\/\d+/) && (
+				)} */}
+				{/* {pathname.match(/\/services\/personnelaccounting\/supervisor\/responds\/fullinfo\/\d+/) && (
 					<RespondInfo type="SUPERVISOR" />
-				)}
-				{pathname.includes(navEmployeeList[1].id) && <ChatEmpDemp />}
+				)} */}
+				{/* {pathname.includes(navEmployeeList[1].id) && <ChatEmpDemp />} */}
 				{pathname === navEmployeeList[2].id && <DepEmployment />}
 				{pathname === navEmployeeList[3].id && <Catalog />}
 				{pathname.match('services/personnelaccounting/vacancies/vacancyedit') && <VacancyEditView />}
 				{pathname === '/services/personnelaccounting/vacancyrequests' && <VacancyRequestsPage />}
-
 				{pathname.match(/\/services\/personnelaccounting\/request\/create\/\d+/) && <VacancyRequestCreateView />}
 				{pathname.match(/\/services\/personnelaccounting\/request\/update\/\d+/) && <VacancyRequestUpdateView />}
 				{pathname.match(/\/services\/personnelaccounting\/request\/(\d+)\/delete\/(\d+)/) && (
 					<VacancyRequestDeleteView />
 				)}
-
 				{pathname === navEmployeeList[4].id && <Reserve />}
 				{pathname.match(/\/services\/personnelaccounting\/reserve\/fullinfo\/\d+/) && (
-					<ReserveRespondInfo type="PERSONNEL_DEPARTMENT" />
+					<ReserveRespondInfo type="PERSONNEL_DEPARTMENT" handleAlert={handleAlert} />
 				)}
 				{pathname === '/services/personnelaccounting/archive' && <Archive />}
 				{pathname.match(/\/services\/personnelaccounting\/archive\/fullinfo\/\d+/) && (
-					<ArchiveRespondInfo type="PERSONNEL_DEPARTMENT" />
+					<ArchiveRespondInfo type="PERSONNEL_DEPARTMENT" handleAlert={handleAlert} />
 				)}
 				{pathname === navSupervisorList[0].id && <RespondsSupervisor />}
 				{pathname === navSupervisorList[1].id && <></>}
@@ -627,7 +650,7 @@ export const NavPesonnelAccounting = () => {
 				{pathname.match(/\/services\/personnelaccounting\/supervisor\/vacancyview\/\d+/) && <SupervisorUpdateVacancy />}
 				{pathname === '/services/personnelaccounting/supervisor/invitation' && <SupervisorInterviews />}
 				{pathname === '/services/personnelaccounting/supervisor/scheduleinvitation' && <SupervisorInterviewCreate />}
-				{pathname.match(/\/services\/personnelaccounting\/supervisor\/invitation\/seekerinfo\/\d+/) && (
+				{pathname.match(/\/services\/personnelaccounting\/supervisor\/invitation\/seekerinfo\/\d+\/\d+/) && (
 					<SupervisorInterviewSeekerInfo />
 				)}
 				{pathname.match(/\/services\/personnelaccounting\/personnel-department\/employment\/stages\/\d+/) &&

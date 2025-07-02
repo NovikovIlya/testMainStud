@@ -1,10 +1,10 @@
-import { Button, ConfigProvider, DatePicker, Form, Input, Modal, Select, message } from 'antd'
+import { Button, ConfigProvider, DatePicker, Form, Input, Modal, Select, message, notification } from 'antd'
 import dayjs from 'dayjs'
+import { t } from 'i18next'
 import { useState } from 'react'
 import uuid from 'react-uuid'
 
 import { useInviteSeekerMutation } from '../../../../store/api/serviceApi'
-import { useAlert } from '../../../../utils/Alert/AlertMessage'
 
 export const InviteSeekerForm = (props: { respondId: number; isButtonDisabled: boolean; callback: Function }) => {
 	const [isFormOpen, setIsFormOpen] = useState<boolean>(false)
@@ -15,14 +15,7 @@ export const InviteSeekerForm = (props: { respondId: number; isButtonDisabled: b
 
 	const match = currentUrl.match(/\/fullinfo\/(\d+)$/)
 
-	let id_from_url: string
-	let current_page_id: number
-	if (match) {
-		id_from_url = match[1]
-	} else {
-		console.error('ID not found')
-	}
-	current_page_id = Number(id_from_url)
+	const current_page_id = parseInt(currentUrl.substring(currentUrl.lastIndexOf('/') + 1))
 
 	const [inviteSeeker, inviteSeekerQueryStatus] = useInviteSeekerMutation()
 
@@ -31,18 +24,13 @@ export const InviteSeekerForm = (props: { respondId: number; isButtonDisabled: b
 
 	const [form] = Form.useForm()
 
-	const { openAlert } = useAlert()
+	const [api, contextHolder] = notification.useNotification()
 
 	const handleDateChange = (e: any, dateString: any) => {
-		if (dayjs(e).isBefore(dayjs(), 'minute')) {
-			message.error('Нельзя выбрать время, которое уже наступило')
-			return
-		}
-
-		if (reservedTime.length >= 3) {
-			message.error('Максимальное количество резервных времён - 3')
-			return
-		}
+		// if (dayjs(e).isBefore(dayjs(), 'minute')) {
+		// 	message.error('Нельзя выбрать время, которое уже наступило')
+		// 	return
+		// }
 
 		if (dateString !== '') {
 			setReservedTimes([
@@ -58,6 +46,7 @@ export const InviteSeekerForm = (props: { respondId: number; isButtonDisabled: b
 
 	return (
 		<>
+			{contextHolder}
 			<Button
 				onClick={() => {
 					setIsFormOpen(true)
@@ -155,7 +144,7 @@ export const InviteSeekerForm = (props: { respondId: number; isButtonDisabled: b
 										setIsFormOpen(false)
 										setIsResultModalOpen(true)
 									} catch (error: any) {
-										openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+										api.error({ message: t('alertError'), placement: 'bottomRight' })
 										form.resetFields(['reserveTime'])
 									}
 								})
@@ -217,7 +206,18 @@ export const InviteSeekerForm = (props: { respondId: number; isButtonDisabled: b
 							label={
 								<label className="text-black text-[18px]/[18px] font-content-font font-normal">Дата и время</label>
 							}
-							rules={[{ required: reservedTime.length === 0, message: 'Не выбрано резервное время' }]}
+							rules={[
+								{
+									validator: () => {
+										if (reservedTime.length === 0) {
+											return Promise.reject('Должно быть выбрано хотя бы одно резервное время')
+										} else if (reservedTime.length > 3) {
+											return Promise.reject('Нельзя выбрать больше трёх резервных времён')
+										}
+										return Promise.resolve()
+									}
+								}
+							]}
 						>
 							<DatePicker
 								format={'DD.MM.YYYY, HH:mm'}
@@ -244,6 +244,7 @@ export const InviteSeekerForm = (props: { respondId: number; isButtonDisabled: b
 											className="cursor-pointer underline text-black font-content-font font-normal text-[16px]/[16px] opacity-40"
 											onClick={() => {
 												setReservedTimes(prev => reservedTime.filter(delTime => delTime.id !== res.id))
+												form.validateFields(['reserveTime'])
 											}}
 										>
 											Удалить

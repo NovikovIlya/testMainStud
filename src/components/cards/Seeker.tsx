@@ -1,12 +1,9 @@
+import { t } from 'i18next'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import img from '../../assets/images/image44.png'
-import {
-	keepFilterCategory,
-	keepFilterSubCategory,
-	keepFilterType
-} from '../../store/reducers/CatalogFilterSlice'
+import { keepFilterCategory, keepFilterSubCategory, keepFilterType } from '../../store/reducers/CatalogFilterSlice'
 
 export const Seeker = () => {
 	const navigate = useNavigate()
@@ -21,34 +18,20 @@ export const Seeker = () => {
 		>
 			<div className="flex flex-col h-full justify-between w-full  max-w-sm max-md:justify-center max-md:gap-5">
 				<span className="bg-none text-4xl font-bold text-start max-[560px]:text-center max-xl:text-3xl max-md:text-2xl">
-					Вакансии
+					{t('vacancies')}
 				</span>
 				<div className="flex justify-between w-[720px] border-dashed border-white border-0 border-b-2 pb-[20px]">
-					<p className="font-main-font font-normal text-[16px]/[28px]">
-						Инженер-программист
-					</p>
-					<p className="font-main-font font-bold text-[16px]/[28px]">
-						от 300 000 р.
-					</p>
+					<p className="font-main-font font-normal text-[16px]/[28px]">{t('staticVacancyOneTitle')}</p>
+					<p className="font-main-font font-bold text-[16px]/[28px]">{t('staticVacancyOneSalary')}</p>
 				</div>
 				<div className="flex justify-between w-[720px] border-dashed border-white border-0 border-b-2 pb-[20px]">
-					<p className="font-main-font font-normal text-[16px]/[28px]">
-						Медицинская сестра
-					</p>
-					<p className="font-main-font font-bold text-[16px]/[28px]">
-						от 100 000 р.
-					</p>
+					<p className="font-main-font font-normal text-[16px]/[28px]">{t('staticVacancyTwoTitle')}</p>
+					<p className="font-main-font font-bold text-[16px]/[28px]">{t('staticVacancyTwoSalary')}</p>
 				</div>
 			</div>
 			<div className="ml-[20%] flex max-[560px]:hidden items-center justify-center w-full">
 				<div className="bg-white rounded-full w-[256px] h-[245px]  absolute"></div>
-				<img
-					src={img}
-					alt=""
-					width={'231px'}
-					height={'233px'}
-					className="ml-6 mt-4 mb-2 bottom-[40px] z-10"
-				/>
+				<img src={img} alt="" width={'231px'} height={'233px'} className="ml-6 mt-4 mb-2 bottom-[40px] z-10" />
 			</div>
 			<div
 				className="flex w-fit max-[560px]:w-full justify-center items-center mr-[5%]"

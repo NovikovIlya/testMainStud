@@ -182,25 +182,32 @@ export const Responds = () => {
 					disabled={isCategoriesLoading}
 				/>
 				<h2 className="mt-[36px] font-content-font font-normal text-[18px]/[18px] text-black">
-					{categories.find(category => category.title === categoryTitle)?.direction ? 'Профобласть' : 'Подразделение'}
+					{categories.find(category => category.title === categoryTitle)?.directions.length !== 0
+						? 'Профобласть'
+						: 'Подразделение'}
 				</h2>
 				<Select
 					className="mt-[16px]"
 					style={{ width: 622 }}
-					options={
-						categories.find(category => category.title === categoryTitle)?.direction
+					options={(() => {
+						let cat = categories.find(category => category.title === categoryTitle)
+						return cat && cat.directions.length !== 0
 							? [
 									{ value: 'Все', label: 'Все' },
-									...directions.map(dir => ({
-										value: dir.title,
-										label: dir.title
+									...cat.directions.map(dir => ({
+										value: dir,
+										label: dir
 									}))
 							  ]
-							: subdivisions.map(sub => ({
-									value: sub.title,
-									label: sub.title
-							  }))
-					}
+							: cat && cat.subdivisionsList.length !== 0
+							? [
+									...cat.subdivisionsList.map(sub => ({
+										value: sub,
+										label: sub
+									}))
+							  ]
+							: []
+					})()}
 					defaultValue={catalogFilter.subcategory}
 					onChange={(value: string) => {
 						categories.find(category => category.title === categoryTitle)?.direction

@@ -1,4 +1,5 @@
 import { Button, ConfigProvider, Modal } from 'antd'
+import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -92,10 +93,10 @@ export const SeekerEmploymentItem = (props: RespondItemType) => {
 					}}
 				>
 					{empDataStatus.isLoading || empDataStatus.isFetching ? (
-						<p>Loading</p>
+						<p>{t('loading')}</p>
 					) : (
 						<>
-							<p className="text-black text-[18px]/[21.6px] font-bold font-content-font mb-[40px]">Комменатарий</p>
+							<p className="text-black text-[18px]/[21.6px] font-bold font-content-font mb-[40px]">{t('empComment')}</p>
 							{comments.map(comm =>
 								comm.comment ? (
 									<div className="mt-[15px]">
@@ -129,9 +130,9 @@ export const SeekerEmploymentItem = (props: RespondItemType) => {
 			<div className="w-full mb-[12px] flex items-center bg-white shadow-custom-shadow pl-[20px] pr-[55px] pt-[20px] pb-[20px]">
 				<p className="w-[30%]">{props.name}</p>
 				{props.employmentStageStatus === 'FILLING' ? (
-					<p className="ml-[10%]">Прохождение</p>
+					<p className="ml-[10%]">{t('empFilling')}</p>
 				) : props.employmentStageStatus === 'VERIFYING' ? (
-					<p className="ml-[10%]">Проверка</p>
+					<p className="ml-[10%]">{t('empVerifying')}</p>
 				) : props.employmentStageStatus === 'REFINE' ? (
 					<p
 						className="ml-[10%] underline underline-offset-[3px] pt-[3px] cursor-pointer"
@@ -139,10 +140,10 @@ export const SeekerEmploymentItem = (props: RespondItemType) => {
 							setIsModalOpen(true)
 						}}
 					>
-						Доработка
+						{t('empRefine')}
 					</p>
 				) : (
-					<p className="ml-[10%]">Трудоустроен</p>
+					<p className="ml-[10%]">{t('empEmployed')}</p>
 				)}
 				<div className="flex gap-[12px] ml-auto">
 					<Button
@@ -152,7 +153,7 @@ export const SeekerEmploymentItem = (props: RespondItemType) => {
 							navigate(`/services/myresponds/employment/stages/${props.vacancyId}/${props.id}`)
 						}}
 					>
-						Пройти этапы
+						{t('passStages')}
 					</Button>
 					<Button
 						onClick={() => {
@@ -161,7 +162,7 @@ export const SeekerEmploymentItem = (props: RespondItemType) => {
 						}}
 						className="font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"
 					>
-						Перейти в чат
+						{t('toChat')}
 					</Button>
 				</div>
 			</div>

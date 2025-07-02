@@ -2,7 +2,7 @@ import { LoadingOutlined } from '@ant-design/icons'
 import { Button, ConfigProvider, Select, Spin } from 'antd'
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 
 import { ChatCrossIcon } from '../../../assets/svg/ChatCrossIcon'
 import { ChatFilterIcon } from '../../../assets/svg/ChatFilterIcon'
@@ -74,23 +74,11 @@ export const ChatEmpDemp = () => {
 				.unwrap()
 				.then(res => {
 					dispatch(setCurrentVacancyName(res.respondInfo.vacancyName))
-					if (res.respondInfo.status) {
-						if (
-							res.respondInfo.status === respondStatus[respondStatus.INVITATION] ||
-							res.respondInfo.status === respondStatus[respondStatus.EMPLOYMENT_REQUEST] ||
-							res.respondInfo.status === respondStatus[respondStatus.EMPLOYMENT]
-						) {
-							dispatch(openChat())
-						} else {
-							dispatch(closeChat())
-						}
-					} else {
-						dispatch(openChat())
-					}
+					dispatch(openChat())
 					dispatch(setChatId(res.id))
 					dispatch(setRespondId(res.respondInfo.id))
 					dispatch(setCurrentVacancyId(res.respondInfo.vacancyId))
-					navigate(`/services/personnelaccounting/chat/id/${res.id}`)
+					//navigate(`id/${res.id}`)
 				})
 	}, [])
 
@@ -183,8 +171,8 @@ export const ChatEmpDemp = () => {
 				chatId={chat.id}
 				vacancyId={chat.respondInfo.vacancyId}
 				respName={chat.chatName}
-				surname="Митрофанов"
-				name="Илья"
+				surname={chat.respondInfo.userData?.lastname || ''}
+				name={chat.respondInfo.userData?.firstname || ''}
 				status={chat.respondInfo.status}
 				unreadCount={chat.unreadCount}
 				lastMessageDate={chat.lastMessageDate}
@@ -195,12 +183,12 @@ export const ChatEmpDemp = () => {
 	return (
 		<>
 			{' '}
-			<div className="bg-[#F5F8FB] flex w-full">
+			<div className="bg-[#F5F8FB] flex w-full h-screen">
 				{!pathname.includes('/services/personnelaccounting/chat/vacancyview') && (
-					<div className="shadowNav bg-white relative z-[5] w-[461px]">
+					<div className="shadowNav bg-white relative z-[5]">
 						<div className="sticky top-[80px]">
 							<div className="flex items-center px-[30px] pt-[20px] pb-[20px]">
-								<p className="font-content-font font-normal text-black text-[20px]/[20px] ">Все сообщения</p>
+								<p className="font-content-font font-normal text-black text-[24px]/[16px] ">Все сообщения</p>
 								<ConfigProvider theme={{ components: { Button: { textHoverBg: '#ffffff' } } }}>
 									<Button
 										type="text"
@@ -328,7 +316,7 @@ export const ChatEmpDemp = () => {
 									// className={`h-[calc(100vh-${
 									// 	isFilterWindowOpen ? '400' : '340'
 									// }px)] w-[461px] flex flex-col gap-4 overflow-auto`}
-									className="w-[461px] flex flex-col gap-4 overflow-auto"
+									className="w-[461px] flex flex-col gap-4 overflow-auto h-full"
 								>
 									{handleList}
 									<li className="h-[1px]" ref={chatPreviewsBottomRef}></li>
@@ -337,8 +325,14 @@ export const ChatEmpDemp = () => {
 						</div>
 					</div>
 				)}
-				{pathname.match('services/personnelaccounting/chat/id/*') && <ChatPage />}
-				{pathname.includes('/services/personnelaccounting/chat/vacancyview') && <VacancyView type="CHAT" />}
+				{/* {pathname.match('services/personnelaccounting/chat/id/*') && <ChatPage />}
+				{pathname.includes('/services/personnelaccounting/chat/vacancyview') && <VacancyView type="CHAT" />} */}
+				<Routes>
+					<Route path="/">
+						<Route path="/id/:chatId" element={<ChatPage />}></Route>
+						<Route path="/vacancyview/:vacancyId/:chatId" element={<VacancyView type="CHAT" />}></Route>
+					</Route>
+				</Routes>
 			</div>
 		</>
 	)

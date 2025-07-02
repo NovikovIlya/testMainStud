@@ -390,18 +390,18 @@ export type ChatMessageType = {
 }
 
 export enum ChatMessageDateDisplayEnum {
-	'января',
-	'февраля',
-	'марта',
-	'апреля',
-	'мая',
-	'июня',
-	'июля',
-	'августа',
-	'сентября',
-	'октября',
-	'ноября',
-	'декабря'
+	'chatJanuary',
+	'chatFebruary',
+	'chatMarch',
+	'chatApril',
+	'chatMay',
+	'chatJune',
+	'chatJuly',
+	'chatAugust',
+	'chatSeptember',
+	'chatOctober',
+	'chatNovember',
+	'chatDecember'
 }
 
 export type VacancyRequestType = {
@@ -484,6 +484,7 @@ export type EmploymentDataType = {
 			status: 'ATTACHED' | 'NOT_ATTACHED'
 			name: string
 			size: number
+			mustUpload: boolean
 		}[]
 		hasRequisites?: boolean
 		testLink?: string
@@ -530,6 +531,7 @@ export type EmploymentDocsType = {
 	id: number
 	employmentStageType: string
 	name: string
+	mustUpload: boolean
 }
 
 export type ChangeStageStatusType = {

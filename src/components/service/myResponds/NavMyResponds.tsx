@@ -1,6 +1,8 @@
 import clsx from 'clsx'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { t } from 'i18next'
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 
+import { BlueDocSvg } from '../../../assets/svg/BlueDocSvg'
 import { BriefcaseSvg } from '../../../assets/svg/BriefcaseSvg'
 import CalendarSvg from '../../../assets/svg/CalendarSvg'
 import { MyDocsSvg } from '../../../assets/svg/MyDocsSvg'
@@ -22,24 +24,24 @@ export const NavMyResponds = () => {
 
 	const navList = [
 		{
-			id: '/services/myresponds/responds',
+			id: 'myresponds/responds',
 			icon: <BriefcaseSvg />,
-			name: 'Мои отклики'
+			name: t('myResponds2')
 		},
 		{
-			id: '/services/myresponds/chat',
-			icon: <MyDocsSvg />,
-			name: 'Сообщения'
+			id: 'myresponds/chat',
+			icon: <BlueDocSvg />,
+			name: t('messages')
 		},
 		{
-			id: '/services/myresponds/employment',
+			id: 'myresponds/employment',
 			icon: <CalendarSvg />,
-			name: 'Этап трудоустройства'
+			name: t('employmentStage')
 		}
 	]
 
 	const handleList = navList.map(({ id, icon, name }, index) => {
-		if (name === 'Мои отклики') {
+		if (name === t('myResponds2')) {
 			return (
 				<li
 					key={index}
@@ -57,7 +59,7 @@ export const NavMyResponds = () => {
 					</div>
 				</li>
 			)
-		} else if (name === 'Сообщения') {
+		} else if (name === t('messages')) {
 			return (
 				<li
 					key={index}
@@ -76,7 +78,7 @@ export const NavMyResponds = () => {
 					</div>
 				</li>
 			)
-		} else if (name === 'Этап трудоустройства') {
+		} else if (name === t('employmentStage')) {
 			return (
 				<li
 					key={index}
@@ -99,15 +101,21 @@ export const NavMyResponds = () => {
 
 	return (
 		<>
-			<Header type="service" service="Мои отклики" />
+			<Header type="service" service={t('myResponds')} />
 			<div className="shadowNav bg-white relative">
-				<ul className="min-w-[230px] pt-14 flex flex-col gap-4 sticky top-[80px]">{handleList}</ul>
+				<ul className="w-[230px] pt-14 flex flex-col gap-4 sticky top-[80px]">{handleList}</ul>
 			</div>
-			<div className="bg-[#F5F8FB] flex w-full">
-				{pathname === navList[0].id && <MyResponds />}
-				{pathname.match(/\/services\/myresponds\/responds\/fullinfo\/\d+/) && <RespondInfo type="SEEKER" />}
+			<div className="bg-[#F5F8FB] flex w-[calc(100%-230px)] overflow-hidden">
+				<Routes>
+					<Route path={navList[0].id} element={<MyResponds />}></Route>
+					<Route path="myresponds/responds/fullinfo/:respondId" element={<RespondInfo type="SEEKER" />}></Route>
+					{/* <Route path={navList[1].id} element={<Chat />}></Route> */}
+					<Route path={navList[2].id + '/*'} element={<NavSeekerEmployment />}></Route>
+				</Routes>
+				{/* {pathname === navList[0].id && <MyResponds />} */}
+				{/* {pathname.match(/\/services\/myresponds\/responds\/fullinfo\/\d+/) && <RespondInfo type="SEEKER" />} */}
 				{pathname.includes(navList[1].id) && <Chat />}
-				{pathname.includes(navList[2].id) && <NavSeekerEmployment />}
+				{/* {pathname.includes(navList[2].id) && <NavSeekerEmployment />} */}
 			</div>
 		</>
 	)

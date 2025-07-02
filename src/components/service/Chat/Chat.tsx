@@ -1,6 +1,7 @@
+import { t } from 'i18next'
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import {
 	useGetSeekerRespondsQuery,
@@ -47,6 +48,8 @@ export const Chat = () => {
 	const [getChatPreviews, chatPreviewsQueryState] = useLazyGetSeekerChatPreviewsQuery()
 	const [getChat, getChatState] = useLazyGetChatIdByRespondIdQuery()
 
+	const params = useParams()
+
 	useEffect(() => {
 		const respondId = parseInt(pathname.substring(pathname.lastIndexOf('/') + 1))
 		respondId &&
@@ -70,7 +73,7 @@ export const Chat = () => {
 					dispatch(setChatId(res.id))
 					dispatch(setRespondId(res.respondInfo.id))
 					dispatch(setCurrentVacancyId(res.respondInfo.vacancyId))
-					navigate(`/services/myresponds/chat/id/${res.id}`)
+					//navigate(`/services/myresponds/chat/id/${res.id}`)
 				})
 	}, [])
 
@@ -144,15 +147,17 @@ export const Chat = () => {
 	return (
 		<>
 			{' '}
-			<div className="bg-[#F5F8FB] flex w-full">
+			<div className="bg-[#F5F8FB] flex w-full h-screen">
 				{!pathname.includes('/services/myresponds/chat/vacancyview') && (
 					<div className=" shadowNav bg-white relative z-[5]">
 						<div className="sticky top-[80px]">
-							<div className="flex items-center pt-[20px] pb-[20px]">
-								<p className="pl-[53px] font-content-font font-normal text-black text-[20px]/[20px] ">Все отклики</p>
+							<div className="flex items-center pt-[30px] pb-[10px]">
+								<p className="pl-[53px] font-content-font font-normal text-black text-[24px]/[16px] ">
+									{t('allMessages')}
+								</p>
 							</div>
 							<div className="overflow-auto flex flex-col h-[calc(100vh-160px)]">
-								<ul className="w-[461px] flex flex-col gap-4 overflow-auto">
+								<ul className="w-[461px] flex flex-col gap-4 overflow-auto h-full">
 									{handleList}
 									<li className="h-[1px]" ref={chatPreviewsBottomRef}></li>
 								</ul>
@@ -160,7 +165,7 @@ export const Chat = () => {
 						</div>
 					</div>
 				)}
-				{pathname.match('services/myresponds/chat/id/*') && <ChatPage />}
+				{/* {pathname.match('services/myresponds/chat/id/*') && <ChatPage />}
 				{pathname === '/services/myresponds/chat' && (
 					<div className="w-full h-full flex flex-col">
 						<p className="text-centerfont-content-font text-[20px]/[20px] text-black font-normal opacity-60 my-auto mx-auto">
@@ -168,7 +173,23 @@ export const Chat = () => {
 						</p>
 					</div>
 				)}
-				{pathname.includes('/services/myresponds/chat/vacancyview') && <VacancyView type="CHAT" />}
+				{pathname.includes('/services/myresponds/chat/vacancyview') && <VacancyView type="CHAT" />} */}
+				<Routes>
+					<Route path="/myresponds/chat">
+						<Route path="/myresponds/chat/id/:chatId" element={<ChatPage />}></Route>
+						<Route
+							path="/myresponds/chat"
+							element={
+								<div className="w-full h-full flex flex-col">
+									<p className="text-centerfont-content-font text-[20px]/[20px] text-black font-normal opacity-60 my-auto mx-auto">
+										{t('chooseChat')}
+									</p>
+								</div>
+							}
+						></Route>
+						<Route path="/myresponds/chat/vacancyview/:vacancyId/:chatId" element={<VacancyView type="CHAT" />}></Route>
+					</Route>
+				</Routes>
 			</div>
 		</>
 	)

@@ -1,11 +1,11 @@
-import { Button, Checkbox, ConfigProvider, Modal } from 'antd'
+import { Button, Checkbox, ConfigProvider, Modal, notification } from 'antd'
+import { t } from 'i18next'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { ModalOkSvg } from '../../../../assets/svg/ModalOkSvg'
 import { useAppSelector } from '../../../../store'
 import { useSendEmploymentDocsMutation } from '../../../../store/api/serviceApi'
-import { useAlert } from '../../../../utils/Alert/AlertMessage'
 
 import { FileAttachment } from './FileAttachment'
 
@@ -13,7 +13,7 @@ export const EmplSend = (props: { respondId: number; stageId: number; stageName:
 	const { empData } = useAppSelector(state => state.employmentData)
 	const { docs } = useAppSelector(state => state.employmentSeekerDocs)
 
-	const { openAlert } = useAlert()
+	const [api, contextHolder] = notification.useNotification()
 
 	const [sendDocs] = useSendEmploymentDocsMutation()
 	const hasNotRequisites = empData.stages.find(stage => stage.type === 'SIXTH')?.hasRequisites
@@ -27,6 +27,7 @@ export const EmplSend = (props: { respondId: number; stageId: number; stageName:
 
 	return (
 		<>
+			{contextHolder}
 			<ConfigProvider
 				theme={{
 					token: {
@@ -52,7 +53,7 @@ export const EmplSend = (props: { respondId: number; stageId: number; stageName:
 						<ModalOkSvg />
 					</div>
 					<p className="text-center font-content-font text-black text-[16px]/[20px] font-normal mt-[22px]">
-						Документы успешно отправлены. Следите за статусом ваших документов на этапе трудоустройства.
+						{t('emplSend.modal.successMessage')}
 					</p>
 					<Button
 						className="rounded-[40px] w-full !py-[13px] mt-[40px]"
@@ -62,27 +63,38 @@ export const EmplSend = (props: { respondId: number; stageId: number; stageName:
 							navigate('/services/myresponds/employment')
 						}}
 					>
-						Ок
+						{t('emplSend.modal.okButton')}
 					</Button>
 				</Modal>
 			</ConfigProvider>
 			<div className="flex flex-col gap-[40px] font-content-font font-normal text-black text-[16px]/[19.2px]">
 				<p className="w-[60%]">
-					Уважаемый соискатель! <br />
-					<br /> Благодарим вас за предоставление части необходимых документов для трудоустройства на работу. Мы рады
-					сообщить вам, что осталось совсем немного! <br />
-					<br /> Обратите внимание, что для окончательного оформления вам потребуется подписать оставшиеся документы в
-					Управлении кадров. Пожалуйста, посетите наш офис в удобное для вас время. Мы работаем с понедельника по
-					пятницу с 9:00 до 17:00 по адресу ул. Кремлевская, 18, корп.4 <br />
-					<br /> Если у вас возникнут вопросы или потребуется дополнительная информация, не стесняйтесь обращаться к
-					нам. <br />
-					<br /> +7 (843) 206-50-94 <br />
-					<br /> С уважением, Команда HR
+					{t('emplSend.mainMessage.part1')}
+					<br />
+					<br />
+					{t('emplSend.mainMessage.part2')}
+					<br />
+					<br />
+					{t('emplSend.mainMessage.part3')}
+					<br />
+					<br />
+					{t('emplSend.mainMessage.part4')}
+					<br />
+					<br />
+					{t('emplSend.mainMessage.part5')}
+					<br />
+					<br />
+					{t('emplSend.mainMessage.part6')}
+					<br />
+					<br />
+					{t('emplSend.mainMessage.part7')}
 				</p>
+
 				<ol className="flex flex-col gap-[40px] ml-[2%]">
-					<li>С трудовыми условиями ознакомлен (а)</li>
-					<li>Инструктаж пройден</li>
+					<li>{t('emplSend.list.item1')}</li>
+					<li>{t('emplSend.list.item2')}</li>
 				</ol>
+
 				<div className="bg-white rounded-[16px] shadow-custom-shadow p-[20px] w-[70%] flex flex-col gap-[20px]">
 					<div className="grid gap-x-[36px] gap-y-[12px] grid-cols-[auto_10%_auto] items-center w-full">
 						{docs.map(doc => (
@@ -90,19 +102,26 @@ export const EmplSend = (props: { respondId: number; stageId: number; stageName:
 						))}
 					</div>
 				</div>
+
 				{!hasNotRequisites && (
 					<ol start={3} className="flex flex-col gap-[40px] ml-[2%]">
-						<li>Необходимо завести банковскую карту {bank === 'SBER' ? 'Сбербанк' : 'ВТБ'}</li>
+						<li>
+							{t('emplSend.list.bankCard', {
+								bankName: bank === 'SBER' ? t('sberbank') : t('vtb')
+							})}
+						</li>
 					</ol>
 				)}
+
 				<Checkbox
 					checked={agree}
 					onChange={() => {
 						setAgree(prev => !prev)
 					}}
 				>
-					Подтверждаю достоверность документов
+					{t('emplSend.checkbox.confirm')}
 				</Checkbox>
+
 				<Button
 					disabled={!agree}
 					type="primary"
@@ -118,11 +137,11 @@ export const EmplSend = (props: { respondId: number; stageId: number; stageName:
 									setIsResultModalOpen(true)
 								})
 						} catch (error: any) {
-							openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+							api.error({ message: t('alertError'), placement: 'bottomRight' })
 						}
 					}}
 				>
-					Подтвердить и отправить данные
+					{t('emplSend.button.submit')}
 				</Button>
 			</div>
 		</>

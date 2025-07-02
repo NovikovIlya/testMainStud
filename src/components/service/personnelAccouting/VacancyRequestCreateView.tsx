@@ -1,5 +1,6 @@
 import { LoadingOutlined } from '@ant-design/icons'
-import { Button, Checkbox, ConfigProvider, Form, Input, Modal, Select, Spin } from 'antd'
+import { Button, Checkbox, ConfigProvider, Form, Input, Modal, Select, Spin, notification } from 'antd'
+import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -12,7 +13,6 @@ import {
 	useGetVacancyRequestViewQuery,
 	useLazyGetVacancyRequestViewQuery
 } from '../../../store/api/serviceApi'
-import { useAlert } from '../../../utils/Alert/AlertMessage'
 import ArrowIcon from '../jobSeeker/ArrowIcon'
 
 export const VacancyRequestCreateView = () => {
@@ -21,19 +21,9 @@ export const VacancyRequestCreateView = () => {
 	// Ищем id из URL
 	const match = currentUrl.match(/\/create\/(\d+)$/)
 
-	let id_from_url: string
-	let page_id: number
+	const requestId = parseInt(currentUrl.substring(currentUrl.lastIndexOf('/') + 1))
 
-	if (match) {
-		id_from_url = match[1]
-	} else {
-		console.error('id miss')
-	}
-	page_id = parseInt(id_from_url)
-
-	const requestId = page_id
-
-	const { data: requestView } = useGetVacancyRequestViewQuery(page_id)
+	const { data: requestView } = useGetVacancyRequestViewQuery(requestId)
 
 	console.log(requestView)
 
@@ -42,7 +32,7 @@ export const VacancyRequestCreateView = () => {
 	const [acceptRequest, { isLoading: acceptRequestLoading }] = useAcceptCreateVacancyRequestMutation()
 	const [alterRequest, { isLoading: alterRequestLoading }] = useAlterCreateVacancyRequestMutation()
 
-	const { openAlert } = useAlert()
+	const [api, contextHolder] = notification.useNotification()
 
 	const { data: categories = [] } = useGetCategoriesQuery()
 	const [categoryTitle, setCategoryTitle] = useState<string>('')
@@ -73,7 +63,7 @@ export const VacancyRequestCreateView = () => {
 	const [resultModalText, setResultModalText] = useState<string>('')
 
 	useEffect(() => {
-		getVacancyRequestView(page_id)
+		getVacancyRequestView(requestId)
 			.unwrap()
 			.then(req => {
 				setPost(req.newData.post)
@@ -143,6 +133,7 @@ export const VacancyRequestCreateView = () => {
 
 	return (
 		<>
+			{contextHolder}
 			<ConfigProvider
 				theme={{
 					token: {
@@ -252,7 +243,7 @@ export const VacancyRequestCreateView = () => {
 							setIsResultModalOpen(true)
 						} catch (error: any) {
 							console.log(error)
-							openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+							api.error({ message: t('alertError'), placement: 'bottomRight' })
 						}
 					}}
 				>
@@ -285,7 +276,9 @@ export const VacancyRequestCreateView = () => {
 					<Form.Item
 						label={
 							<label className="text-black text-[18px]/[18px] font-content-font font-normal opacity-80">
-								{categories.find(cat => cat.title === categoryTitle)?.direction ? 'Профобласть' : 'Подразделение'}
+								{categories.find(category => category.title === categoryTitle)?.directions.length !== 0
+									? 'Профобласть'
+									: 'Подразделение'}
 							</label>
 						}
 						rules={[{ required: true, message: 'Не указана подкатегория' }]}

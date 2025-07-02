@@ -13,9 +13,10 @@ import { useAppSelector } from '../../store'
 import { useGetInfoUserQuery } from '../../store/api/formApi'
 import { useCheckIsEmployeeQuery } from '../../store/api/practiceApi/contracts'
 import { useGetModulesQuery } from '../../store/api/roleModel/roleModel'
-import { useGetRoleQuery } from '../../store/api/serviceApi'
+import { useGetEmploymentPossibleRolesQuery, useGetRoleQuery } from '../../store/api/serviceApi'
 import { getBaseUrlShelly } from '../../store/api/studentPractice/getBaseUrlShelly'
 import { changeLayout, removeCard } from '../../store/reducers/LayoutsSlice'
+import InfoEmployment from '../InfoEmployment'
 import InfoStudent from '../InfoStudent'
 import { AboutUniversityCard } from '../aboutUniversity/AboutUniversityCard'
 import { Apply } from '../apply/Apply'
@@ -72,13 +73,15 @@ const employeeKeys = [
 	'NoticeList',
 	'EmpDempDocument',
 	'AccDempDocument',
-	'PsychologicalHelpEmp'
+	'PsychologicalHelpEmp',
 	// 'jobSeeker',
 	// 'myResponds',
 	// 'DirectResume',
-	// 'personnelAccounting'
+	'personnelAccounting'
 	// 'shortLink'
 ]
+
+const seekerKeys = ['jobSeeker', 'myResponds', 'DirectResume', 'AboutUniversity']
 
 const DropDrag = () => {
 	const dispatch = useDispatch()
@@ -99,6 +102,14 @@ const DropDrag = () => {
 		isLoading: isLoadingGetInfoSubrole,
 		isSuccess: isSuccessGetInfoSubrole
 	} = useGetInfoUserQuery()
+	const { data: rolesData = undefined } = useGetEmploymentPossibleRolesQuery()
+	const isPersonnelDepartment = rolesData?.find(
+		role =>
+			role === 'PERSONNEL_DEPARTMENT' ||
+			role === 'SUPERVISOR' ||
+			role === 'ACCOUNTING' ||
+			role === 'LABOR_PROTECTION_DEPARTMENT'
+	)
 	const [currentBreakpoint, setCurrentBreakpoint] = useState<string>('lg')
 	const [mounted, setMounted] = useState(false)
 	const [toolbox, setToolbox] = useState<{ [index: string]: any[] }>({ lg: [] })
@@ -146,8 +157,8 @@ const DropDrag = () => {
 			key: 'myResponds',
 			element: (
 				<TemplateCard
-					title="Мои отклики"
-					info="В разделе отображается ваш текущий статус заявления на работу"
+					title="myResponds"
+					info="myRespondsCardDescription"
 					href="/services/myresponds/responds"
 					img="/myrespondsicon.png"
 					width={146}
@@ -169,9 +180,9 @@ const DropDrag = () => {
 				<DirectResume
 					href="#"
 					img="/directresumeimage.png"
-					info="Не нашли подходящую вакансию? Заполняйте резюме, отправляйте на проверку и мы рассмотрим вашу кандидатуру"
-					title="Резюме"
-					buttonText="Создать"
+					info="directResumeCardDescription"
+					title="resume"
+					buttonText="attach"
 					buttonType="primary"
 					height={99}
 					width={85}
@@ -189,7 +200,15 @@ const DropDrag = () => {
 		{
 			key: 'personnelAccounting',
 			element: (
-				<TemplateCard title="Трудоустройство" info="" href="/services/personnelaccounting" buttonText="Изучить" />
+				<TemplateCard
+					title="employment"
+					info="employmentCardDescription"
+					href="/services/personnelaccounting"
+					img="/emplicon.png"
+					height={133}
+					width={122}
+					className={'absolute top-1'}
+				/>
 			),
 			place: {
 				w: 1,
@@ -1070,6 +1089,28 @@ const DropDrag = () => {
 				y: 0,
 				i: 'PsychologicalHelpEmp'
 			}
+		},
+		{
+			key: 'AboutUniversity',
+			element: (
+				<TemplateCard
+					href="/services/aboutUniversity"
+					info="infoUniversity"
+					title="AboutTheUniversity"
+					buttonText="Watch"
+					img={'/src/assets/images/aboutUniversity.png'}
+					width={102}
+					height={113}
+					positionImage={'mr-2 mt-2'}
+				/>
+			),
+			place: {
+				w: 1,
+				h: 1,
+				x: 0,
+				y: 0,
+				i: 'AboutUniversityCard'
+			}
 		}
 	]
 
@@ -1154,7 +1195,12 @@ const DropDrag = () => {
 			if (mainRole === 'STUD') {
 				return studentKeys.includes(item?.key ? item?.key : '')
 			} else if (mainRole === 'EMPL') {
+				if (item.key === 'personnelAccounting') {
+					return isPersonnelDepartment
+				}
 				return (item.key === 'Practices' && isSuccessCheck) || employeeKeys.includes(item?.key ? item?.key : '')
+			} else if (maiRole === 'OTHER' && subRole === 'SEEKER') {
+				return seekerKeys.includes(item?.key ? item?.key : '')
 			} else {
 				return <>Такой роли не найдено</>
 			}
@@ -1213,11 +1259,24 @@ const DropDrag = () => {
 			if (subRole === 'SEEKER') {
 				return (
 					<>
-						<Row>
-							<Col span={8}>
-								<AboutUniversityCard />
-							</Col>
-						</Row>
+						<ResponsiveReactGridLayout
+							className="layout mb-10 !height-full"
+							cols={{ lg: isMobile ? 2 : 3, md: 2, sm: 2, xs: 2, xxs: 1 }}
+							rowHeight={windowSize.innerWidth < 768 ? 210 : 320}
+							containerPadding={[0, 0]}
+							margin={[20, 20]}
+							layouts={layout}
+							measureBeforeMount={true}
+							useCSSTransforms={mounted}
+							onLayoutChange={onLayoutChange}
+							onBreakpointChange={onBreakpointChange}
+							isDraggable={edit}
+							isResizable={false}
+							compactType="vertical"
+							preventCollision={true}
+						>
+							{generateDOM}
+						</ResponsiveReactGridLayout>
 					</>
 				)
 			}

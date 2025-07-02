@@ -1,7 +1,8 @@
 import { LoadingOutlined } from '@ant-design/icons'
-import { Button, ConfigProvider, Form, Modal, Select, Spin, Tag } from 'antd'
+import { Button, ConfigProvider, Form, Modal, Select, Spin, Tag, notification } from 'antd'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useLocation } from 'react-router-dom'
 import uuid from 'react-uuid'
 
 import { AvatartandardSvg } from '../../../../../assets/svg/AvatarStandardSvg'
@@ -14,53 +15,60 @@ import {
 	useLazyGetSeekerResumeFileQuery
 } from '../../../../../store/api/serviceApi'
 import { useGetCountriesQuery } from '../../../../../store/api/utilsApi'
-import { useAlert } from '../../../../../utils/Alert/AlertMessage'
 import { NocircleArrowIcon } from '../../../jobSeeker/NoCircleArrowIcon'
+import { RespondInfoCommon } from '../../RespondInfoCommon'
 
 export const SupervisorInterviewSeekerInfo = () => {
-	const { openAlert } = useAlert()
+	const [api, contextHolder] = notification.useNotification()
 
-	const currentUrl = window.location.pathname
-	const match = currentUrl.match(/\/seekerinfo\/(\d+)$/)
+	const { pathname } = useLocation()
+	console.log(
+		pathname.substring(pathname.substring(0, pathname.lastIndexOf('/')).lastIndexOf('/') + 1, pathname.lastIndexOf('/'))
+	)
+	console.log(pathname.substring(pathname.lastIndexOf('/') + 1))
 
-	let id_from_url: number
+	const interviewId = pathname.substring(
+		pathname.substring(0, pathname.lastIndexOf('/')).lastIndexOf('/') + 1,
+		pathname.lastIndexOf('/')
+	)
+	const respondId = pathname.substring(pathname.lastIndexOf('/') + 1)
 
-	if (match) {
-		id_from_url = Number(match[1])
-	} else {
-		console.error('id miss')
-	}
-
-	const { data: foundInterview, isLoading: interviewDataLoading } = useGetInterviewQuery(id_from_url)
+	const { data: foundInterview, isLoading: interviewDataLoading } = useGetInterviewQuery(parseInt(interviewId))
 
 	const format = foundInterview?.format || ''
 	const time = foundInterview?.time
 	console.log(time)
 
-	const createTimeFormatted = (time: string) => {
+	const createTimeFormatted = (time: string | undefined) => {
 		if (time) {
 			const date = new Date(time)
 
-			// Извлекаем компоненты даты
-			const day = String(date.getUTCDate()).padStart(2, '0') // День (с ведущим нулем)
-			const month = String(date.getUTCMonth() + 1).padStart(2, '0') // Месяц (с ведущим нулем)
-			const shortYear = String(date.getUTCFullYear()).slice(-2) // Последние две цифры года
+			// Получаем локальное время
+			const localDate = date.toLocaleString('ru-RU', {
+				timeZoneName: 'short',
+				hour12: false
+			})
 
-			// Извлекаем компоненты времени
-			const hours = String(date.getUTCHours()).padStart(2, '0') // Часы (с ведущим нулем)
-			const minutes = String(date.getUTCMinutes()).padStart(2, '0') // Минуты (с ведущим нулем)
+			// Преобразуем строку в формат "дд.мм.гг чч:мм"
+			const [datePart, timePart] = localDate.split(', ')
+			const [day, month, year] = datePart.split('.')
+
+			// Получаем последние две цифры года
+			const shortYear: string = year.slice(-2)
+			const shortTime: string = timePart.substring(0, 5)
 
 			// Форматируем дату и время
-			const timeFormated = `${day}.${month}.${shortYear} в ${hours}:${minutes}`
+			const timeFormated = `${day}.${month}.${shortYear} в ${shortTime}`
 
 			return timeFormated
 		} else {
 			console.error('Время не найдено.')
+			return ''
 		}
 	}
 	let timeFormated = createTimeFormatted(time)
 
-	const { data, isLoading: loading } = useGetRespondFullInfoQuery(id_from_url)
+	const { data, isLoading: loading } = useGetRespondFullInfoQuery(parseInt(respondId))
 
 	const [getResume, resumeQueryStatus] = useLazyGetSeekerResumeFileQuery()
 
@@ -103,7 +111,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 	const [resumeSize, setResumeSize] = useState<number>(0)
 
 	useEffect(() => {
-		getResume(id_from_url)
+		getResume(parseInt(respondId))
 			.unwrap()
 			.then(resume => {
 				setResume(prev => resume.href)
@@ -152,10 +160,13 @@ export const SupervisorInterviewSeekerInfo = () => {
 					datePublicString += 'Осталось ' + minutes + ' минут'
 				}
 				if (isDaysEmpty && !isHoursEmpty) {
-					datePublicString += 'Осталось ' + hours + ' ч' + minutes + ' м'
+					datePublicString += 'Осталось ' + hours + ' ч ' + minutes + ' м'
 				}
 				if (!isDaysEmpty && !isHoursEmpty) {
 					datePublicString += 'Осталось ' + days + ' дн ' + hours + ' ч'
+				}
+				if (!isDaysEmpty && isHoursEmpty) {
+					datePublicString += 'Осталось ' + days + ' дн ' + minutes + ' м'
 				}
 				setDatePublicString(datePublicString)
 
@@ -180,6 +191,12 @@ export const SupervisorInterviewSeekerInfo = () => {
 				console.log(targetDate)
 				console.log(now)
 				console.log(difference)
+				console.log('Минуты')
+				console.log(minutes)
+				console.log('Часы')
+				console.log(hours)
+				console.log('Дни')
+				console.log(days)
 				return difference
 			}
 
@@ -192,7 +209,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 		return (
 			<div className="flex flex-col gap-[30px] mr-[10%]">
 				{format === 'OFFLINE' &&
-					!isInterviewStarted && ( // Офлайн собес, ожидание
+					!is30MinAfterInterviewEnded && ( // Офлайн собес, ожидание
 						<div className="flex flex-col justify-center">
 							<h3 className=" mb-[20px] font-content-font font-bold text-black text-[16px]/[19.2px]">Собеседование</h3>
 							<h4 className=" mb-[10px] font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">
@@ -240,15 +257,15 @@ export const SupervisorInterviewSeekerInfo = () => {
 										await aproveSeeker({
 											rejectionReason: 'approve',
 											action: 'EMPLOY',
-											respondId: id_from_url
+											respondId: parseInt(respondId)
 										})
 											.unwrap()
 											.then(() => {
 												setIsEmploymentRequestSent(true)
 											})
-										openAlert({ type: 'success', text: 'Приглашение на работу успешно отправлено' })
+										api.success({ message: 'Приглашение на работу успешно отправлено', placement: 'bottomRight' })
 									} catch (error: any) {
-										openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+										api.error({ message: t('alertError'), placement: 'bottomRight' })
 									}
 								}}
 								loading={aproveSeekerLoading}
@@ -267,14 +284,14 @@ export const SupervisorInterviewSeekerInfo = () => {
 							</Button>
 						</div>
 					)}
-				{/* <Button
+				<Button
 					disabled={isEmploymentRequestSent || isSeekerRejected}
 					className="h-[40px] w-[257px] bg-[#3073D7] rounded-[54.5px] text-white text-[16px]/[16px]"
 					onClick={values => {
 						aproveSeeker({
 							rejectionReason: 'approve',
 							action: 'EMPLOY',
-							respondId: id_from_url
+							respondId: parseInt(respondId)
 						})
 							.unwrap()
 							.then(() => {
@@ -283,12 +300,13 @@ export const SupervisorInterviewSeekerInfo = () => {
 					}}
 				>
 					invite without time check
-				</Button> */}
+				</Button>
 			</div>
 		)
 	}
 	return (
 		<>
+			{contextHolder}
 			<ConfigProvider
 				theme={{
 					token: {
@@ -434,16 +452,16 @@ export const SupervisorInterviewSeekerInfo = () => {
 											await rejectSeeker({
 												rejectionReason: values.reason,
 												action: 'REJECT',
-												respondId: id_from_url
+												respondId: parseInt(respondId)
 											})
 												.unwrap()
 												.then(() => {
 													setIsSeekerRejected(true)
 												})
 											setIsRefuseModalOpen(false)
-											openAlert({ type: 'success', text: 'Причина отказа успешно отправлена' })
+											api.success({ message: 'Причина отказа успешно отправлена', placement: 'bottomRight' })
 										} catch (error: any) {
-											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+											api.error({ message: t('alertError'), placement: 'bottomRight' })
 										}
 									}}
 								>
@@ -481,141 +499,14 @@ export const SupervisorInterviewSeekerInfo = () => {
 								</Form>
 							</Modal>
 						</ConfigProvider>
-						<Component time={time} format={format} timeFormated={timeFormated}></Component>
+						<Component time={time ? time : ''} format={format} timeFormated={timeFormated}></Component>
 					</div>
-					<hr />
-					<div className="flex flex-col gap-[24px]">
-						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">
-							Сопроводительное письмо
-						</p>
-						<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-							{data?.respondData.coverLetter}
-						</p>
-					</div>
-					<hr />
-					<div className="flex flex-col gap-[24px]">
-						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">Образование</p>
-						<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
-							{data?.educations.map(edu => (
-								<>
-									<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">{edu.endYear}</p>
-									<div className="flex flex-col gap-[8px]">
-										<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">
-											{edu.institution + ', ' + edu.country}
-										</p>
-										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-											{edu.speciality === null ? '' : edu.speciality + ', '}
-											{edu.educationLevel}
-										</p>
-									</div>
-								</>
-							))}
-						</div>
-					</div>
-					<hr />
-					<div className="flex flex-col gap-[24px]">
-						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">Опыт работы</p>
-						{data?.respondData.portfolio.workExperiences.length === 0 ? (
-							<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-								Соискатель не имеет опыта работы
-							</p>
-						) : (
-							<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
-								{data?.respondData.portfolio.workExperiences.map(exp => (
-									<>
-										<div className="flex flex-col gap-[4px]">
-											<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-												{exp.beginWork.substring(0, 4)}-
-												{parseInt(exp.endWork.substring(0, 4)) === date.getFullYear()
-													? 'по наст.время'
-													: exp.endWork.substring(0, 4)}
-											</p>
-											<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-												{parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) === 0
-													? ''
-													: parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4))}
-												{parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) === 1 &&
-													' год'}
-												{parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) >= 2 &&
-													parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) <= 4 &&
-													' года'}
-												{parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) > 4 && ' лет'}
-											</p>
-										</div>
-										<div className="flex flex-col gap-[8px]">
-											<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">{exp.position}</p>
-											<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">{exp.workPlace}</p>
-											<p className="font-content-font font-normal text-black text-[14px]/[16.8px]">{exp.duties}</p>
-										</div>
-									</>
-								))}
-							</div>
-						)}
-						{data?.respondData.portfolio.url !== '' && (
-							<div className="grid grid-cols-[164px_auto] gap-x-[50px] gap-y-[24px] w-[90%]">
-								<p>Ссылка на портфолио:</p>
-								<a href={data?.respondData.portfolio.url} target="_blank">
-									{data?.respondData.portfolio.url}
-								</a>
-							</div>
-						)}
-						{resumeQueryStatus.isSuccess && (
-							<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
-								<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">Резюме</p>
-								<div className="bg-white rounded-[16px] shadow-custom-shadow h-[59px] w-[65%] p-[20px] flex">
-									<MyDocsSvg />
-									<p
-										className="ml-[20px] font-content-font font-normal text-black text-[16px]/[19.2px] underline cursor-pointer"
-										onClick={() => {
-											const link = document.createElement('a')
-											link.href = resume
-											link.download = 'Резюме'
-											link.click()
-										}}
-									>
-										{'Резюме ' +
-											data?.userData?.lastname +
-											' ' +
-											data?.userData?.firstname +
-											' ' +
-											data?.userData?.middlename}
-									</p>
-									<p className="ml-auto font-content-font font-normal text-black text-[16px]/[19.2px] opacity-70">
-										{Math.round(resumeSize / 1000000) > 0
-											? Math.round(resumeSize / 1000000) + ' Мб'
-											: Math.round(resumeSize / 1000) > 0
-											? Math.round(resumeSize / 1000) + ' Кб'
-											: resumeSize + ' б'}
-									</p>
-								</div>
-							</div>
-						)}
-					</div>
-					<hr />
-					<div className="flex flex-col gap-[24px]">
-						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">О себе</p>
-						<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-							{data?.respondData.skills.aboutMe}
-						</p>
-					</div>
-					<hr />
-					<div className="flex flex-col">
-						<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40 w-[194px]">
-							Профессиональные навыки
-						</p>
-						<div className="grid grid-cols-[194px_auto] gap-x-[20px] w-[90%]">
-							<div className="col-start-2 mt-[24px] flex gap-[8px] flex-wrap">
-								{data?.respondData.skills.keySkills.map(skill => (
-									<Tag
-										className="bg-black bg-opacity-10 rounded-[40px] py-[8px] px-[16px] font-content-font font-normal text-black text-[16px]/[19.2px]"
-										key={uuid()}
-									>
-										{skill}
-									</Tag>
-								))}
-							</div>
-						</div>
-					</div>
+					<RespondInfoCommon
+						res={data!}
+						resume={resume}
+						resumeSize={resumeSize}
+						isSuccess={resumeQueryStatus.isSuccess}
+					/>
 				</div>
 			</div>
 		</>

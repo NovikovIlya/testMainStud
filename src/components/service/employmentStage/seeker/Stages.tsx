@@ -62,7 +62,8 @@ export const Stages = () => {
 							return { ...stage, status: 'READY' }
 						} else if (
 							docs.filter(doc => doc.employmentStageType === stage.type).length !== 0 &&
-							stage.documents.length === docs.filter(doc => doc.employmentStageType === stage.type).length
+							stage.documents.filter(doc => doc.mustUpload).length ===
+								docs.filter(doc => doc.employmentStageType === stage.type && doc.mustUpload).length
 						) {
 							return { ...stage, status: 'READY' }
 						} else {

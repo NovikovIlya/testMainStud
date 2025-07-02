@@ -1,13 +1,13 @@
-import { Button, ConfigProvider, Form, Input, Modal, Select } from 'antd'
+import { Button, ConfigProvider, Form, Input, Modal, Select, notification } from 'antd'
+import { t } from 'i18next'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { ModalOkSvg } from '../../../../../assets/svg/ModalOkSvg'
 import { useRequestCreateVacancyMutation } from '../../../../../store/api/serviceApi'
-import { useAlert } from '../../../../../utils/Alert/AlertMessage'
 
 export const SupervisorCreateVacancyForm = () => {
-	const { openAlert } = useAlert()
+	const [api, contextHolder] = notification.useNotification()
 
 	const [requestCreateVacancy, { isLoading }] = useRequestCreateVacancyMutation()
 
@@ -68,7 +68,7 @@ export const SupervisorCreateVacancyForm = () => {
 							await requestCreateVacancy(values).unwrap()
 							setIsSuccessModalOpen(true)
 						} catch (error: any) {
-							openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+							api.error({ message: t('alertError'), placement: 'bottomRight' })
 						}
 					}}
 				>

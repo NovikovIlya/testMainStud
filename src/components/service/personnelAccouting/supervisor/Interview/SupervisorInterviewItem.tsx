@@ -2,12 +2,14 @@ import { Button, ConfigProvider, Modal } from 'antd'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { useLazyGetInterviewQuery } from '../../../../../store/api/serviceApi'
+import { DeleteSvg } from '../../../../../assets/svg/DeleteSvg'
+import { useDeleteInterviewMutation, useLazyGetInterviewQuery } from '../../../../../store/api/serviceApi'
 import { InterviewItemType } from '../../../../../store/reducers/type'
 
 export const SupervisorInterviewItem = (props: InterviewItemType) => {
 	interface InterviewButtonElemProps {
 		id: any
+		respondId: any
 		format: string
 		time: string
 	}
@@ -26,6 +28,9 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 
 	const [isUnsuccessModalOpen, setIsUnsuccessModalOpen] = useState(false)
 	const navigate = useNavigate()
+
+	const [deleteInterview] = useDeleteInterviewMutation()
+	const [isDeletable, setIsDeletable] = useState<boolean>(false)
 
 	const seekerName = props.seeker.lastName + ' ' + props.seeker.firstName + ' ' + props.seeker.middleName
 
@@ -54,15 +59,19 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 					datePublicString += 'Осталось ' + minutes + ' минут'
 				}
 				if (isDaysEmpty && !isHoursEmpty) {
-					datePublicString += 'Осталось ' + hours + ' ч' + minutes + ' м'
+					datePublicString += 'Осталось ' + hours + ' ч ' + minutes + ' м'
 				}
 				if (!isDaysEmpty && !isHoursEmpty) {
 					datePublicString += 'Осталось ' + days + ' дн ' + hours + ' ч'
+				}
+				if (!isDaysEmpty && isHoursEmpty) {
+					datePublicString += 'Осталось ' + days + ' дн ' + minutes + ' м'
 				}
 				setDatePublicString(datePublicString)
 
 				if (difference < 0) {
 					setIsInterviewStarted(true)
+					setIsDeletable(true)
 				} else {
 					setIsInterviewStarted(false)
 				}
@@ -103,8 +112,8 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 		}, [is5MinBeforeInterviewStarted])
 
 		return (
-			<div className="flex items-center">
-				{props.format === 'OFFLINE' && <span className="min-w-[220px] opacity-[0%]"></span>}
+			<div className="flex items-center shrink">
+				{props.format === 'OFFLINE' && <span className="opacity-[0%]"></span>}
 				{props.format === 'ONLINE' && !is5MinBeforeInterviewStarted && !isInterviewStarted && (
 					<span className="min-w-[220px] flex justify-center bg-[#3073D7] opacity-[32%] text-white font-content-font font-normal text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[35px] border-0">
 						{datePublicString}
@@ -131,7 +140,7 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 					</Button>
 				)}
 				{props.format === 'ONLINE' && isInterviewStarted && is30MinAfterInterviewEnded && (
-					<span className="min-w-[220px] flex justify-center bg-[#3073D7] opacity-[32%] text-white font-content-font font-normal text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[35px] border-0">
+					<span className="min-w-[180px] flex justify-center bg-[#3073D7] opacity-[32%] text-white font-content-font font-normal text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[35px] border-0">
 						Время истекло
 					</span>
 				)}
@@ -179,12 +188,33 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 			<>
 				<Button
 					onClick={() => {
-						navigate(`/services/personnelaccounting/supervisor/invitation/seekerinfo/${props.id}`)
+						navigate(`/services/personnelaccounting/supervisor/invitation/seekerinfo/${props.id}/${props.respondId}`)
 					}}
-					className="font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"
+					className="font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black ml-auto"
 				>
 					Подробнее
 				</Button>
+			</>
+		)
+	}
+
+	const InterviewDeleteButton = () => {
+		return (
+			<>
+				<Button
+					className={`rounded-[54.5px] border-solid border-black !px-[16px] !py-[7px] !w-[50px] ${
+						isDeletable ? '' : 'hidden'
+					}`}
+					onClick={() => {
+						deleteInterview(props.id)
+							.then(() => {})
+							.catch(() => {
+								setIsUnsuccessModalOpen(true)
+							})
+					}}
+					type="text"
+					icon={<DeleteSvg />}
+				/>
 			</>
 		)
 	}
@@ -229,9 +259,15 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 				<span className="w-[22%] ml-[3%]">{seekerName}</span>
 				<InterviewTimeElem eventTime={props.time}></InterviewTimeElem>
 				<InterviewFormatElem format={props.format}></InterviewFormatElem>
-				<div className="w-[25%] ml-[2%] gap-[3%] flex flex-row items-center justify-between">
+				<div className="w-[37%] ml-[2%] gap-[3%] flex flex-row items-center">
 					<InterviewCountdownTimeElem eventTime={props.time} format={props.format} url={props.url} id={props.id} />
-					<InterviewButtonElem id={props.respondId} format={props.format} time={props.time}></InterviewButtonElem>
+					<InterviewButtonElem
+						id={props.id}
+						respondId={props.respondId}
+						format={props.format}
+						time={props.time}
+					></InterviewButtonElem>
+					<InterviewDeleteButton />
 				</div>
 			</div>
 		</>

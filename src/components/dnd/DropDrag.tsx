@@ -1223,6 +1223,33 @@ const DropDrag = () => {
 				return (
 					<>
 						<Row>
+							<Seeker />
+						</Row>
+						<Row>
+							<Col span={8}>
+								<TemplateCard
+									title="myResponds"
+									info="myRespondsCardDescription"
+									href="/services/myresponds/responds"
+									img="/myrespondsicon.png"
+									width={146}
+									height={136}
+									mt="mt-[25px]"
+								/>
+							</Col>
+							<Col span={8}>
+								<DirectResume
+									href="#"
+									img="/directresumeimage.png"
+									info="directResumeCardDescription"
+									title="resume"
+									buttonText="attach"
+									buttonType="primary"
+									height={99}
+									width={85}
+									positionImage="mt-2"
+								/>
+							</Col>
 							<Col span={8}>
 								<AboutUniversityCard />
 							</Col>

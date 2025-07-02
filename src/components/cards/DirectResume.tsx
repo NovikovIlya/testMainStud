@@ -318,7 +318,7 @@ export const DirectResume = ({
 								</div>
 							</div>
 						</>
-					) : checkboxes.IS_CHECKED_PERS_DATA === 0 ? (
+					) : checkboxes && checkboxes.IS_CHECKED_PERS_DATA === 0 ? (
 						<div className="flex flex-col">
 							<div className="w-full flex justify-center">
 								<WarningModalIconSvg />

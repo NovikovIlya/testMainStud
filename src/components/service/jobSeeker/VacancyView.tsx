@@ -72,9 +72,9 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 						.then(countries => {
 							dispatch(
 								allData({
-									name: info.FIRSTNAME,
-									surName: info.LASTNAME,
-									patronymic: info.SECONDNAME,
+									name: user.firstname,
+									surName: user.lastname,
+									patronymic: user.middleName,
 									phone: user.phone,
 									email: user.email,
 									birthDay: user.birthday,
@@ -86,7 +86,7 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 												: user.countryId
 											: user.countryId,
 									isPatronymicSet:
-										info.SECONDNAME === null || info.SECONDNAME === undefined || info.SECONDNAME === '' ? false : true,
+										user.middleName === null || user.middleName === undefined || user.middleName === '' ? false : true,
 									isBirthDaySet:
 										user.birthday === null || user.birthday === undefined || user.birthday === '' ? false : true,
 									isGenderSet: info.SEX === null || info.SEX === undefined ? false : true
@@ -188,7 +188,10 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 					<p className="w-[106px] font-content-font font-bold text-black text-[18px]/[21px]">{t('employmentType')}</p>
 					<p className="w-[106px] font-content-font font-bold text-black text-[18px]/[21px]">{t('salary')}</p>
 					{props.type === 'CATALOG' ? (
-						<ResponseForm canRespond={canRespond} personalData={true} />
+						<ResponseForm
+							canRespond={canRespond}
+							personalData={checkboxes ? checkboxes.IS_CHECKED_PERS_DATA === 1 : true}
+						/>
 					) : (
 						<>
 							<div className="w-[143px]"></div>

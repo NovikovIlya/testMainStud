@@ -185,20 +185,26 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 									</div>
 									<div className="flex flex-col gap-[8px]">
 										<p className="font-content-font font-normal text-black text-[24px]/[28.8px]">
-											{res?.userData?.lastname + ' ' + res?.userData?.firstname + ' ' + res?.userData?.middlename}
+											{res?.userData?.lastname +
+												' ' +
+												res?.userData?.firstname +
+												' ' +
+												(res?.userData?.middlename ?? '')}
 										</p>
 										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-											{res.userData?.sex === 'M' ? t('man') : t('woman')},{' '}
-											{dayjs().diff(dayjs(res.userData?.birthday), 'years')}{' '}
-											{dayjs().diff(dayjs(res.userData?.birthday), 'years') >= 10 &&
-											dayjs().diff(dayjs(res.userData?.birthday), 'years') <= 20
-												? t('yearsOld')
-												: dayjs().diff(dayjs(res.userData?.birthday), 'years') % 10 >= 2 &&
-												  dayjs().diff(dayjs(res.userData?.birthday), 'years') % 10 <= 4
-												? t('yearsOldSpec')
-												: dayjs().diff(dayjs(res.userData?.birthday), 'years') % 10 == 1
-												? 'yearOld'
-												: 'yearsOld'}
+											{res.userData?.sex ? (res.userData?.sex === 'M' ? t('man') + ',' : t('woman') + ',') : ''}{' '}
+											{res.userData?.birthday ? dayjs().diff(dayjs(res.userData?.birthday), 'years') : ''}{' '}
+											{res.userData?.birthday
+												? dayjs().diff(dayjs(res.userData?.birthday), 'years') >= 10 &&
+												  dayjs().diff(dayjs(res.userData?.birthday), 'years') <= 20
+													? t('yearsOld')
+													: dayjs().diff(dayjs(res.userData?.birthday), 'years') % 10 >= 2 &&
+													  dayjs().diff(dayjs(res.userData?.birthday), 'years') % 10 <= 4
+													? t('yearsOldSpec')
+													: dayjs().diff(dayjs(res.userData?.birthday), 'years') % 10 == 1
+													? 'yearOld'
+													: 'yearsOld'
+												: ''}
 										</p>
 										<div className="flex gap-[36px]">
 											<div className="flex flex-col gap-[8px]">
@@ -206,7 +212,9 @@ export const RespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
 													{t('birth')}
 												</p>
 												<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-													{res.userData?.birthday && res.userData?.birthday.split('-').reverse().join('.')}
+													{res.userData?.birthday
+														? res.userData?.birthday.split('-').reverse().join('.')
+														: 'Не указана'}
 												</p>
 											</div>
 											<div className="flex flex-col gap-[8px]">

@@ -76,7 +76,7 @@ export const VacancyRespondItem = (
 			<div className="w-full mb-[12px] flex items-center bg-white shadow-custom-shadow pl-[20px] pr-[55px] pt-[20px] pb-[20px]">
 				<p className="w-[25%]">
 					{props.userData
-						? props.userData.lastname + ' ' + props.userData.firstname + ' ' + props.userData.middlename
+						? props.userData.lastname + ' ' + props.userData.firstname + ' ' + (props.userData.middlename ?? '')
 						: 'Толстой Лев Николаевич'}
 				</p>
 				{props.itemType === 'PERSONNEL_DEPARTMENT' ? (

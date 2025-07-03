@@ -14,7 +14,7 @@ const getBaseUrl = () => {
 
 	// Для локального окружения
 	if (hostname === 'localhost' || hostname === '127.0.0.1') {
-		return 'https://newlk.kpfu.ru/' // ваш локальный URL
+		return 'https://newlk-test.kpfu.ru/' // ваш локальный URL
 	}
 
 	// По умолчанию для продакшена

@@ -172,7 +172,11 @@ export const Reserve = () => {
 							<ReserveItem
 								id={respond.id}
 								name={
-									respond.userData?.lastname + ' ' + respond.userData?.firstname + ' ' + respond.userData?.middlename
+									respond.userData?.lastname +
+									' ' +
+									respond.userData?.firstname +
+									' ' +
+									(respond.userData?.middlename ?? '')
 								}
 								respondDate={respond.respondDate}
 								refetch={() => {

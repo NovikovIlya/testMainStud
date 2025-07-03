@@ -32,7 +32,7 @@ export const SupervisorInterviewItem = (props: InterviewItemType) => {
 	const [deleteInterview] = useDeleteInterviewMutation()
 	const [isDeletable, setIsDeletable] = useState<boolean>(false)
 
-	const seekerName = props.seeker.lastName + ' ' + props.seeker.firstName + ' ' + props.seeker.middleName
+	const seekerName = props.seeker.lastName + ' ' + props.seeker.firstName + ' ' + (props.seeker.middleName ?? '')
 
 	const InterviewCountdownTimeElem = (props: CountdownButtonProps) => {
 		const [isInterviewStarted, setIsInterviewStarted] = useState<boolean>(false)

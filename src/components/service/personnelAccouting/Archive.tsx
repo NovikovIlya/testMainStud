@@ -124,7 +124,11 @@ export const Archive = () => {
 							<ArchiveItem
 								id={respond.id}
 								name={
-									respond.userData?.lastname + ' ' + respond.userData?.firstname + ' ' + respond.userData?.middlename
+									respond.userData?.lastname +
+									' ' +
+									respond.userData?.firstname +
+									' ' +
+									(respond.userData?.middlename ?? '')
 								}
 								respondDate={respond.responseDate}
 								refetch={() => {

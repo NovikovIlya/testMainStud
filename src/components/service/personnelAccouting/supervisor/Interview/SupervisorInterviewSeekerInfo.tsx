@@ -1,5 +1,6 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Button, ConfigProvider, Form, Modal, Select, Spin, Tag, notification } from 'antd'
+import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
@@ -22,6 +23,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 	const [api, contextHolder] = notification.useNotification()
 
 	const { pathname } = useLocation()
+	const { hostname } = window.location
 	console.log(
 		pathname.substring(pathname.substring(0, pathname.lastIndexOf('/')).lastIndexOf('/') + 1, pathname.lastIndexOf('/'))
 	)
@@ -95,7 +97,7 @@ export const SupervisorInterviewSeekerInfo = () => {
 	const birthday = data?.userData?.birthday
 	const age = birthday ? calculateAge(birthday) : undefined
 
-	const updatedDateStr = data?.userData?.birthday.replace(/-/g, '.')
+	//const updatedDateStr = data?.userData?.birthday.replace(/-/g, '.')
 
 	const [isRefuseModalOpen, setIsRefuseModalOpen] = useState(false)
 
@@ -284,23 +286,25 @@ export const SupervisorInterviewSeekerInfo = () => {
 							</Button>
 						</div>
 					)}
-				<Button
-					disabled={isEmploymentRequestSent || isSeekerRejected}
-					className="h-[40px] w-[257px] bg-[#3073D7] rounded-[54.5px] text-white text-[16px]/[16px]"
-					onClick={values => {
-						aproveSeeker({
-							rejectionReason: 'approve',
-							action: 'EMPLOY',
-							respondId: parseInt(respondId)
-						})
-							.unwrap()
-							.then(() => {
-								setIsEmploymentRequestSent(true)
+				{(hostname === 'localhost' || hostname === '127.0.0.1' || hostname.includes('vector')) && (
+					<Button
+						disabled={isEmploymentRequestSent || isSeekerRejected}
+						className="h-[40px] w-[257px] bg-[#3073D7] rounded-[54.5px] text-white text-[16px]/[16px]"
+						onClick={values => {
+							aproveSeeker({
+								rejectionReason: 'approve',
+								action: 'EMPLOY',
+								respondId: parseInt(respondId)
 							})
-					}}
-				>
-					invite without time check
-				</Button>
+								.unwrap()
+								.then(() => {
+									setIsEmploymentRequestSent(true)
+								})
+						}}
+					>
+						invite without time check
+					</Button>
+				)}
 			</div>
 		)
 	}
@@ -391,22 +395,41 @@ export const SupervisorInterviewSeekerInfo = () => {
 							</div>
 							<div className="flex flex-col gap-[8px]">
 								<p className="font-content-font font-normal text-black text-[24px]/[28.8px]">
-									{data?.userData?.lastname + ' ' + data?.userData?.firstname + ' ' + data?.userData?.middlename}
+									{data?.userData?.lastname +
+										' ' +
+										data?.userData?.firstname +
+										' ' +
+										(data?.userData?.middlename ?? '')}
 								</p>
 								<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-									{data?.userData?.sex === 'M' ? 'Мужчина' : ''}
-									{data?.userData?.sex === 'Ж' ? 'Женщина' : ''}, {age} года
+									{data?.userData?.sex ? (data?.userData?.sex === 'M' ? t('man') + ',' : t('woman') + ',') : ''}{' '}
+									{data?.userData?.birthday ? dayjs().diff(dayjs(data?.userData?.birthday), 'years') : ''}{' '}
+									{data?.userData?.birthday
+										? dayjs().diff(dayjs(data?.userData?.birthday), 'years') >= 10 &&
+										  dayjs().diff(dayjs(data?.userData?.birthday), 'years') <= 20
+											? t('yearsOld')
+											: dayjs().diff(dayjs(data?.userData?.birthday), 'years') % 10 >= 2 &&
+											  dayjs().diff(dayjs(data?.userData?.birthday), 'years') % 10 <= 4
+											? t('yearsOldSpec')
+											: dayjs().diff(dayjs(data?.userData?.birthday), 'years') % 10 == 1
+											? 'yearOld'
+											: 'yearsOld'
+										: ''}
 								</p>
 								<div className="flex gap-[36px]">
 									<div className="flex flex-col gap-[8px]">
 										<p className="font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">
-											Дата рождения
+											{t('birth')}
 										</p>
-										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">{updatedDateStr}</p>
+										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
+											{data?.userData?.birthday
+												? data?.userData?.birthday.split('-').reverse().join('.')
+												: 'Не указана'}
+										</p>
 									</div>
 									<div className="flex flex-col gap-[8px]">
 										<p className="font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">
-											Страна гражданства
+											{t('citizenshipCountry')}
 										</p>
 										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 											{countries?.find(country => country.id === data?.userData?.countryId)?.shortName}
@@ -414,7 +437,9 @@ export const SupervisorInterviewSeekerInfo = () => {
 									</div>
 								</div>
 								<div className="flex flex-col gap-[8px]">
-									<p className="font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">Контакты:</p>
+									<p className="font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">
+										{t('contacts')}:
+									</p>
 									<div className="flex gap-[24px]">
 										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 											{data?.userData?.phone}

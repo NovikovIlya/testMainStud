@@ -237,33 +237,41 @@ export const ArchiveRespondInfo = (props: {
 									</div>
 									<div className="flex flex-col gap-[8px]">
 										<p className="font-content-font font-normal text-black text-[24px]/[28.8px]">
-											{res?.userData?.lastname + ' ' + res?.userData?.firstname + ' ' + res?.userData?.middlename}
+											{res?.userData?.lastname +
+												' ' +
+												res?.userData?.firstname +
+												' ' +
+												(res?.userData?.middlename ?? '')}
 										</p>
 										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-											{res.userData?.sex === 'M' ? 'Мужчина' : 'Женщина'},{' '}
-											{dayjs().diff(dayjs(res.userData?.birthday), 'years')}{' '}
-											{dayjs().diff(dayjs(res.userData?.birthday), 'years') >= 10 &&
-											dayjs().diff(dayjs(res.userData?.birthday), 'years') <= 20
-												? 'лет'
-												: dayjs().diff(dayjs(res.userData?.birthday), 'years') % 10 >= 2 &&
-												  dayjs().diff(dayjs(res.userData?.birthday), 'years') % 10 <= 4
-												? 'года'
-												: dayjs().diff(dayjs(res.userData?.birthday), 'years') % 10 == 1
-												? 'год'
-												: 'лет'}
+											{res.userData?.sex ? (res.userData?.sex === 'M' ? t('man') + ',' : t('woman') + ',') : ''}{' '}
+											{res.userData?.birthday ? dayjs().diff(dayjs(res.userData?.birthday), 'years') : ''}{' '}
+											{res.userData?.birthday
+												? dayjs().diff(dayjs(res.userData?.birthday), 'years') >= 10 &&
+												  dayjs().diff(dayjs(res.userData?.birthday), 'years') <= 20
+													? t('yearsOld')
+													: dayjs().diff(dayjs(res.userData?.birthday), 'years') % 10 >= 2 &&
+													  dayjs().diff(dayjs(res.userData?.birthday), 'years') % 10 <= 4
+													? t('yearsOldSpec')
+													: dayjs().diff(dayjs(res.userData?.birthday), 'years') % 10 == 1
+													? 'yearOld'
+													: 'yearsOld'
+												: ''}
 										</p>
 										<div className="flex gap-[36px]">
 											<div className="flex flex-col gap-[8px]">
 												<p className="font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">
-													Дата рождения
+													{t('birth')}
 												</p>
 												<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-													{res.userData?.birthday && res.userData?.birthday.split('-').reverse().join('.')}
+													{res.userData?.birthday
+														? res.userData?.birthday.split('-').reverse().join('.')
+														: 'Не указана'}
 												</p>
 											</div>
 											<div className="flex flex-col gap-[8px]">
 												<p className="font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">
-													Страна гражданства
+													{t('citizenshipCountry')}
 												</p>
 												<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 													{countries?.find(country => country.id === res.userData?.countryId)?.shortName}
@@ -272,7 +280,7 @@ export const ArchiveRespondInfo = (props: {
 										</div>
 										<div className="flex flex-col gap-[8px]">
 											<p className="font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">
-												Контакты:
+												{t('contacts')}:
 											</p>
 											<div className="flex gap-[24px]">
 												<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">

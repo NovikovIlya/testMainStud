@@ -1,15 +1,15 @@
 import { Button } from 'antd'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+
 import { setCurrentResponce } from '../../../../../store/reducers/CurrentResponceSlice'
 import {
 	setCurrentRequisiteSeekerName,
 	setCurrentRequisiteSeekerVacancy
 } from '../../../../../store/reducers/RequisiteReducers/RequisiteSeekerReducer'
-import { useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
 import { EmploymentStageItemType } from '../../../../../store/reducers/type'
 
-export const RequisiteItem = ( props : EmploymentStageItemType ) => {
-
+export const RequisiteItem = (props: EmploymentStageItemType) => {
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
 
@@ -17,11 +17,9 @@ export const RequisiteItem = ( props : EmploymentStageItemType ) => {
 		<div className="flex flex-col">
 			<div className="flex flex-row items-center h-[80px] w-full bg-[#FFFFFF]">
 				<div className="flex ml-[1.5%] w-[30%]">
-					{props.applicant.lastName + ' ' + props.applicant.firstName + ' ' + props.applicant.middleName}
+					{props.applicant.lastName + ' ' + props.applicant.firstName + ' ' + (props.applicant.middleName ?? '')}
 				</div>
-				<div className="flex w-[20%] mr-[10%]">
-					{props.vacancy.name}
-				</div>
+				<div className="flex w-[20%] mr-[10%]">{props.vacancy.name}</div>
 				{props.status === 'REFINE' && (
 					<div className="flex items-center w-[13.5%] gap-[12px]">
 						<div className="w-[11px] h-[11px] rounded-[100%] bg-[#FFD600]"></div>
@@ -42,14 +40,19 @@ export const RequisiteItem = ( props : EmploymentStageItemType ) => {
 				)}
 				<div className="flex ml-[5%] w-[20%] flex-row justify-between">
 					<Button
-						className='text-[#FFFFFF] py-[8px] px-[24px] border-none rounded-[54.5px] text-[16px] font-normal'
+						className="text-[#FFFFFF] py-[8px] px-[24px] border-none rounded-[54.5px] text-[16px] font-normal"
 						type="primary"
 						onClick={() => {
 							dispatch(setCurrentResponce(props.respondId))
 							dispatch(setCurrentRequisiteSeekerVacancy(props.vacancy.name))
-							dispatch(setCurrentRequisiteSeekerName( props.applicant.lastName + ' ' + props.applicant.firstName + ' ' + props.applicant.middleName))
+							dispatch(
+								setCurrentRequisiteSeekerName(
+									props.applicant.lastName + ' ' + props.applicant.firstName + ' ' + (props.applicant.middleName ?? '')
+								)
+							)
 							navigate(`/services/personnelaccounting/accounting/requisite/requisite-review/${props.respondId}`)
-						}}>
+						}}
+					>
 						Подробнее
 					</Button>
 				</div>

@@ -119,7 +119,7 @@ export const SupervisorInterviews = () => {
 					>
 						Формат
 					</h3>
-					<h3 className="w-[37%] mr-[2%]"></h3>
+					<h3 className="w-[37%] ml-[2%]"></h3>
 				</div>
 				<div className="flex flex-col gap-[12px]">
 					{interviews.map(inter => (

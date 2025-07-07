@@ -1,4 +1,5 @@
 import { Button, Checkbox, Popover, Radio } from 'antd'
+import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
@@ -56,8 +57,7 @@ export const EmplRequisites = (props: { respondId: number; stageId: number; stag
 		<>
 			<div className="flex flex-col gap-[40px] font-content-font font-normal text-black text-[16px]/[19.2px] w-full">
 				<p>
-					Прикрепите свои реквизиты для начисления зарплаты <br /> (только банковская карта Сбербанка или ВТБ, платёжная
-					система МИР)
+					{t('requisitesText1')} <br /> ({t('requisitesText2')})
 				</p>
 				<div
 					className={`bg-white rounded-[16px] shadow-custom-shadow p-[20px] w-[70%] flex flex-col gap-[20px] ${
@@ -65,7 +65,7 @@ export const EmplRequisites = (props: { respondId: number; stageId: number; stag
 					}`}
 				>
 					<div className="flex items-center gap-[9px]">
-						<p className="opacity-80">Прикрепить файлы</p>
+						<p className="opacity-80">{t('attachFiles')}</p>
 						<Popover
 							overlayClassName="p-[20px] w-[369px]"
 							className="pointer-events-auto"
@@ -75,18 +75,17 @@ export const EmplRequisites = (props: { respondId: number; stageId: number; stag
 								<>
 									<div className="font-content-font font-normal text-black text-[14px]/[16px] flex flex-col gap-[16px]">
 										<p>
-											1. <b>Формат файла</b> может быть jpg, png, pdf.
+											1. <b>{t('fileFormat')}</b> {t('fileFormatText')}.
 										</p>
 										<p>
-											2. <b>Вес файла</b> должен быть не больше 5мб.
+											2. <b>{t('sizeOfFile')}</b> {t('lessThen5MB')}.
 										</p>
 										<p>
-											3. <b>Объединение.</b> Если ваш документ содержит несколько страниц, необходимо объединить их в
-											один многостраничный файл pdf.
+											3. <b>{t('concatanation')}.</b> {t('concatanationText')}.
 										</p>
 										<div className="flex flex-col gap-[16px]">
 											<p>
-												4. <b>Пример</b>
+												4. <b>{t('example')}</b>
 											</p>
 											<img
 												className="mx-auto"
@@ -133,14 +132,14 @@ export const EmplRequisites = (props: { respondId: number; stageId: number; stag
 									}
 								}}
 							>
-								У меня нет ни одной из указанных карт
+								{t('requisitesNoCard')}
 							</Checkbox>
 							<Popover
 								overlayClassName="p-[20px] w-[369px]"
 								className="pointer-events-auto"
 								placement="bottomLeft"
 								arrow={false}
-								content="Если у вас нет ни одной из указанных карт, нажмите на галочку. Карта будет заведена на ваше имя и вы сможете получить её, как только будете трудоустроены."
+								content={t('requisitesNoCardHint')}
 							>
 								<p className="h-[18px] w-[18px] border border-black border-solid text-center content-center text-[12px]/[12px] opacity-40">
 									?
@@ -149,7 +148,7 @@ export const EmplRequisites = (props: { respondId: number; stageId: number; stag
 						</div>
 						{hasRequisites && (
 							<div className="flex flex-col gap-[8px]">
-								<p className="text-[14px]/[14px] ml-[24px]">Выберите карту, которую вы бы хотели завести:</p>
+								<p className="text-[14px]/[14px] ml-[24px]">{t('requsitesChooseCard')}:</p>
 								<Radio.Group name="bank" className="flex flex-col gap-[8px]" defaultValue={foundStage?.bank}>
 									<Radio
 										value={'SBER'}
@@ -167,7 +166,7 @@ export const EmplRequisites = (props: { respondId: number; stageId: number; stag
 												})
 										}}
 									>
-										Сбербанк
+										{t('sber')}
 									</Radio>
 									<Radio
 										value={'VTB'}
@@ -185,7 +184,7 @@ export const EmplRequisites = (props: { respondId: number; stageId: number; stag
 												})
 										}}
 									>
-										ВТБ
+										{t('vtb')}
 									</Radio>
 								</Radio.Group>
 							</div>
@@ -205,7 +204,7 @@ export const EmplRequisites = (props: { respondId: number; stageId: number; stag
 								})
 						}}
 					>
-						Далее
+						{t('next')}
 					</Button>
 				)}
 			</div>

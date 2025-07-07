@@ -1,4 +1,4 @@
-import { Button, Checkbox, ConfigProvider, DatePicker, Form, Input, Modal, Radio, Upload } from 'antd'
+import { Button, Checkbox, ConfigProvider, DatePicker, Form, Input, Modal, Popover, Radio, Upload } from 'antd'
 import { FormInstance } from 'antd/lib'
 import en_US from 'antd/locale/en_US'
 import ru_RU from 'antd/locale/ru_RU'
@@ -31,7 +31,6 @@ export const AddAwardModal = (props: {
 					<Form
 						form={props.form}
 						layout="vertical"
-						requiredMark={false}
 						className="w-full"
 						onFinish={values => {
 							console.log(values)
@@ -83,7 +82,7 @@ export const AddAwardModal = (props: {
 						</Form.Item>
 						<Form.Item
 							name={'award'}
-							label={t('award') + '*'}
+							label={t('award')}
 							rules={[{ required: true, message: t('awardNameNotEntered') }]}
 						>
 							<Input className="w-full" placeholder={t('awardEnterPlaceholder')}></Input>
@@ -91,7 +90,7 @@ export const AddAwardModal = (props: {
 						<ConfigProvider locale={i18next.language === 'ru' ? ru_RU : en_US}>
 							<Form.Item
 								name={'awardDate'}
-								label={t('awardDate') + '*'}
+								label={t('awardDate')}
 								rules={[{ required: true, message: t('awardDateNotEntered') }]}
 							>
 								<DatePicker className="w-[47%]" maxDate={dayjs()} format="DD.MM.YYYY"></DatePicker>
@@ -110,7 +109,31 @@ export const AddAwardModal = (props: {
 						</Form.Item>
 						<Form.Item
 							name={'file'}
-							label={<div className="flex gap-[10px]">{t('AttachDocuments')}</div>}
+							label={
+								<div
+									className="flex gap-[10px]"
+									onClick={e => {
+										e.preventDefault()
+									}}
+								>
+									{t('AttachDocuments')}
+									<Popover
+										overlayClassName="p-[20px] w-[369px]"
+										placement="right"
+										arrow={false}
+										content={
+											<>
+												<p>{t('awardPopoverText')}</p>
+											</>
+										}
+									>
+										{' '}
+										<p className="h-[18px] w-[18px] border border-black border-solid text-center content-center text-[12px]/[12px] opacity-40">
+											?
+										</p>
+									</Popover>
+								</div>
+							}
 							valuePropName="defaultFileList"
 							rules={[
 								{

@@ -1,9 +1,10 @@
 import { Button } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
+import { t } from 'i18next'
 import { forwardRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import { ArrowToTheRight } from '../../../assets/svg/ArrowToTheRight'
 import { MessageReadSvg } from '../../../assets/svg/MessageReadSvg'
@@ -34,15 +35,9 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 	const currentUrl = useLocation()
 	const match = currentUrl.pathname.match(/\/id\/(\d+)$/)
 
-	let id_from_url: string
-	let page_id: number
+	const params = useParams()
 
-	if (match) {
-		id_from_url = match[1]
-	} else {
-		console.error('id miss')
-	}
-	page_id = Number(id_from_url)
+	const page_id = parseInt(currentUrl.pathname.substring(currentUrl.pathname.lastIndexOf('/') + 1))
 
 	const [answerMainTime, { isLoading: answerMainTimeLoading }] = useAnswerToInivitationMainTimeMutation()
 	const [getVacancy, result] = useLazyGetVacancyViewQuery()
@@ -88,14 +83,14 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 								.then(result => {
 									dispatch(setCurrentVacancy(result))
 									isEmpDep
-										? navigate(`/services/personnelaccounting/chat/vacancyview/${currentVacancyId}`)
-										: navigate(`/services/myresponds/chat/vacancyview/${currentVacancyId}`)
+										? navigate(`/services/personnelaccounting/chat/vacancyview/${currentVacancyId}/${params.chatId}`)
+										: navigate(`/services/myresponds/chat/vacancyview/${currentVacancyId}/${params.chatId}`)
 								})
 						}}
 					>
 						<div className="flex items-center">
 							<div>
-								<p className="font-bold">Отклик на вакансию</p>
+								<p className="font-bold">{t('vacancyRespond')}</p>
 								<p>{vacancyTitle}</p>
 							</div>
 							<div className="ml-auto">
@@ -105,7 +100,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 						<div className="h-[1px] bg-black bg-opacity-[24%] mt-[16px]"></div>
 					</div>
 				)}
-				<p className="whitespace-pre-line">
+				<p className="whitespace-pre-line overflow-hidden text-ellipsis">
 					{props.msgData.text && props.msgData.text.match(/(https?:\/\/[^\s]+)/g) ? (
 						<>
 							{/* <span className="whitespace-pre-line">{props.msgData.text.split(/(https?:\/\/[^\s]+)/g)?.[0]}</span>
@@ -185,12 +180,12 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 							})
 						}}
 						loading={answerMainTimeLoading}
-						disabled={isEmpDep || isResponsed}
+						disabled={isEmpDep === 'PERSONNEL_DEPARTMENT' || isResponsed}
 						className={`rounded-[54.5px] h-full border-black bg-inherit outline-none border cursor-pointer ${
 							isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
 						}`}
 					>
-						Да
+						{t('Yes')}
 					</Button>
 					<Button
 						onClick={() => {
@@ -198,12 +193,12 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 								setIsResponsed(true)
 							})
 						}}
-						disabled={isEmpDep || isResponsed}
+						disabled={isEmpDep === 'PERSONNEL_DEPARTMENT' || isResponsed}
 						className={`rounded-[54.5px] h-full border-black bg-inherit outline-none border cursor-pointer ${
 							isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
 						}`}
 					>
-						Не удобно
+						{t('notConvenient')}
 					</Button>
 					<Button
 						onClick={() => {
@@ -215,12 +210,12 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 								setIsResponsed(true)
 							})
 						}}
-						disabled={isEmpDep || isResponsed}
+						disabled={isEmpDep === 'PERSONNEL_DEPARTMENT' || isResponsed}
 						className={`col-span-2 rounded-[54.5px] h-full border-black bg-inherit outline-none border cursor-pointer ${
 							isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
 						}`}
 					>
-						Вакансия не актуальна
+						{t('nonRelevantVacancy')}
 					</Button>
 				</div>
 			)}
@@ -248,7 +243,7 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 										setIsResponsed(true)
 									})
 								}}
-								disabled={isEmpDep || isResponsed}
+								disabled={isEmpDep === 'PERSONNEL_DEPARTMENT' || isResponsed}
 								loading={answerReserveTimeLoading && pressedButton === i}
 								className={`w-full text-[16px]/[19.2px] text-wrap h-full border-black rounded-[54.5px] py-[12px] px-[20px] text-center bg-inherit outline-none border cursor-pointer test:px-[12px]  ${
 									isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
@@ -268,12 +263,12 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 							})
 						}}
 						loading={answerReserveTimeLoading && pressedButton === 3}
-						disabled={isEmpDep || isResponsed}
+						disabled={isEmpDep === 'PERSONNEL_DEPARTMENT' || isResponsed}
 						className={`row-start-2 row-end-2 col-span-3 rounded-[54.5px] h-full border-black bg-inherit outline-none border cursor-pointer ${
 							isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
 						}`}
 					>
-						Нет подходящего времени
+						{t('noRightTime')}
 					</Button>
 				</div>
 			)}
@@ -301,12 +296,12 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 								})
 							}}
 							loading={answerEmploymentRequestLoading && pressedButton === 4}
-							disabled={isEmpDep || isResponsed}
+							disabled={isEmpDep === 'PERSONNEL_DEPARTMENT' || isResponsed}
 							className={`w-6/12 text-[16px]/[19.2px] rounded-[54.5px] h-full border-black text-center bg-inherit outline-none border cursor-pointer ${
 								isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
 							}`}
 						>
-							Да
+							{t('Yes')}
 						</Button>
 						<Button
 							onClick={() => {
@@ -319,13 +314,13 @@ export const ChatMessage = forwardRef<Ref, Props>((props, ref) => {
 									setIsResponsed(true)
 								})
 							}}
-							disabled={isEmpDep || isResponsed}
+							disabled={isEmpDep === 'PERSONNEL_DEPARTMENT' || isResponsed}
 							loading={answerEmploymentRequestLoading && pressedButton === 5}
 							className={`w-6/12 text-[16px]/[19.2px] rounded-[54.5px] h-full border-black text-center py-[12px] bg-inherit outline-none border cursor-pointer ${
 								isEmpDep || isResponsed ? 'select-none !cursor-not-allowed' : ''
 							}`}
 						>
-							Нет
+							{t('No')}
 						</Button>
 					</div>
 				</div>

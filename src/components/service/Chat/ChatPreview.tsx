@@ -1,6 +1,7 @@
 import { Badge } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
+import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -76,13 +77,16 @@ export const ChatPreview = (props: {
 	const smallhandler = (e: CustomEventInit) => {
 		console.log('Отработка')
 		console.log(pathname)
+		console.log(props.respondId.toString())
 		pathname.includes(props.respondId.toString()) && console.log('Received a new message!')
 		pathname.includes(props.respondId.toString()) && console.log(e.detail.date)
 		pathname.includes(props.respondId.toString()) && setLastMessageDate(prev => e.detail.date as string)
 	}
 
 	useEffect(() => {
-		setLastMessageDate(prev => chatInfo.lastMessageDate)
+		console.log('Отработка эффекта по прокидыванию изначального времени')
+		console.log(chatInfo.lastMessageDate)
+		setLastMessageDate(prev => chatInfo.lastMessageDate + 'Z')
 	}, [chatInfo.lastMessageDate])
 
 	useEffect(() => {
@@ -90,7 +94,7 @@ export const ChatPreview = (props: {
 		return () => {
 			window.removeEventListener('newmessage', smallhandler)
 		}
-	}, [])
+	}, [pathname])
 
 	return (
 		<>
@@ -101,16 +105,12 @@ export const ChatPreview = (props: {
 				)}
 				onClick={() => {
 					dispatch(setCurrentVacancyName(props.respName))
-					handleNavigate(
-						isEmpDemp
-							? `/services/personnelaccounting/chat/id/${chatInfo.id}`
-							: `/services/myresponds/chat/id/${chatInfo.id}`
-					)
+					handleNavigate(`/services/myresponds/chat/id/${chatInfo.id}`)
 					setIsChatOpen(true)
 				}}
 			>
 				<div className="w-full flex flex-col gap-[10px]">
-					<p className=" font-content-font font-normal text-black text-[16px]/[19.2px] opacity-50">Просмотрен</p>
+					<p className=" font-content-font font-normal text-black text-[16px]/[19.2px] opacity-50">{t('viewed')}</p>
 					<div className="w-full flex justify-between">
 						<p className="text-base w-[60%]">{props.respName}</p>
 						<div className="flex flex-col">
@@ -118,7 +118,7 @@ export const ChatPreview = (props: {
 								<p className=" font-content-font font-normal text-black text-[12px]/[14.4px] opacity-[52%]">
 									{lastMessageDate.substring(8, 10) +
 										' ' +
-										ChatMessageDateDisplayEnum[parseInt(lastMessageDate.substring(5, 7)) - 1].substring(0, 3) +
+										t(ChatMessageDateDisplayEnum[parseInt(lastMessageDate.substring(5, 7)) - 1]) +
 										' ' +
 										dayjs(lastMessageDate).format().substring(11, 16)}
 								</p>

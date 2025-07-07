@@ -1,5 +1,5 @@
 import { LoadingOutlined } from '@ant-design/icons'
-import { Spin } from 'antd'
+import { Spin, notification } from 'antd'
 import { useEffect, useRef, useState } from 'react'
 
 import { useLazyGetArchivedResponcesQuery } from '../../../store/api/serviceApi'
@@ -22,6 +22,14 @@ export const Archive = () => {
 	const [archive, setArchive] = useState<VacancyRespondItemType[]>([])
 
 	const [getResponds, getRespondsStatus] = useLazyGetArchivedResponcesQuery()
+
+	const [api, contextHolder] = notification.useNotification()
+
+	const handleAlert = (text: string, type: 'SUCCESS' | 'ERROR') => {
+		type === 'SUCCESS'
+			? api.success({ message: text, placement: 'bottomRight' })
+			: api.error({ message: text, placement: 'bottomRight' })
+	}
 
 	useEffect(() => {
 		const lowerObserver = new IntersectionObserver(entries => {
@@ -88,6 +96,7 @@ export const Archive = () => {
 
 	return (
 		<>
+			{contextHolder}
 			<div className="w-full pl-[52px] pr-[52px] pt-[60px] mt-[60px]">
 				<h1 className="font-content-font font-normal text-black text-[28px]/[28px]">Архив</h1>
 				<div className="flex mt-[52px] mb-[16px] pl-[20px] pr-[55px]">
@@ -115,13 +124,18 @@ export const Archive = () => {
 							<ArchiveItem
 								id={respond.id}
 								name={
-									respond.userData?.lastname + ' ' + respond.userData?.firstname + ' ' + respond.userData?.middlename
+									respond.userData?.lastname +
+									' ' +
+									respond.userData?.firstname +
+									' ' +
+									(respond.userData?.middlename ?? '')
 								}
 								respondDate={respond.responseDate}
 								refetch={() => {
 									setRequestData({ page: 0 })
 								}}
 								post={respond.vacancyName ? respond.vacancyName : respond.desiredJob}
+								handleAlert={handleAlert}
 							/>
 						))}
 						{getRespondsStatus.isFetching && requestData.page > 0 && showSpin && (

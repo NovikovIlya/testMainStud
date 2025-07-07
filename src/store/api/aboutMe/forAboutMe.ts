@@ -287,23 +287,22 @@ export const myPracticeService = apiSlice.injectEndpoints({
 
 		// Получить социальные сети
 		getSocialNetworks: builder.query<any, void>({
-		query: () => ({
-			url: '/user-api/social-network',
-			method: 'GET'
-		}),
-		providesTags: ['SocialNetwork'],
-		keepUnusedDataFor: 1
+			query: () => ({
+				url: '/user-api/social-network',
+				method: 'GET'
+			}),
+			providesTags: ['SocialNetwork'],
+			keepUnusedDataFor: 1
 		}),
 
 		updateSocialNetworks: builder.mutation({
-		query: (body) => ({
-			url: '/user-api/social-network',
-			method: 'POST',
-			body
-		}),
-		invalidatesTags: ['SocialNetwork']
-		}),
-		
+			query: body => ({
+				url: '/user-api/social-network',
+				method: 'POST',
+				body
+			}),
+			invalidatesTags: ['SocialNetwork']
+		})
 	})
 })
 
@@ -340,5 +339,6 @@ export const {
 	useEditScientificActivityMutation,
 	useIsPublishedScientificMutation,
 	useGetSocialNetworksQuery,
-	useUpdateSocialNetworksMutation
+	useUpdateSocialNetworksMutation,
+	useLazyGetAboutMeQuery
 } = myPracticeService

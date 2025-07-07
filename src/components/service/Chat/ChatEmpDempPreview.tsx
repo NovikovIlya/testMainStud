@@ -1,6 +1,7 @@
 import { Badge } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
+import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -27,15 +28,16 @@ export const ChatEmpDempPreview = (props: {
 	lastMessageDate: string
 }) => {
 	const user = useAppSelector(state => state.auth.user)
-	const isEmpDemp = user?.roles.find(role => role.type === 'EMPL')
+	const isEmpDemp = user?.roles.find((role: { type: string }) => role.type === 'EMPL')
 
 	const { pathname } = useLocation()
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 
 	const handleNavigate = (url: string) => {
+		dispatch(openChat())
 		dispatch(setChatId(props.chatId))
-		//dispatch(setRespondId(props.respondId))
+		dispatch(setRespondId(0))
 		dispatch(setCurrentVacancyId(props.vacancyId))
 		navigate(url)
 	}
@@ -68,11 +70,7 @@ export const ChatEmpDempPreview = (props: {
 				)}
 				onClick={() => {
 					dispatch(setCurrentVacancyName(props.respName))
-					handleNavigate(
-						isEmpDemp
-							? `/services/personnelaccounting/chat/id/${props.chatId}`
-							: `/services/myresponds/chat/id/${props.chatId}`
-					)
+					handleNavigate(`id/${props.chatId}`)
 					setIsChatOpen(true)
 				}}
 			>
@@ -104,7 +102,7 @@ export const ChatEmpDempPreview = (props: {
 								{props.status === 'INVITATION'
 									? 'Приглашение'
 									: props.status === 'ARCHIVE'
-									? 'Отказ'
+									? 'Архив'
 									: props.status === 'IN_RESERVE'
 									? 'Резерв'
 									: props.status === 'IN_SUPERVISOR_REVIEW'
@@ -119,9 +117,11 @@ export const ChatEmpDempPreview = (props: {
 								<p className=" font-content-font font-normal text-black text-[12px]/[14.4px] opacity-[52%]">
 									{lastMessageDate.substring(8, 10) +
 										' ' +
-										ChatMessageDateDisplayEnum[parseInt(lastMessageDate.substring(5, 7)) - 1].substring(0, 3) +
+										t(ChatMessageDateDisplayEnum[parseInt(lastMessageDate.substring(5, 7)) - 1]).substring(0, 3) +
 										' ' +
-										dayjs(lastMessageDate).format().substring(11, 16)}
+										dayjs(lastMessageDate.endsWith('Z') ? lastMessageDate : lastMessageDate + 'Z')
+											.format()
+											.substring(11, 16)}
 								</p>
 							)}
 

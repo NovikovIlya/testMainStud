@@ -169,7 +169,9 @@ export default function Catalog() {
 					value={categoryTitle}
 				/>
 				<h2 className="mt-[36px] font-content-font font-normal text-[18px]/[18px] text-black">
-					{categories.find(category => category.title === categoryTitle)?.direction ? 'Профобласть' : 'Подразделение'}
+					{categories.find(category => category.title === categoryTitle)?.directions.length !== 0
+						? 'Профобласть'
+						: 'Подразделение'}
 				</h2>
 				<Select
 					className="mt-[16px]"

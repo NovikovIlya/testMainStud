@@ -1,4 +1,5 @@
 import { Button, ConfigProvider, Modal } from 'antd'
+import { t } from 'i18next'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -7,21 +8,20 @@ import { DeleteSvg } from '../../../assets/svg/DeleteSvg'
 import { WarningModalIconSvg } from '../../../assets/svg/WarningModalIconSvg'
 import { useDeleteRespondFromArchiveMutation } from '../../../store/api/serviceApi'
 import { setCurrentResponce } from '../../../store/reducers/CurrentResponceSlice'
-import { useAlert } from '../../../utils/Alert/AlertMessage'
-import styles from "../../../utils/deleteOverwriteAntButton.module.css";
+import styles from '../../../utils/deleteOverwriteAntButton.module.css'
 
 export const ArchiveItem = (props: {
 	id: number
 	name: String | undefined
 	respondDate: string
 	refetch: Function
+	handleAlert: (text: string, type: 'SUCCESS' | 'ERROR') => void
 	post: string
 }) => {
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
 	const [isModalOpen, setModalOpen] = useState(false)
 	const [deleteVacancy, deleteResult] = useDeleteRespondFromArchiveMutation()
-	const { openAlert } = useAlert()
 	return (
 		<>
 			<ConfigProvider
@@ -67,9 +67,9 @@ export const ArchiveItem = (props: {
 											setModalOpen(false)
 											props.refetch()
 										})
-									openAlert({ type: 'success', text: 'Отклик успешно удалён.' })
+									props.handleAlert('Отклик успешно удалён', 'SUCCESS')
 								} catch (error: any) {
-									openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+									props.handleAlert(t('alertError'), 'ERROR')
 								}
 							}}
 							loading={deleteResult.isLoading}

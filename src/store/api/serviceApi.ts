@@ -47,7 +47,7 @@ import { apiSlice } from './apiSlice'
 
 const host = import.meta.env.REACT_APP_HOST
 const port = import.meta.env.REACT_APP_PORT
-const emplBaseURL = host && port ? `http://${host}:${port}/` : `employment/`
+const emplBaseURL = host && port ? `http://${host}:${port}/` : `https://newlk.kpfu.ru/employment/`
 
 export const serviceApi = apiSlice.injectEndpoints({
 	endpoints: builder => ({
@@ -1061,6 +1061,12 @@ export const serviceApi = apiSlice.injectEndpoints({
 				method: 'GET'
 			})
 		}),
+		deleteInterview: builder.mutation<void, number>({
+			query: interviewId => ({
+				url: `${emplBaseURL}employment-api/v1/interview/${interviewId}`,
+				method: 'DELETE'
+			})
+		}),
 		getAwards: builder.query<AwardType[], void>({
 			query: () => ({
 				url: `about-me/get-awards`
@@ -1087,6 +1093,13 @@ export const serviceApi = apiSlice.injectEndpoints({
 				url: `about-me/set-award`,
 				method: 'PUT',
 				body: arg
+			}),
+			invalidatesTags: ['Awards']
+		}),
+		publishAward: builder.mutation<void, number>({
+			query: awardId => ({
+				url: `about-me/award-is-published?id=${awardId}`,
+				method: 'PATCH'
 			}),
 			invalidatesTags: ['Awards']
 		}),
@@ -1240,11 +1253,13 @@ export const {
 	useGetInterviewQuery,
 	useLazyGetInterviewQuery,
 	useLazyGetChatIdByRespondIdQuery,
+	useDeleteInterviewMutation,
 	useGetCurrentDateQuery,
 	useGetAwardsQuery,
 	useAddNewAwardMutation,
 	useUpdateNewAwardMutation,
 	useDeleteNewAwardMutation,
+	usePublishAwardMutation,
 	useSetMainEmailMutation,
 	useSetEmailMarkerMutation,
 	useSetPhoneMarkerMutation,

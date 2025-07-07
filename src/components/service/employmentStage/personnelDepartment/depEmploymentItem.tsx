@@ -35,7 +35,7 @@ export const DepEmploymentItem = (props: EmploymentStageItemType) => {
 		<div className="flex flex-col">
 			<div className="flex flex-row items-center h-[80px] w-full bg-[#FFFFFF]">
 				<div className="flex ml-[1.5%] w-[24%]">
-					{props.applicant.lastName + ' ' + props.applicant.firstName + ' ' + props.applicant.middleName}
+					{props.applicant.lastName + ' ' + props.applicant.firstName + ' ' + (props.applicant.middleName ?? '')}
 				</div>
 				<div className="flex w-[20%] mr-[5%]">{props.vacancy.name}</div>
 				{props.status === 'REFINE' && (
@@ -65,7 +65,7 @@ export const DepEmploymentItem = (props: EmploymentStageItemType) => {
 							dispatch(setCurrentEmploymentSeekerVacancy(props.vacancy.name))
 							dispatch(
 								setCurrentEmploymentSeekerName(
-									props.applicant.lastName + ' ' + props.applicant.firstName + ' ' + props.applicant.middleName
+									props.applicant.lastName + ' ' + props.applicant.firstName + ' ' + (props.applicant.middleName ?? '')
 								)
 							)
 							navigate(`/services/personnelaccounting/personnel-department/employment/stages/${props.respondId}`)

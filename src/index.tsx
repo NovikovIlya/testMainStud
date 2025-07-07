@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/browser'
 import React, { Suspense } from 'react'
 import ReactDOM from 'react-dom/client'
 import { Provider } from 'react-redux'
@@ -8,33 +9,29 @@ import App from './App'
 import CookieConsent from './components/dnd/CookieConsent'
 import './index.scss'
 import { store } from './store'
-import { AlertProvider } from './utils/Alert/AlertMessage'
-import * as Sentry from "@sentry/browser";
 
-Sentry.init({ dsn: "https://3f6acd05f9694ea095dc26db003809cb@app.glitchtip.com/11250" });
+Sentry.init({ dsn: 'https://3f6acd05f9694ea095dc26db003809cb@app.glitchtip.com/11250' })
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
 root.render(
 	// <BrowserRouter>
-	<React.StrictMode>
-		<Suspense
-			fallback={
-				<div className="screen">
-					<div className="loader">
-						<div className="inner one"></div>
-						<div className="inner two"></div>
-						<div className="inner three"></div>
-					</div>
+	//<React.StrictMode>
+	<Suspense
+		fallback={
+			<div className="screen">
+				<div className="loader">
+					<div className="inner one"></div>
+					<div className="inner two"></div>
+					<div className="inner three"></div>
 				</div>
-			}
-		>
-			<Provider store={store}>
-				<AlertProvider>
-					<App />
-					<CookieConsent />
-				</AlertProvider>
-			</Provider>
-		</Suspense>
-	</React.StrictMode>
+			</div>
+		}
+	>
+		<Provider store={store}>
+			<App />
+			<CookieConsent />
+		</Provider>
+	</Suspense>
+	//</React.StrictMode>
 	//  </BrowserRouter>
 )

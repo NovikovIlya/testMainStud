@@ -1,19 +1,19 @@
 import { LoadingOutlined } from '@ant-design/icons'
-import { Button, ConfigProvider, Modal, Spin } from 'antd'
+import { Button, ConfigProvider, Modal, Spin, notification } from 'antd'
+import { t } from 'i18next'
 import { useEffect, useRef, useState } from 'react'
 
 import { SearchInputIconSvg } from '../../../../../assets/svg/SearchInputIconSvg'
 import { SuccessModalIconSvg } from '../../../../../assets/svg/SuccessModalIconSvg'
 import { useLazyGetTestResultsQuery, useSetTestResultSignedMutation } from '../../../../../store/api/serviceApi'
 import { SignedItemType } from '../../../../../store/reducers/type'
-import { useAlert } from '../../../../../utils/Alert/AlertMessage'
 
 export const TestResults = () => {
 	const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
 	const [isApproveModalOpen, setIsApproveModalOpen] = useState(false)
 	const [searchQuery, setSearchQuery] = useState('')
 
-	const { openAlert } = useAlert()
+	const [api, contextHolder] = notification.useNotification()
 
 	const [requestData, setRequestData] = useState<{
 		query: string
@@ -139,6 +139,7 @@ export const TestResults = () => {
 	const ApproveModal = (props: { id: number }) => {
 		return (
 			<>
+				{contextHolder}
 				<ConfigProvider
 					theme={{
 						token: {
@@ -178,7 +179,7 @@ export const TestResults = () => {
 											setIsApproveModalOpen(false)
 											setSeekerSigned({ subStageId: props.id })
 										} catch (error: any) {
-											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+											api.error({ message: t('alertError'), placement: 'bottomRight' })
 										}
 									}}
 								>

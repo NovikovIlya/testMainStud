@@ -1,5 +1,7 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Button, ConfigProvider, Modal, Spin, Tag } from 'antd'
+import dayjs from 'dayjs'
+import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
@@ -27,24 +29,21 @@ import { setRespondId } from '../../../store/reducers/CurrentRespondIdSlice'
 import { setCurrentVacancyId } from '../../../store/reducers/CurrentVacancyIdSlice'
 import { setCurrentVacancyName } from '../../../store/reducers/CurrentVacancyNameSlice'
 import { setChatId } from '../../../store/reducers/chatIdSlice'
-import { useAlert } from '../../../utils/Alert/AlertMessage'
 import styles from '../../../utils/deleteOverwriteAntButton.module.css'
 import { NocircleArrowIcon } from '../jobSeeker/NoCircleArrowIcon'
 
 import { ApproveRespondForm } from './ApproveRespondForm'
+import { RespondInfoCommon } from './RespondInfoCommon'
 import { InviteSeekerForm } from './supervisor/InviteSeekerForm'
 
-export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR' }) => {
+export const ReserveRespondInfo = (props: {
+	type: 'PERSONNEL_DEPARTMENT' | 'SUPERVISOR'
+	handleAlert: (text: string, type: 'SUCCESS' | 'ERROR') => void
+}) => {
 	const currentUrl = window.location.pathname
 	const match = currentUrl.match(/\/fullinfo\/(\d+)(?=\/|$)/)
 
-	let id_from_url: string | number
-
-	if (match) {
-		id_from_url = match[1]
-	} else {
-		console.error('id miss')
-	}
+	const id_from_url = parseInt(currentUrl.substring(currentUrl.lastIndexOf('/') + 1))
 
 	const { data: res } = useGetReservedRespondFullInfoQuery(id_from_url)
 
@@ -52,8 +51,6 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 
 	const { i18n } = useTranslation()
 	const { data: countries } = useGetCountriesQuery(i18n.language)
-
-	const { openAlert } = useAlert()
 
 	const [getResume, resumeQueryStatus] = useLazyGetSeekerResumeFileQuery()
 	const { refetch } = useGetReservedResponcesQuery({ type: 'все', page: 0 })
@@ -151,7 +148,7 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 								<WarningModalIconSvg />
 							</div>
 							<p className="font-content-font font-normal text-black text-[16px]/[20px] text-center mt-[22px]">
-								Вы действительно хотите удалить отклик?
+								Вы действительно хотите отправить отклик в архив?
 							</p>
 							<div className="mt-[40px] flex gap-[12px]">
 								<Button
@@ -173,14 +170,14 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 														navigate('/services/personnelaccounting/reserve')
 													})
 												})
-											openAlert({ type: 'success', text: 'Отклик успешно удален' })
+											props.handleAlert('Отклик успешно удалён', 'SUCCESS')
 										} catch (error: any) {
-											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+											props.handleAlert(t('alertError'), 'ERROR')
 										}
 									}}
 									loading={deleteRespondLoading}
 								>
-									Удалить
+									В архив
 								</Button>
 							</div>
 						</Modal>
@@ -234,33 +231,41 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 									</div>
 									<div className="flex flex-col gap-[8px]">
 										<p className="font-content-font font-normal text-black text-[24px]/[28.8px]">
-											{res?.userData?.lastname + ' ' + res?.userData?.firstname + ' ' + res?.userData?.middlename}
+											{res?.userData?.lastname +
+												' ' +
+												res?.userData?.firstname +
+												' ' +
+												(res?.userData?.middlename ?? '')}
 										</p>
 										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-											{res.userData?.sex === 'M' ? 'Мужчина' : 'Женщина'},{' '}
-											{date.getFullYear() - parseInt(res.userData?.birthday.split('-')[0] as string)}{' '}
-											{date.getFullYear() - parseInt(res.userData?.birthday.split('-')[0] as string) >= 10 &&
-											date.getFullYear() - parseInt(res.userData?.birthday.split('-')[0] as string) <= 20
-												? 'лет'
-												: (date.getFullYear() - parseInt(res.userData?.birthday.split('-')[0] as string)) % 10 >= 2 &&
-												  (date.getFullYear() - parseInt(res.userData?.birthday.split('-')[0] as string)) % 10 <= 4
-												? 'года'
-												: (date.getFullYear() - parseInt(res.userData?.birthday.split('-')[0] as string)) % 10 == 1
-												? 'год'
-												: 'лет'}
+											{res.userData?.sex ? (res.userData?.sex === 'M' ? t('man') + ',' : t('woman') + ',') : ''}{' '}
+											{res.userData?.birthday ? dayjs().diff(dayjs(res.userData?.birthday), 'years') : ''}{' '}
+											{res.userData?.birthday
+												? dayjs().diff(dayjs(res.userData?.birthday), 'years') >= 10 &&
+												  dayjs().diff(dayjs(res.userData?.birthday), 'years') <= 20
+													? t('yearsOld')
+													: dayjs().diff(dayjs(res.userData?.birthday), 'years') % 10 >= 2 &&
+													  dayjs().diff(dayjs(res.userData?.birthday), 'years') % 10 <= 4
+													? t('yearsOldSpec')
+													: dayjs().diff(dayjs(res.userData?.birthday), 'years') % 10 == 1
+													? 'yearOld'
+													: 'yearsOld'
+												: ''}
 										</p>
 										<div className="flex gap-[36px]">
 											<div className="flex flex-col gap-[8px]">
 												<p className="font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">
-													Дата рождения
+													{t('birth')}
 												</p>
 												<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-													{res.userData?.birthday.split('-').reverse().join('.')}
+													{res.userData?.birthday
+														? res.userData?.birthday.split('-').reverse().join('.')
+														: 'Не указана'}
 												</p>
 											</div>
 											<div className="flex flex-col gap-[8px]">
 												<p className="font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">
-													Страна гражданства
+													{t('citizenshipCountry')}
 												</p>
 												<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
 													{countries?.find(country => country.id === res.userData?.countryId)?.shortName}
@@ -269,7 +274,7 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 										</div>
 										<div className="flex flex-col gap-[8px]">
 											<p className="font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">
-												Контакты:
+												{t('contacts')}:
 											</p>
 											<div className="flex gap-[24px]">
 												<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
@@ -373,139 +378,12 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 									</div>
 								)}
 							</div>
-							<hr />
-							<div className="flex flex-col gap-[24px]">
-								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">
-									Сопроводительное письмо
-								</p>
-								<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-									{res.respondData.coverLetter}
-								</p>
-							</div>
-							<hr />
-							<div className="flex flex-col gap-[24px]">
-								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">Образование</p>
-								<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
-									{res.educations.map(edu => (
-										<>
-											<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">{edu.endYear}</p>
-											<div className="flex flex-col gap-[8px]">
-												<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">
-													{edu.institution + ', ' + edu.country}
-												</p>
-												<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-													{edu.speciality === null ? '' : edu.speciality + ', '}
-													{edu.educationLevel}
-												</p>
-											</div>
-										</>
-									))}
-								</div>
-							</div>
-							<hr />
-							<div className="flex flex-col gap-[24px]">
-								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">Опыт работы</p>
-								{res.respondData.portfolio.workExperiences.length === 0 ? (
-									<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-										Соискатель не имеет опыта работы
-									</p>
-								) : (
-									<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
-										{res.respondData.portfolio.workExperiences.map(exp => (
-											<>
-												<div className="flex flex-col gap-[4px]">
-													<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-														{exp.beginWork.substring(0, 4)}-{exp.endWork.substring(0, 4)}
-													</p>
-													<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-														{parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) === 0
-															? ''
-															: parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4))}
-														{parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) === 1 &&
-															' год'}
-														{parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) >= 2 &&
-															parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) <= 4 &&
-															' года'}
-														{parseInt(exp.endWork.substring(0, 4)) - parseInt(exp.beginWork.substring(0, 4)) > 4 &&
-															' лет'}
-													</p>
-												</div>
-												<div className="flex flex-col gap-[8px]">
-													<p className="font-content-font font-bold text-black text-[16px]/[19.2px]">{exp.position}</p>
-													<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-														{exp.workPlace}
-													</p>
-													<p className="font-content-font font-normal text-black text-[14px]/[16.8px]">{exp.duties}</p>
-												</div>
-											</>
-										))}
-									</div>
-								)}
-								{res.respondData.portfolio.url !== '' && (
-									<div className="grid grid-cols-[164px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
-										<p>Ссылка на портфолио:</p>
-										<a href={res.respondData.portfolio.url} target="_blank">
-											{res.respondData.portfolio.url}
-										</a>
-									</div>
-								)}
-								{resumeQueryStatus.isSuccess && (
-									<div className="grid grid-cols-[194px_auto] gap-x-[20px] gap-y-[24px] w-[90%]">
-										<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">Резюме</p>
-										<div className="bg-white rounded-[16px] shadow-custom-shadow h-[59px] w-[65%] p-[20px] flex">
-											<MyDocsSvg />
-											<p
-												className="ml-[20px] font-content-font font-normal text-black text-[16px]/[19.2px] underline cursor-pointer"
-												onClick={() => {
-													const link = document.createElement('a')
-													link.href = resume
-													link.download = 'Резюме'
-													link.click()
-												}}
-											>
-												{'Резюме ' +
-													res.userData?.lastname +
-													' ' +
-													res.userData?.firstname +
-													' ' +
-													res.userData?.middlename}
-											</p>
-											<p className="ml-auto font-content-font font-normal text-black text-[16px]/[19.2px] opacity-70">
-												{Math.round(resumeSize / 1000000) > 0
-													? Math.round(resumeSize / 1000000) + ' Мб'
-													: Math.round(resumeSize / 1000) > 0
-													? Math.round(resumeSize / 1000) + ' Кб'
-													: resumeSize + ' б'}
-											</p>
-										</div>
-									</div>
-								)}
-							</div>
-							<hr />
-							<div className="flex flex-col gap-[24px]">
-								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40">О себе</p>
-								<p className="font-content-font font-normal text-black text-[16px]/[19.2px]">
-									{res.respondData.skills.aboutMe}
-								</p>
-							</div>
-							<hr />
-							<div className="flex flex-col">
-								<p className="font-content-font font-normal text-black text-[18px]/[21.6x] opacity-40 w-[194px]">
-									Профессиональные навыки
-								</p>
-								<div className="grid grid-cols-[194px_auto] gap-x-[20px] w-[90%]">
-									<div className="col-start-2 flex gap-[8px] flex-wrap">
-										{res.respondData.skills.keySkills.map(skill => (
-											<Tag
-												className="bg-black bg-opacity-10 rounded-[40px] py-[8px] px-[16px] font-content-font font-normal text-black text-[16px]/[19.2px]"
-												key={uuid()}
-											>
-												{skill}
-											</Tag>
-										))}
-									</div>
-								</div>
-							</div>
+							<RespondInfoCommon
+								res={res}
+								resume={resume}
+								resumeSize={resumeSize}
+								isSuccess={resumeQueryStatus.isSuccess}
+							/>
 						</div>
 					</div>
 				</>
@@ -535,7 +413,11 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 									</div>
 									<div className="flex flex-col gap-[8px]">
 										<p className="font-content-font font-normal text-black text-[24px]/[28.8px]">
-											{res?.userData?.lastname + ' ' + res?.userData?.firstname + ' ' + res?.userData?.middlename}
+											{res?.userData?.lastname +
+												' ' +
+												res?.userData?.firstname +
+												' ' +
+												(res?.userData?.middlename ?? '')}
 										</p>
 										<div className="flex flex-col gap-[8px]">
 											<p className="font-content-font font-normal text-black text-[12px]/[14.4x] opacity-40">
@@ -617,7 +499,7 @@ export const ReserveRespondInfo = (props: { type: 'PERSONNEL_DEPARTMENT' | 'SUPE
 												' ' +
 												res.userData?.firstname +
 												' ' +
-												res.userData?.middlename}
+												(res.userData?.middlename ?? '')}
 										</p>
 										<p className="ml-auto font-content-font font-normal text-black text-[16px]/[19.2px] opacity-70">
 											{Math.round(resumeSize / 1000000) > 0

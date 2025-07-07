@@ -1,8 +1,8 @@
-import { Button, Form, Modal, Select } from 'antd'
+import { Button, Form, Modal, Select, notification } from 'antd'
+import { t } from 'i18next'
 import { useState } from 'react'
 
 import { useApproveReservedRespondMutation, useGetAllVacanciesQuery } from '../../../store/api/serviceApi'
-import { useAlert } from '../../../utils/Alert/AlertMessage'
 
 export const ApproveRespondForm = (props: {
 	respondId: number
@@ -14,10 +14,11 @@ export const ApproveRespondForm = (props: {
 	const [isFormOpen, setIsFormOpen] = useState<boolean>(false)
 	const [approveRespond, result] = useApproveReservedRespondMutation()
 	const { data: vacancies = [] } = useGetAllVacanciesQuery()
-	const { openAlert } = useAlert()
+	const [api, contextHolder] = notification.useNotification()
 
 	return (
 		<>
+			{contextHolder}
 			<Modal
 				centered
 				open={isFormOpen}
@@ -47,9 +48,9 @@ export const ApproveRespondForm = (props: {
 									props.callback()
 									setIsFormOpen(false)
 								})
-							openAlert({ type: 'success', text: 'Отклик успешно отправлен руководителю' })
+							api.success({ message: 'Отклик успешно отправлен руководителю', placement: 'bottomRight' })
 						} catch (error: any) {
-							openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+							api.error({ message: t('alertError'), placement: 'bottomRight' })
 						}
 					}}
 				>
@@ -86,9 +87,9 @@ export const ApproveRespondForm = (props: {
 						try {
 							await approveRespond({ respondId: props.respondId, vacancyId: 0 }).unwrap()
 							props.callback()
-							openAlert({ type: 'success', text: 'Отклик успешно отправлен руководителю' })
+							api.success({ message: 'Отклик успешно отправлен руководителю', placement: 'bottomRight' })
 						} catch (error: any) {
-							openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+							api.error({ message: t('alertError'), placement: 'bottomRight' })
 						}
 					}
 				}}

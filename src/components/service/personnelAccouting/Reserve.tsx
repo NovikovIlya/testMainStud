@@ -1,5 +1,5 @@
 import { LoadingOutlined } from '@ant-design/icons'
-import { Radio, Spin } from 'antd'
+import { Radio, Spin, notification } from 'antd'
 import { useEffect, useRef, useState } from 'react'
 
 import { useLazyGetReservedResponcesQuery } from '../../../store/api/serviceApi'
@@ -24,6 +24,14 @@ export const Reserve = () => {
 	const [reserve, setReserve] = useState<VacancyRespondItemType[]>([])
 
 	const [getResponds, getRespondsStatus] = useLazyGetReservedResponcesQuery()
+
+	const [api, contextHolder] = notification.useNotification()
+
+	const handleAlert = (text: string, type: 'SUCCESS' | 'ERROR') => {
+		type === 'SUCCESS'
+			? api.success({ message: text, placement: 'bottomRight' })
+			: api.error({ message: text, placement: 'bottomRight' })
+	}
 
 	useEffect(() => {
 		const lowerObserver = new IntersectionObserver(entries => {
@@ -96,6 +104,7 @@ export const Reserve = () => {
 
 	return (
 		<>
+			{contextHolder}
 			<div className="w-full pl-[52px] pr-[52px] pt-[60px] mt-[60px]">
 				<h1 className="font-content-font font-normal text-black text-[28px]/[28px]">Резерв</h1>
 				<Radio.Group
@@ -163,13 +172,18 @@ export const Reserve = () => {
 							<ReserveItem
 								id={respond.id}
 								name={
-									respond.userData?.lastname + ' ' + respond.userData?.firstname + ' ' + respond.userData?.middlename
+									respond.userData?.lastname +
+									' ' +
+									respond.userData?.firstname +
+									' ' +
+									(respond.userData?.middlename ?? '')
 								}
 								respondDate={respond.respondDate}
 								refetch={() => {
 									setRequestData(prev => ({ ...prev, page: 0 }))
 								}}
 								post={respond.oldVacancyName ? respond.oldVacancyName : respond.desiredJob}
+								handleAlert={handleAlert}
 							/>
 						))}
 						{getRespondsStatus.isFetching && requestData.page > 0 && showSpin && (

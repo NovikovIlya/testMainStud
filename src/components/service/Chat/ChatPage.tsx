@@ -1,12 +1,14 @@
 import { Button } from 'antd'
+import { t } from 'i18next'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import SockJS from 'sockjs-client'
 // const Stomp = require('stompjs/lib/stomp').Stomp
 import Stomp from 'stompjs'
 
+import { DeleteSvg } from '../../../assets/svg/DeleteSvg'
 import { useAppSelector } from '../../../store'
 import {
 	useGetEmploymentPossibleRolesQuery,
@@ -23,7 +25,7 @@ import { ChatMessage } from './ChatMessage'
 
 const host = import.meta.env.REACT_APP_HOST
 const port = import.meta.env.REACT_APP_PORT
-const emplBaseURL = host && port ? `http://${host}:${port}/` : `employment/`
+const emplBaseURL = host && port ? `http://${host}:${port}/` : `https://newlk.kpfu.ru/employment/`
 
 type ChatMessageFormDataType = {
 	text: string
@@ -49,7 +51,7 @@ export const ChatPage = () => {
 
 	// const chat_id = { chatId: Number(id_from_url) }
 
-	const { chatId } = useAppSelector(state => state.chatId)
+	const { chatId } = useParams()
 	const ChatStatus = useAppSelector(state => state.chatResponceStatus)
 	const user = useAppSelector(state => state.auth.user)
 	const { data: rolesData = undefined } = useGetEmploymentPossibleRolesQuery()
@@ -61,6 +63,7 @@ export const ChatPage = () => {
 	const chatPageUpperRef = useRef<null | HTMLDivElement>(null)
 	const chatPageRef = useRef<null | HTMLDivElement>(null)
 	const chatPageMessagesRef = useRef<Array<HTMLDivElement | null>>([])
+	const formTextAreaRef = useRef<null | HTMLTextAreaElement>(null)
 
 	const [isBottomOfChatVisible, setIsBottomOfChatVisible] = useState<boolean>(true)
 	const [isTopOfChatVisible, setIsTopOfChatVisible] = useState<boolean>(false)
@@ -114,10 +117,15 @@ export const ChatPage = () => {
 
 	// из за юзэфекта снизу ломается чат
 	useEffect(() => {
+		reset()
+		setMsgInputText('')
+		setFileName('')
 		const socket = new SockJS(
 			`${emplBaseURL}employment-api/v1/ws?sender=${
 				isEmpDemp ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
-			}&token=Bearer ${token?.replaceAll('"', '')}`
+			}&token=Bearer ${token?.replaceAll('"', '')}`,
+			undefined,
+			{ timeout: 10000 }
 		)
 		socket.onopen = () => {
 			console.log('WS Open')
@@ -141,7 +149,7 @@ export const ChatPage = () => {
 					setMessages(prev => [msgBody.message as ChatMessageType, ...prev])
 					dispatchEvent(new CustomEvent('newmessage', { detail: { date: msgBody.message.sendDate } }))
 					readMsg({
-						chatId: chatId,
+						chatId: parseInt(chatId!),
 						messageId: msgBody.message.id,
 						sessionId: sessionId,
 						role: isEmpDemp ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
@@ -157,14 +165,20 @@ export const ChatPage = () => {
 			})
 		})
 		return () => {
-			chatId !== 0 && client.disconnect(() => {})
-			chatId !== 0 && socket.close()
+			// chatId !== 0 && client && client.disconnect(() => {})
+			// chatId !== 0 && socket && socket.close()
+			try {
+				parseInt(chatId!) !== 0 && client && client.disconnect(() => {})
+				parseInt(chatId!) !== 0 && socket && socket.close()
+			} catch (e) {
+				console.log(e)
+			}
 		}
 	}, [chatId])
 
 	useEffect(() => {
 		getChatMessages({
-			chatId: chatId,
+			chatId: parseInt(chatId!),
 			size: 20,
 			role: isEmpDemp ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
 		})
@@ -217,7 +231,7 @@ export const ChatPage = () => {
 	const loadMessagesFromTop = () => {
 		console.log(lastMessageId)
 		getChatMessages({
-			chatId: chatId,
+			chatId: parseInt(chatId!),
 			lastMessageId: lastMessageId,
 			size: 20,
 			role: isEmpDemp ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
@@ -271,6 +285,8 @@ export const ChatPage = () => {
 		handleSubmit,
 		register,
 		reset,
+		watch,
+		setValue,
 		formState,
 		formState: { isSubmitSuccessful }
 	} = useForm({
@@ -278,11 +294,12 @@ export const ChatPage = () => {
 	})
 
 	const handleMessage: SubmitHandler<ChatMessageFormDataType> = data => {
+		console.log(data)
 		if (data.files) {
 			console.log(data.files)
 			const formData = new FormData()
 			formData.append('sender', isEmpDemp ? 'PERSONNEL_DEPARTMENT' : 'SEEKER')
-			formData.append('text', data.text)
+			formData.append('text', msgInputText)
 			for (let i = 0; i < data.files.length; i++) {
 				formData.append('files', data.files[i])
 			}
@@ -303,7 +320,7 @@ export const ChatPage = () => {
 		} else {
 			msgInputText !== '' &&
 				postMsg({
-					id: chatId,
+					id: parseInt(chatId!),
 					text: msgInputText,
 					name: sessionId,
 					role: isEmpDemp ? 'PERSONNEL_DEPARTMENT' : 'SEEKER'
@@ -329,8 +346,8 @@ export const ChatPage = () => {
 
 	return (
 		<>
-			<div className="flex flex-col w-full relative">
-				<div ref={chatPageRef} className="w-full h-full flex flex-col pt-[60px] pr-[40px] pl-[40px] overflow-scroll">
+			<div className="flex flex-col w-[calc(100%-461px)] overflow-hidden relative">
+				<div ref={chatPageRef} className="w-full h-full flex flex-col pt-[60px] pr-[40px] pl-[40px] overflow-y-auto">
 					<div className="h-[1px]" key={'verkhnyi_osobyi_kluch'} ref={chatPageUpperRef} />
 					{[...messages].reverse().map((msg, msgIndex, msgArray) => (
 						<>
@@ -341,7 +358,7 @@ export const ChatPage = () => {
 									<div className="self-center font-content-font font-normal text-black text-[14px]/[16.8px] opacity-60 mt-[60px] mb-[30px]">
 										{parseInt(msg.sendDate.substring(8, 10)) +
 											' ' +
-											ChatMessageDateDisplayEnum[parseInt(msg.sendDate.substring(5, 7)) - 1]}
+											t(ChatMessageDateDisplayEnum[parseInt(msg.sendDate.substring(5, 7)) - 1])}
 									</div>
 								))}
 							<ChatMessage
@@ -365,6 +382,9 @@ export const ChatPage = () => {
 					<form
 						onSubmit={handleSubmit(handleMessage)}
 						className="w-full h-full flex items-center py-[24px] pl-[40px] pr-[85px]"
+						onKeyDown={e => {
+							!e.shiftKey && e.code === 'Enter' && handleSubmit(handleMessage)()
+						}}
 					>
 						<Controller
 							name="text"
@@ -372,9 +392,9 @@ export const ChatPage = () => {
 							render={({ field }) => (
 								<div className="flex flex-col w-full min-h-full">
 									<textarea
-										onKeyDown={e => {
-											!e.shiftKey && e.code === 'Enter' && handleSubmit(handleMessage)()
-										}}
+										// onKeyDown={e => {
+										// 	!e.shiftKey && e.code === 'Enter' && handleSubmit(handleMessage)()
+										// }}
 										disabled={ChatStatus.chatClosed}
 										{...register('text')}
 										value={msgInputText}
@@ -382,11 +402,24 @@ export const ChatPage = () => {
 											setMsgInputText(e.target.value)
 										}}
 										className="w-full h-full font-content-font font-normal text-black text-[16px]/[16px] placeholder:opacity-50 resize-none border-none focus:outline-none pt-[8px] disabled:bg-white"
-										placeholder="Ввести сообщение"
+										placeholder={t('enterMessage')}
+										ref={formTextAreaRef}
 									></textarea>
-									<p className="w-[80%] whitespace-nowrap text-ellipsis overflow-auto font-content-font text-[14px]/[14px] font-normal text-black">
-										{fileName}
-									</p>
+									<div className="flex w-full items-center justify-between">
+										<p className="w-[80%] whitespace-nowrap text-ellipsis overflow-hidden font-content-font text-[14px]/[14px] font-normal text-black">
+											{fileName}
+										</p>
+										{watch('files') !== null && (
+											<Button
+												icon={<DeleteSvg />}
+												type="text"
+												onClick={() => {
+													setValue('files', null, { shouldValidate: true })
+													setFileName('')
+												}}
+											/>
+										)}
+									</div>
 								</div>
 							)}
 						/>
@@ -401,12 +434,12 @@ export const ChatPage = () => {
 											{...register('files', {
 												onChange(event) {
 													setFileName(event.target.files?.[0].name)
+													formTextAreaRef.current?.focus()
 												}
 											})}
 											id="files"
 											className="hidden"
 											type="file"
-											multiple={true}
 										></input>
 										<label htmlFor="files" className="self-center cursor-pointer">
 											<AttachIcon />
@@ -420,7 +453,7 @@ export const ChatPage = () => {
 								type="primary"
 								htmlType="submit"
 							>
-								Отправить
+								{t('send')}
 							</Button>
 						</div>
 					</form>

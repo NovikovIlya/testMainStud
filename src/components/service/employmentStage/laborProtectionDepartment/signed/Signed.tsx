@@ -1,5 +1,6 @@
 import { LoadingOutlined } from '@ant-design/icons'
-import { Button, ConfigProvider, Modal, Spin } from 'antd'
+import { Button, ConfigProvider, Modal, Spin, notification } from 'antd'
+import { t } from 'i18next'
 import { useEffect, useRef, useState } from 'react'
 
 import { DeleteIconHoverLaborSvg } from '../../../../../assets/svg/DeleteIconHoverLaborSvg'
@@ -13,7 +14,6 @@ import {
 	useSetTestResultHiddenMutation
 } from '../../../../../store/api/serviceApi'
 import { SignedItemType } from '../../../../../store/reducers/type'
-import { useAlert } from '../../../../../utils/Alert/AlertMessage'
 import styles from '../../../../../utils/deleteOverwriteAntButton.module.css'
 
 export const Signed = () => {
@@ -23,7 +23,7 @@ export const Signed = () => {
 	const [isSearching, setIsSearching] = useState(false)
 	const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
-	const { openAlert } = useAlert()
+	const [api, contextHolder] = notification.useNotification()
 
 	const {
 		data: test_result_data = { content: [] },
@@ -102,6 +102,7 @@ export const Signed = () => {
 	const ApproveSignedModal = (props: { id: number }) => {
 		return (
 			<>
+				{contextHolder}
 				<ConfigProvider
 					theme={{
 						token: {
@@ -144,7 +145,7 @@ export const Signed = () => {
 											setIsApproveSignedModalOpen(false)
 											setSeekerHidden({ subStageId: props.id })
 										} catch (error: any) {
-											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+											api.error({ message: t('alertError'), placement: 'bottomRight' })
 										}
 									}}
 								>

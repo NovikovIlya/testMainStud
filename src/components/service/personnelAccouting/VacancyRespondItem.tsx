@@ -76,7 +76,7 @@ export const VacancyRespondItem = (
 			<div className="w-full mb-[12px] flex items-center bg-white shadow-custom-shadow pl-[20px] pr-[55px] pt-[20px] pb-[20px]">
 				<p className="w-[25%]">
 					{props.userData
-						? props.userData.lastname + ' ' + props.userData.firstname + ' ' + props.userData.middlename
+						? props.userData.lastname + ' ' + props.userData.firstname + ' ' + (props.userData.middlename ?? '')
 						: 'Толстой Лев Николаевич'}
 				</p>
 				{props.itemType === 'PERSONNEL_DEPARTMENT' ? (
@@ -177,8 +177,8 @@ export const VacancyRespondItem = (
 					onClick={() => {
 						dispatch(setCurrentResponce(props.id))
 						props.itemType === 'PERSONNEL_DEPARTMENT'
-							? navigate(`services/personnelaccounting/responds/fullinfo/${props.id}`)
-							: navigate(`services/personnelaccounting/supervisor/responds/fullinfo/${props.id}`)
+							? navigate(`/services/personnelaccounting/responds/fullinfo/${props.id}`)
+							: navigate(`/services/personnelaccounting/supervisor/responds/fullinfo/${props.id}`)
 					}}
 					className="ml-auto max-w-[15%] font-content-font font-normal text-black text-[16px]/[16px] rounded-[54.5px] py-[8px] px-[24px] border-black"
 				>

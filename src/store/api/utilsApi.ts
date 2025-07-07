@@ -1,8 +1,4 @@
-import {
-	ICountryRequest,
-	IEducationLevelRequest,
-	IResponse
-} from '../../api/types'
+import { ICountryRequest, IEducationLevelRequest, IResponse } from '../../api/types'
 
 import { apiSlice } from './apiSlice'
 
@@ -32,8 +28,5 @@ export const utilsApi = apiSlice.injectEndpoints({
 	})
 })
 
-export const {
-	useGetCountriesQuery,
-	useGetEducationLevelQuery,
-	useGetDocumentQuery
-} = utilsApi
+export const { useGetCountriesQuery, useGetEducationLevelQuery, useGetDocumentQuery, useLazyGetCountriesQuery } =
+	utilsApi

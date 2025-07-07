@@ -1,5 +1,19 @@
-import { Button, Checkbox, ConfigProvider, DatePicker, Form, Input, Modal, Radio, Select, Tag, Upload } from 'antd'
+import {
+	Button,
+	Checkbox,
+	ConfigProvider,
+	DatePicker,
+	Form,
+	Input,
+	Modal,
+	Radio,
+	Select,
+	Tag,
+	Upload,
+	notification
+} from 'antd'
 import dayjs from 'dayjs'
+import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
@@ -36,14 +50,13 @@ import {
 	educationResponceItemType
 } from '../../../store/reducers/SeekerFormReducers/RespondEducationReducer'
 import { allSkillsData } from '../../../store/reducers/SeekerFormReducers/SkillsReducer'
-import { useAlert } from '../../../utils/Alert/AlertMessage'
 
 import ArrowIcon from './ArrowIcon'
 import { AttachIcon } from './AttachIcon'
 import { ButtonPlusIcon } from './ButtonPlusIcon'
 import { CheckedIcon } from './CheckedIcon'
 
-export const ResponseForm = (props: { canRespond: boolean }) => {
+export const ResponseForm = (props: { canRespond: boolean; personalData: boolean }) => {
 	const { i18n } = useTranslation()
 	const { data: countries } = useGetCountriesQuery(i18n.language)
 	const { data: levels } = useGetEducationLevelQuery(i18n.language)
@@ -57,8 +70,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 	const educationData = useAppSelector(state => state.RespondEducation)
 	const experienceData = useAppSelector(state => state.Experience)
 	const fileData = useAppSelector(state => state.experienceFile)
-
-	const { openAlert } = useAlert()
+	const [api, contextHolder] = notification.useNotification()
 
 	const [currentFormskills, setcurrentFormSkills] = useState<string[]>(skillsData.skills)
 	const [haveNoExprience, setHaveNoExperience] = useState(experienceData.noExperienceFlag)
@@ -213,8 +225,11 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 		setCanRespond(props.canRespond)
 	}, [props.canRespond])
 
+	console.log(canRespond)
+
 	return (
 		<>
+			{contextHolder}
 			<Button
 				className="rounded-[54.5px]"
 				type="primary"
@@ -222,10 +237,10 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 					e.preventDefault()
 				}}
 				onClick={e => {
-					canRespond ? (setPage('main'), setIsFormOpen(true)) : setIsFailedModalOpen(true)
+					canRespond && props.personalData ? (setPage('main'), setIsFormOpen(true)) : setIsFailedModalOpen(true)
 				}}
 			>
-				Откликнуться
+				{t('respond')}
 			</Button>
 
 			<ConfigProvider
@@ -251,8 +266,10 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 							<WarningModalIconSvg />
 						</div>
 						<p className="font-content-font font-normal text-black text-[16px]/[20px] text-center mt-[22px]">
-							Спасибо за интерес к нашей вакансии! Мы заметили, что вы уже откликнулись на эту позицию. К сожалению,
-							повторные отклики на данную вакансию не принимаются.
+							{!props.personalData && t('personalDataNotChecked')}
+							<br />
+							<br />
+							{!canRespond && t('noRespondDuplicates')}
 						</p>
 						<Button
 							className="rounded-[40px] mt-[40px]"
@@ -331,12 +348,12 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 				>
 					{page === 'main' && (
 						<>
-							<p className="font-content-font text-black text-[18px]/[21.6px] font-normal">Откликнуться на вакансию</p>
+							<p className="font-content-font text-black text-[18px]/[21.6px] font-normal">{t('respondToVacancy')}</p>
 							<p className="font-content-font text-black text-[18px]/[21.6px] font-bold">
 								{currentVacancy?.title.rendered}
 							</p>
 							<p className="mt-[36px] font-content-font text-black text-[18px]/[21.px] font-normal">
-								Чтобы отправить отклик, необходимо заполнить следующие данные:
+								{t('respondRequirements')}
 							</p>
 							<div className="mt-[36px] flex flex-col gap-[12px]">
 								<div
@@ -346,7 +363,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 									className="h-[43px] pl-[16px] pr-[16px] flex justify-between items-center border-[1px] border-dashed border-blue1f5 rounded-[5px] cursor-pointer"
 								>
 									<p className="font-content-font text-black text-[16px]/[19.2px] font-bold select-none">
-										Личные данные
+										{t('PersonalData')}
 									</p>
 									{aboutMeCompleted ? <CheckedIcon /> : <EditSvg />}
 								</div>
@@ -356,7 +373,9 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 									}}
 									className="h-[43px] pl-[16px] pr-[16px] flex justify-between items-center border-[1px] border-dashed border-blue1f5 rounded-[5px] cursor-pointer"
 								>
-									<p className="font-content-font text-black text-[16px]/[19.2px] font-bold select-none">Образование</p>
+									<p className="font-content-font text-black text-[16px]/[19.2px] font-bold select-none">
+										{t('education')}
+									</p>
 									{educationData.educations.length !== 0 ? <CheckedIcon /> : <EditSvg />}
 								</div>
 								<div
@@ -365,7 +384,9 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 									}}
 									className="h-[43px] pl-[16px] pr-[16px] flex justify-between items-center border-[1px] border-dashed border-blue1f5 rounded-[5px] cursor-pointer"
 								>
-									<p className="font-content-font text-black text-[16px]/[19.2px] font-bold select-none">Опыт работы</p>
+									<p className="font-content-font text-black text-[16px]/[19.2px] font-bold select-none">
+										{t('workExperience')}
+									</p>
 									{experienceData.noExperienceFlag || experienceData.experiences.length !== 0 ? (
 										<CheckedIcon />
 									) : (
@@ -413,17 +434,19 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 									educationData.educations.length !== 0 &&
 									(experienceData.noExperienceFlag || experienceData.experiences.length !== 0) &&
 									skillsData.skills.length !== 0
-										? 'Откликнуться'
-										: 'Дальше'}
+										? t('respond')
+										: t('goNext')}
 								</Button>
 							</div>
 						</>
 					)}
 					{page === 'coverletter' && (
 						<>
-							<p className="mb-[36px] font-content-font text-black text-[18px]/[18px] font-normal">Откликнуться</p>
+							<p className="mb-[36px] font-content-font text-black text-[18px]/[18px] font-normal">{t('respond')}</p>
 							<div className="mb-[20px] rounded-[8px] bg-[#E5EBFB] py-[12px] px-[20px] relative">
-								<p className="font-content-font text-black text-[16px]/[19.2px] font-normal opacity-40">Вакансия</p>
+								<p className="font-content-font text-black text-[16px]/[19.2px] font-normal opacity-40">
+									{t('vacancy')}
+								</p>
 								<p className="font-content-font text-black text-[16px]/[19.2px] font-normal w-[90%]">
 									{currentVacancy?.title.rendered}
 								</p>
@@ -437,12 +460,12 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 								</div>
 							</div>
 							<p className="mb-[16px] font-content-font text-black text-[16px]/[16px] font-normal">
-								Сопроводительное письмо
+								{t('coverLetter')}
 							</p>
 							<Input.TextArea
 								autoSize={true}
 								className="!h-[185px] !px-[16px] !py-[11px]"
-								placeholder="Введите сообщение"
+								placeholder={t('enterCoverLetter')}
 								value={coverLetter}
 								onChange={e => {
 									if (e.target.value.length < 10000) {
@@ -510,17 +533,17 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 											.unwrap()
 											.then(() => {
 												setCanRespond(false)
-												setResultModalText('Спасибо, ваш отклик успешно отправлен.')
+												setResultModalText(t('respondSuccess'))
 												setIsFormOpen(false)
 												setIsSuccessModalOpen(true)
 											})
 											.catch(error => {
-												openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+												api.error({ message: t('alertError'), placement: 'bottomRight' })
 												setIsFormOpen(false)
 											})
 								}}
 							>
-								Отправить
+								{t('send')}
 							</Button>
 						</>
 					)}
@@ -567,25 +590,29 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 									<ArrowIcon />
 								</button>
 								<p className="mb-[2px] ml-[15px] font-content-font font-bold text-black text-[18px]/[21.6px]">
-									Личные данные
+									{t('PersonalData')}
 								</p>
 							</div>
 							<Form.Item
 								name={'gender'}
-								label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Пол</label>}
-								rules={[{ required: true, message: 'Не выбран пол' }]}
+								label={
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">{t('gender')}</label>
+								}
+								rules={[{ required: true, message: t('errorGender') }]}
 							>
 								<Radio.Group disabled={aboutMeData.isGenderSet} value={aboutMeData.gender}>
-									<Radio value={'M'}>Мужской</Radio>
-									<Radio value={'W'}>Женский</Radio>
+									<Radio value={'M'}>{t('m')}</Radio>
+									<Radio value={'W'}>{t('w')}</Radio>
 								</Radio.Group>
 							</Form.Item>
 							<Form.Item
 								name={'surname'}
-								label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Фамилия</label>}
+								label={
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">{t('surname')}</label>
+								}
 								rules={[
-									{ required: true, message: 'Не указано Фамилия' },
-									{ max: 500, message: 'Количество символов было превышено' }
+									{ required: true, message: t('errorSurnameName') },
+									{ max: 500, message: t('symbolExcess') }
 								]}
 							>
 								<Input
@@ -598,10 +625,12 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 							</Form.Item>
 							<Form.Item
 								name={'name'}
-								label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Имя</label>}
+								label={
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">{t('name')}</label>
+								}
 								rules={[
-									{ required: true, message: 'Не указано Имя' },
-									{ max: 500, message: 'Количество символов было превышено' }
+									{ required: true, message: t('errorName') },
+									{ max: 500, message: t('symbolExcess') }
 								]}
 							>
 								<Input
@@ -614,10 +643,14 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 							</Form.Item>
 							<Form.Item
 								name={'patronymic'}
-								label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Отчество</label>}
+								label={
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+										{t('middleName')}
+									</label>
+								}
 								rules={[
-									{ required: true, message: 'Не указано Отчество' },
-									{ max: 500, message: 'Количество символов было превышено' }
+									{ required: true, message: t('errorMiddleName') },
+									{ max: 500, message: t('symbolExcess') }
 								]}
 							>
 								<Input
@@ -633,7 +666,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 								label={
 									<label className="text-black text-[18px]/[18px] font-content-font font-normal">Дата рождения</label>
 								}
-								rules={[{ required: true, message: 'Не введена дата рождения' }]}
+								rules={[{ required: true, message: t('DateError') }]}
 							>
 								<DatePicker
 									disabled={aboutMeData.isBirthDaySet}
@@ -647,10 +680,10 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 								name={'country'}
 								label={
 									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										Страна гражданства
+										{t('citizenshipCountry')}
 									</label>
 								}
-								rules={[{ required: true, message: 'Не выбрана страна' }]}
+								rules={[{ required: true, message: t('countryNotDetermined') }]}
 							>
 								<Select
 									className="w-full rounded-lg"
@@ -669,8 +702,12 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 							</Form.Item>
 							<Form.Item
 								name="phoneNumber"
-								label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Телефон</label>}
-								rules={[{ required: true, message: 'Поле номера телефона не заполнено' }]}
+								label={
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+										{t('telephone')}
+									</label>
+								}
+								rules={[{ required: true, message: t('specify' + ' ' + t('telephone').toLowerCase()) }]}
 							>
 								<Input
 									onKeyDown={handleKeyDownPhone}
@@ -682,15 +719,13 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 							<Form.Item
 								name={'email'}
 								label={
-									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										Электронная почта
-									</label>
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">{t('email')}</label>
 								}
 								rules={[
-									{ required: true, message: 'Поле электронной почты не заполнено' },
+									{ required: true, message: t('responseFormMailError') },
 									{
 										pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-										message: 'Введите корректный адрес электронной почты'
+										message: t('BadEmail')
 									}
 								]}
 							>
@@ -704,7 +739,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 							</Form.Item>
 							<div style={{ textAlign: 'right', marginTop: 40 }}>
 								<Button type="primary" htmlType="submit">
-									Сохранить
+									{t('Save')}
 								</Button>
 							</div>
 						</Form>
@@ -721,7 +756,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 									<ArrowIcon />
 								</button>
 								<p className="mb-[2px] ml-[15px] font-content-font font-bold text-black text-[18px]/[21.6px]">
-									Образование
+									{t('education')}
 								</p>
 							</div>
 							<div className="mt-[40px]">
@@ -730,9 +765,10 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 										key={edu.id}
 										className="min-h-[90px] pl-[16px] pr-[16px] pb-[20px] mb-[20px] border-solid flex justify-between items-center border-0 border-b-[1px] border-black border-opacity-20 cursor-pointer"
 									>
-										<div className="flex flex-col gap-[12px]">
+										<div className="flex flex-col gap-[12px] overflow-hidden">
 											<p className="font-content-font text-black text-[16px]/[16px] font-bold select-none">
-												{edu.education.nameofInstitute}
+												{edu.education.nameofInstitute},{' '}
+												{countries?.find(country => country.id === edu.education.countryId)?.shortName}
 											</p>
 											<p className="font-content-font text-black text-[16px]/[16px] font-normal select-none">
 												{edu.education.specialization},{' '}
@@ -787,7 +823,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 									></Button>
 								</ConfigProvider>
 								<p className="mt-[5px] w-[94px] font-main-font font-normal text-[14px]/[18px] opacity-40">
-									добавить образование
+									{t('addEducation')}
 								</p>
 								{!eduValidHidden && (
 									<p className="mt-[20px] w-[250px] text-[#FF0133] font-main-font font-normal text-[14px]/[18px] opacity-100">
@@ -828,17 +864,17 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 									<ArrowIcon />
 								</button>
 								<p className="mb-[2px] ml-[15px] font-content-font font-bold text-black text-[18px]/[21.6px]">
-									Добавить образование
+									{t('add') + ' ' + t('education').toLowerCase()}
 								</p>
 							</div>
 							<Form.Item
 								name={'educationLevel'}
 								label={
 									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										Уровень образования
+										{t('educationLevel')}
 									</label>
 								}
-								rules={[{ required: true, message: 'Не указан уровень образования' }]}
+								rules={[{ required: true, message: t('educationNotChosen') }]}
 							>
 								<Select
 									className="w-full rounded-lg"
@@ -856,10 +892,10 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 								name={'country'}
 								label={
 									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										Страна получения образования
+										{t('countryEducation')}
 									</label>
 								}
-								rules={[{ required: true, message: 'Не указана страна' }]}
+								rules={[{ required: true, message: t('countryNotDetermined') }]}
 							>
 								<Select
 									className="w-full rounded-lg"
@@ -879,12 +915,12 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 								name={'instituteName'}
 								label={
 									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										Учебное заведение
+										{t('educationalInstitution')}
 									</label>
 								}
 								rules={[
-									{ required: true, message: 'Не указано учебное заведение' },
-									{ max: 1000, message: 'Количество символов было превышено' }
+									{ required: true, message: t('institutionNameNotEntered') },
+									{ max: 1000, message: t('symbolExcess') }
 								]}
 							>
 								<Input
@@ -896,9 +932,11 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 							<Form.Item
 								name={'specialization'}
 								label={
-									<label className="text-black text-[18px]/[18px] font-content-font font-normal">Специальность</label>
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+										{t('specialization')}
+									</label>
 								}
-								rules={[{ required: true, message: 'Не указана специальность' }]}
+								rules={[{ required: true, message: t('specializationNotEntered') }]}
 							>
 								<Input
 									onPressEnter={e => {
@@ -909,9 +947,11 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 							<Form.Item
 								name={'graduateYear'}
 								label={
-									<label className="text-black text-[18px]/[18px] font-content-font font-normal">Год окончания</label>
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+										{t('graduateYear')}
+									</label>
 								}
-								rules={[{ required: true, message: 'Не указан год' }]}
+								rules={[{ required: true, message: t('graduateYearNotChosen') }]}
 							>
 								<Select
 									className="w-full rounded-lg"
@@ -929,7 +969,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 							<Form.Item>
 								<div style={{ textAlign: 'right', marginTop: 40 }}>
 									<Button type="primary" htmlType="submit">
-										Сохранить
+										{t('Save')}
 									</Button>
 								</div>
 							</Form.Item>
@@ -972,17 +1012,17 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 									<ArrowIcon />
 								</button>
 								<p className="mb-[2px] ml-[15px] font-content-font font-bold text-black text-[18px]/[21.6px]">
-									Изменить образование
+									{t('edit') + ' ' + t('education').toLowerCase()}
 								</p>
 							</div>
 							<Form.Item
 								name={'educationLevel'}
 								label={
 									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										Уровень образования
+										{t('educationLevel')}
 									</label>
 								}
-								rules={[{ required: true, message: 'Не выбран уровень образования' }]}
+								rules={[{ required: true, message: t('educationNotChosen') }]}
 							>
 								<Select
 									className="w-full rounded-lg"
@@ -1000,10 +1040,10 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 								name={'country'}
 								label={
 									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										Страна получения образования
+										{t('countryEducation')}
 									</label>
 								}
-								rules={[{ required: true, message: 'Не выбрана страна' }]}
+								rules={[{ required: true, message: t('countryNotDetermined') }]}
 							>
 								<Select
 									showSearch
@@ -1023,10 +1063,10 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 								name={'instituteName'}
 								label={
 									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										Учебное заведение
+										{t('educationalInstitution')}
 									</label>
 								}
-								rules={[{ required: true, message: 'Не введено учебное заведение' }]}
+								rules={[{ required: true, message: t('institutionNameNotEntered') }]}
 							>
 								<Input
 									onPressEnter={e => {
@@ -1037,9 +1077,11 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 							<Form.Item
 								name={'specialization'}
 								label={
-									<label className="text-black text-[18px]/[18px] font-content-font font-normal">Специальность</label>
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+										{t('specialization')}
+									</label>
 								}
-								rules={[{ required: true, message: 'Не введена специальность' }]}
+								rules={[{ required: true, message: t('specializationNotEntered') }]}
 							>
 								<Input
 									onPressEnter={e => {
@@ -1050,9 +1092,11 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 							<Form.Item
 								name={'graduateYear'}
 								label={
-									<label className="text-black text-[18px]/[18px] font-content-font font-normal">Год окончания</label>
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+										{t('graduateYear')}
+									</label>
 								}
-								rules={[{ required: true, message: 'Не выбран год' }]}
+								rules={[{ required: true, message: t('graduateYearNotChosen') }]}
 							>
 								<Select
 									className="w-full rounded-lg"
@@ -1070,7 +1114,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 							<Form.Item>
 								<div style={{ textAlign: 'right', marginTop: 40 }}>
 									<Button type="primary" htmlType="submit">
-										Сохранить
+										{t('Save')}
 									</Button>
 								</div>
 							</Form.Item>
@@ -1088,13 +1132,13 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 									<ArrowIcon />
 								</button>
 								<p className="mb-[2px] ml-[15px] font-content-font font-bold text-black text-[18px]/[21.6px]">
-									Опыт работы
+									{t('workExperience')}
 								</p>
 							</div>
 							<p className="font-content-font text-black text-[18px]/[18px]">
-								<b>Портфолио</b> (не обязательно)
+								<b>{t('portfolio')}</b> ({t('notNecessary')})
 							</p>
-							<p className="mt-[24px] font-content-font text-black text-[16px]/[16px]">Ссылка</p>
+							<p className="mt-[24px] font-content-font text-black text-[16px]/[16px]">{t('link')}</p>
 							<Form.Item className="mt-[18px]">
 								<Input
 									placeholder="https://disk.yandex.ru"
@@ -1154,9 +1198,9 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 								<div className="flex items-center gap-[12px] cursor-pointer">
 									<AttachIcon />
 									<p className="font-content-font font-normal text-[16px]/[16px] text-black underline select-none">
-										Прикрепить файл
+										{t('attachFile')}
 									</p>
-									<p className="font-content-font font-normal text-[16px]/[16px] text-black">(не более 10 мб)</p>
+									<p className="font-content-font font-normal text-[16px]/[16px] text-black">({t('max10MB')})</p>
 								</div>
 							</Upload>
 							<Form.Item
@@ -1170,7 +1214,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 										!haveNoExprience ? dispatch(raiseNoExperienceFlag()) : dispatch(lowerNoExperienceFlag())
 									}}
 								>
-									Я не имею опыта работы
+									{t('noExperience')}
 								</Checkbox>
 							</Form.Item>
 							<div className="mt-[40px]">
@@ -1179,7 +1223,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 										key={exp.id}
 										className="min-h-[90px] pl-[16px] pr-[16px] pb-[20px] mb-[20px] border-solid flex justify-between items-center border-0 border-b-[1px] border-black border-opacity-20 cursor-pointer"
 									>
-										<div className="flex flex-col gap-[12px]">
+										<div className="flex flex-col gap-[12px] overflow-hidden">
 											<p className="font-content-font text-black text-[16px]/[16px] font-bold select-none">
 												{exp.experience.seat}
 											</p>
@@ -1250,7 +1294,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 									></Button>
 								</ConfigProvider>
 								<p className="mt-[5px] w-[94px] font-main-font font-normal text-[14px]/[18px] opacity-40">
-									добавить место работы
+									{t('add') + ' ' + t('placeWork').toLowerCase()}
 								</p>
 								{!jobValidHidden && (
 									<p className="mt-[20px] w-[250px] text-[#FF0133] font-main-font font-normal text-[14px]/[18px] opacity-100">
@@ -1291,17 +1335,19 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 									<ArrowIcon />
 								</button>
 								<p className="mb-[2px] ml-[15px] font-content-font font-bold text-black text-[18px]/[21.6px]">
-									Добавить место работы
+									{t('add') + ' ' + t('placeWork').toLowerCase()}
 								</p>
 							</div>
 							<Form.Item
 								name={'workplace'}
 								rules={[
-									{ required: true, message: 'Не указано Место работы"' },
-									{ max: 1000, message: 'Количество символов было превышено' }
+									{ required: true, message: t('specify') + ' ' + t('placeWork').toLowerCase() },
+									{ max: 1000, message: t('symbolExcess') }
 								]}
 								label={
-									<label className="text-black text-[18px]/[18px] font-content-font font-normal">Место работы</label>
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+										{t('placeWork')}
+									</label>
 								}
 							>
 								<Input
@@ -1314,10 +1360,12 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 							<Form.Item
 								name={'seat'}
 								rules={[
-									{ required: true, message: 'Не указана должность' },
-									{ max: 1000, message: 'Количество символов было превышено' }
+									{ required: true, message: t('specify') + ' ' + t('job').toLowerCase() },
+									{ max: 1000, message: t('symbolExcess') }
 								]}
-								label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Должность</label>}
+								label={
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">{t('job')}</label>
+								}
 							>
 								<Input
 									onPressEnter={e => {
@@ -1330,9 +1378,11 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 								<Form.Item
 									className="w-[50%]"
 									name={'beginWork'}
-									rules={[{ required: true, message: 'Укажите период работы' }]}
+									rules={[{ required: true, message: t('specify') + ' ' + t('periodOperation').toLowerCase() }]}
 									label={
-										<label className="text-black text-[18px]/[18px] font-content-font font-normal">Период работы</label>
+										<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+											{t('periodOperation')}
+										</label>
 									}
 								>
 									<DatePicker.MonthPicker className="w-full" disabled={haveNoExprience} maxDate={dayjs(date)} />
@@ -1340,7 +1390,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 								<Form.Item
 									name={'endWork'}
 									className="w-[50%] mt-auto"
-									rules={[{ required: true, message: 'Укажите период работы' }]}
+									rules={[{ required: true, message: t('specify') + ' ' + t('periodOperation').toLowerCase() }]}
 								>
 									<DatePicker.MonthPicker className="w-full" disabled={haveNoExprience} maxDate={dayjs(date)} />
 								</Form.Item>
@@ -1348,11 +1398,13 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 							<Form.Item
 								name={'duties'}
 								rules={[
-									{ required: true, message: 'Не указаны обязанности' },
-									{ max: 1000, message: 'Количество символов было превышено' }
+									{ required: true, message: t('specify') + ' ' + t('Responsibilities').toLowerCase() },
+									{ max: 1000, message: t('symbolExcess') }
 								]}
 								label={
-									<label className="text-black text-[18px]/[18px] font-content-font font-normal">Обязанности</label>
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+										{t('Responsibilities')}
+									</label>
 								}
 							>
 								<Input.TextArea autoSize={true} className="!h-[107px]" disabled={haveNoExprience}></Input.TextArea>
@@ -1360,7 +1412,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 							<Form.Item>
 								<div style={{ textAlign: 'right', marginTop: 40 }}>
 									<Button type="primary" htmlType="submit">
-										Сохранить
+										{t('Save')}
 									</Button>
 								</div>
 							</Form.Item>
@@ -1402,13 +1454,19 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 									<ArrowIcon />
 								</button>
 								<p className="mb-[2px] ml-[15px] font-content-font font-bold text-black text-[18px]/[21.6px]">
-									Изменить место работы
+									{t('edit') + ' ' + t('placeWork').toLowerCase()}
 								</p>
 							</div>
 							<Form.Item
 								name={'workplace'}
+								rules={[
+									{ required: true, message: t('specify') + ' ' + t('placeWork').toLowerCase() },
+									{ max: 1000, message: t('symbolExcess') }
+								]}
 								label={
-									<label className="text-black text-[18px]/[18px] font-content-font font-normal">Место работы</label>
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+										{t('placeWork')}
+									</label>
 								}
 							>
 								<Input
@@ -1420,7 +1478,13 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 							</Form.Item>
 							<Form.Item
 								name={'seat'}
-								label={<label className="text-black text-[18px]/[18px] font-content-font font-normal">Должность</label>}
+								rules={[
+									{ required: true, message: t('specify') + ' ' + t('job').toLowerCase() },
+									{ max: 1000, message: t('symbolExcess') }
+								]}
+								label={
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">{t('job')}</label>
+								}
 							>
 								<Input
 									onPressEnter={e => {
@@ -1433,9 +1497,11 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 								<Form.Item
 									className="w-[50%]"
 									name={'beginWork'}
-									rules={[{ required: true, message: 'Укажите период работы' }]}
+									rules={[{ required: true, message: t('specify') + ' ' + t('periodOperation').toLowerCase() }]}
 									label={
-										<label className="text-black text-[18px]/[18px] font-content-font font-normal">Период работы</label>
+										<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+											{t('periodOperation')}
+										</label>
 									}
 								>
 									<DatePicker.MonthPicker className="w-full" disabled={haveNoExprience} maxDate={dayjs(date)} />
@@ -1443,15 +1509,21 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 								<Form.Item
 									name={'endWork'}
 									className="w-[50%] mt-auto"
-									rules={[{ required: true, message: 'Укажите период работы' }]}
+									rules={[{ required: true, message: t('specify') + ' ' + t('periodOperation').toLowerCase() }]}
 								>
 									<DatePicker.MonthPicker className="w-full" disabled={haveNoExprience} maxDate={dayjs(date)} />
 								</Form.Item>
 							</div>
 							<Form.Item
 								name={'duties'}
+								rules={[
+									{ required: true, message: t('specify') + ' ' + t('Responsibilities').toLowerCase() },
+									{ max: 1000, message: t('symbolExcess') }
+								]}
 								label={
-									<label className="text-black text-[18px]/[18px] font-content-font font-normal">Обязанности</label>
+									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
+										{t('Responsibilities')}
+									</label>
 								}
 							>
 								<Input.TextArea autoSize={true} className="!h-[107px]" disabled={haveNoExprience}></Input.TextArea>
@@ -1459,7 +1531,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 							<Form.Item>
 								<div style={{ textAlign: 'right', marginTop: 40 }}>
 									<Button type="primary" htmlType="submit">
-										Сохранить
+										{t('Save')}
 									</Button>
 								</div>
 							</Form.Item>
@@ -1484,6 +1556,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 							<div className="flex items-center mb-[38px]">
 								<button
 									onClick={() => {
+										setcurrentFormSkills(skillsData.skills)
 										setPage('main')
 									}}
 									className="bg-white border-none cursor-pointer"
@@ -1491,7 +1564,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 									<ArrowIcon />
 								</button>
 								<p className="mb-[2px] ml-[15px] font-content-font font-bold text-black text-[18px]/[21.6px]">
-									Профессиональные навыки
+									{t('professionalSkills')}
 								</p>
 							</div>
 							<Form.Item
@@ -1499,17 +1572,17 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 								rules={[
 									{
 										required: currentFormskills.length === 0,
-										message: 'Не указаны ключевые навыки'
+										message: t('specify') + ' ' + t('keySkills').toLocaleLowerCase()
 									}
 								]}
 								label={
 									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										Какими ключевыми навыками вы обладаете?
+										{t('keySkillsQuestion')}
 									</label>
 								}
 							>
 								<Input
-									placeholder='Например, "Прототипирование"'
+									placeholder={t('keySkillExample')}
 									suffix={
 										<ConfigProvider
 											theme={{
@@ -1570,12 +1643,12 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 								rules={[
 									{
 										max: 10000,
-										message: 'Количество символов было превышено'
+										message: t('symbolExcess')
 									}
 								]}
 								label={
 									<label className="text-black text-[18px]/[18px] font-content-font font-normal">
-										О себе (необязательно)
+										{t('aboutMyself')} ({t('notNecessary')})
 									</label>
 								}
 							>
@@ -1584,7 +1657,7 @@ export const ResponseForm = (props: { canRespond: boolean }) => {
 							<Form.Item>
 								<div style={{ textAlign: 'right', marginTop: 40 }}>
 									<Button type="primary" htmlType="submit">
-										Сохранить
+										{t('Save')}
 									</Button>
 								</div>
 							</Form.Item>

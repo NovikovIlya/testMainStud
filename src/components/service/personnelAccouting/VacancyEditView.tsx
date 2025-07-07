@@ -1,5 +1,6 @@
 import { LoadingOutlined } from '@ant-design/icons'
-import { Button, ConfigProvider, Form, Input, Modal, Select, Spin } from 'antd'
+import { Button, ConfigProvider, Form, Input, Modal, Select, Spin, notification } from 'antd'
+import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -11,12 +12,13 @@ import {
 	useGetCategoriesQuery,
 	useLazyGetVacancyViewQuery
 } from '../../../store/api/serviceApi'
-import { useAlert } from '../../../utils/Alert/AlertMessage'
 import styles from '../../../utils/deleteOverwriteAntButton.module.css'
 import ArrowIcon from '../jobSeeker/ArrowIcon'
 
 export const VacancyEditView = () => {
 	const [getVacancy, { data, isLoading }] = useLazyGetVacancyViewQuery()
+
+	const [api, contextHolder] = notification.useNotification()
 
 	useEffect(() => {
 		// Получаем текущий URL
@@ -44,8 +46,6 @@ export const VacancyEditView = () => {
 
 	const { data: categories = [] } = useGetCategoriesQuery()
 	const [categoryTitle, setCategoryTitle] = useState<string>(data?.acf.category as string)
-
-	const { openAlert } = useAlert()
 
 	const navigate = useNavigate()
 	const [editVacancy, { isLoading: editVacancyLoading }] = useEditVacancyAsPerDepartmentMutation()
@@ -152,6 +152,7 @@ export const VacancyEditView = () => {
 
 	return (
 		<>
+			{contextHolder}
 			<ConfigProvider
 				theme={{
 					token: {
@@ -197,7 +198,7 @@ export const VacancyEditView = () => {
 											setIsSuccessModalOpen(true)
 										})
 								} catch (error: any) {
-									openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+									api.error({ message: t('alertError'), placement: 'bottomRight' })
 								}
 							}}
 							loading={deleteVacancyLoading}
@@ -550,7 +551,7 @@ export const VacancyEditView = () => {
 													setIsSuccessModalOpen(true)
 												})
 										} catch (error: any) {
-											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+											api.error({ message: t('alertError'), placement: 'bottomRight' })
 										}
 									}}
 									type="primary"

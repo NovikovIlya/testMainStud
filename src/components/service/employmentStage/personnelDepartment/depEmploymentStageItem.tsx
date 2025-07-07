@@ -1,4 +1,5 @@
-import { Button, ConfigProvider, Form, Input, Modal } from 'antd'
+import { Button, ConfigProvider, Form, Input, Modal, notification } from 'antd'
+import { t } from 'i18next'
 import { useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
@@ -17,7 +18,6 @@ import { setFifthStageStatus } from '../../../../store/reducers/EmploymentStageR
 import { setForthStageStatus } from '../../../../store/reducers/EmploymentStageReducers/stages/ForthStageStatusSlice'
 import { setSecondStageStatus } from '../../../../store/reducers/EmploymentStageReducers/stages/SecondStageStatusSlice'
 import { setThirdStageStatus } from '../../../../store/reducers/EmploymentStageReducers/stages/ThirdStageStatusSlice'
-import { useAlert } from '../../../../utils/Alert/AlertMessage'
 
 import { DocumentElem } from './components/DocumentElem'
 import { StageComment } from './components/StageComment'
@@ -40,7 +40,7 @@ interface DepEmploymentStageItemProps {
 }
 
 export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
-	const { openAlert } = useAlert()
+	const [api, contextHolder] = notification.useNotification()
 
 	const secondStageStatus = useAppSelector(state => state.secondStageStatus)
 	const thirdStageStatus = useAppSelector(state => state.thirdStageStatus)
@@ -112,7 +112,7 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 												setIsReqModalSuccessOpen(true)
 											})
 									} catch (error: any) {
-										openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+										api.error({ message: t('alertError'), placement: 'bottomRight' })
 									}
 								}}
 							>
@@ -188,10 +188,10 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 												.then(() => {
 													dispatch(setSecondStageStatus('ACCEPTED'))
 													dispatch(setSecondStageCommentVisibility('invisible'))
-													openAlert({ type: 'success', text: 'Этап успешно принят' })
+													api.success({ message: 'Этап успешно принят', placement: 'bottomRight' })
 												})
 										} catch (error: any) {
-											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+											api.error({ message: t('alertError'), placement: 'bottomRight' })
 										}
 									}}
 								>
@@ -247,10 +247,10 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 												.then(() => {
 													dispatch(setThirdStageStatus('ACCEPTED'))
 													dispatch(setThirdStageCommentVisibility('invisible'))
-													openAlert({ type: 'success', text: 'Этап успешно принят' })
+													api.success({ message: 'Этап успешно принят', placement: 'bottomRight' })
 												})
 										} catch (error: any) {
-											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+											api.error({ message: t('alertError'), placement: 'bottomRight' })
 										}
 									}}
 								>
@@ -306,10 +306,10 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 												.then(() => {
 													dispatch(setFifthStageStatus('ACCEPTED'))
 													dispatch(setFifthStageCommentVisibility('invisible'))
-													openAlert({ type: 'success', text: 'Этап успешно принят' })
+													api.success({ message: 'Этап успешно принят', placement: 'bottomRight' })
 												})
 										} catch (error: any) {
-											openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+											api.error({ message: t('alertError'), placement: 'bottomRight' })
 										}
 									}}
 								>
@@ -511,13 +511,10 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 													.then(() => {
 														dispatch(setSecondStageStatus('REFINE'))
 														dispatch(setSecondStageCommentVisibility('visible'))
-														openAlert({
-															type: 'success',
-															text: 'Этап успешно отправлен на доработку'
-														})
+														api.success({ message: 'Этап успешно отправлен на доработку', placement: 'bottomRight' })
 													})
 											} catch (error: any) {
-												openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+												api.error({ message: t('alertError'), placement: 'bottomRight' })
 											}
 										}}
 									>
@@ -541,13 +538,10 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 													.then(() => {
 														dispatch(setThirdStageStatus('REFINE'))
 														dispatch(setThirdStageCommentVisibility('visible'))
-														openAlert({
-															type: 'success',
-															text: 'Этап успешно отправлен на доработку'
-														})
+														api.success({ message: 'Этап успешно отправлен на доработку', placement: 'bottomRight' })
 													})
 											} catch (error: any) {
-												openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+												api.error({ message: t('alertError'), placement: 'bottomRight' })
 											}
 										}}
 									>
@@ -570,13 +564,10 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 													.unwrap()
 													.then(() => {
 														dispatch(setForthStageStatus('REFINE'))
-														openAlert({
-															type: 'success',
-															text: 'Этап успешно отправлен на доработку'
-														})
+														api.success({ message: 'Этап успешно отправлен на доработку', placement: 'bottomRight' })
 													})
 											} catch (error: any) {
-												openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+												api.error({ message: t('errorAlert'), placement: 'bottomRight' })
 											}
 										}}
 									>
@@ -599,13 +590,10 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 													.then(() => {
 														setIsRevisionModalOpen(false)
 														dispatch(setFifthStageStatus('REFINE'))
-														openAlert({
-															type: 'success',
-															text: 'Этап успешно отправлен на доработку'
-														})
+														api.success({ message: 'Этап успешно отправлен на доработку', placement: 'bottomRight' })
 													})
 											} catch (error: any) {
-												openAlert({ type: 'error', text: 'Извините, что-то пошло не так...' })
+												api.error({ message: t('alertError'), placement: 'bottomRight' })
 											}
 										}}
 									>
@@ -622,6 +610,7 @@ export const DepEmploymentStageItem = (props: DepEmploymentStageItemProps) => {
 
 	return (
 		<>
+			{contextHolder}
 			<ReqModal></ReqModal>
 			<ReqModalSuccess></ReqModalSuccess>
 			<StageStatusModal></StageStatusModal>

@@ -1,13 +1,18 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Spin } from 'antd'
+import i18next, { t } from 'i18next'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { useAppSelector } from '../../../store'
+import { useGetCheckboxQuery, useLazyGetAboutMeQuery } from '../../../store/api/aboutMe/forAboutMe'
 import { useLazyGetInfoUserQuery } from '../../../store/api/formApi'
 import { useLazyGetSeekerVacancyRelationQuery, usePostVacancyRespondMutation } from '../../../store/api/serviceApi'
 import { useLazyGetVacancyViewQuery } from '../../../store/api/serviceApi'
+import { useGetCountriesQuery, useLazyGetCountriesQuery } from '../../../store/api/utilsApi'
+import { setCurrentVacancy } from '../../../store/reducers/CurrentVacancySlice'
 import { allData } from '../../../store/reducers/SeekerFormReducers/AboutMeReducer'
 import { setData } from '../../../store/reducers/SeekerFormReducers/ResponseDataSetReducer'
 
@@ -16,34 +21,30 @@ import { ResponseForm } from './ResponceForm'
 
 export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 	const [canRespond, setCanRespond] = useState<boolean>(false)
+	const { i18n } = useTranslation()
 
 	const [getVacancy, { data, isLoading }] = useLazyGetVacancyViewQuery()
 	const [getRelation, getRelationStatus] = useLazyGetSeekerVacancyRelationQuery()
 	const [getInfo, getInfoStatus] = useLazyGetInfoUserQuery()
+	const [getAboutMe, getAboutMeStatus] = useLazyGetAboutMeQuery()
+	const [getCountries, getCountriesStatus] = useLazyGetCountriesQuery()
+	const { data: checkboxes, isLoading: checkboxesLoading } = useGetCheckboxQuery()
 
 	const dispatch = useDispatch()
 
+	const parameters = useParams()
+
+	console.log(parameters)
+
 	useEffect(() => {
-		// Получаем текущий URL
-		const currentUrl = window.location.pathname
-
-		// Ищем id из URL
-		const match = currentUrl.match(/\/vacancyview\/(\d+)$/)
-
-		let id_from_url: string | number
-
-		if (match) {
-			id_from_url = match[1]
-		} else {
-			console.error('ID not found')
-			return // Возвращаемся, если id нет
-		}
+		let id_from_url = parameters.vacancyId
 
 		// Если id найден, запускаем запрос
 		if (id_from_url) {
 			getVacancy(parseInt(id_from_url))
 				.unwrap()
-				.then(() => {
+				.then(res => {
+					dispatch(setCurrentVacancy(res))
 					getRelation(parseInt(id_from_url))
 						.unwrap()
 						.then(res => {
@@ -59,31 +60,40 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 	const { dataSet } = useAppSelector(state => state.respondDataSet)
 	const { currentVacancy } = useAppSelector(state => state.currentVacancy)
 	const navigate = useNavigate()
-	const isEmpDep = user?.roles.find(role => role.type === 'EMPL')
+	const isEmpDep = user?.roles.find((role: { type: string }) => role.type === 'EMPL')
 
 	useEffect(() => {
 		if (user && !dataSet) {
-			getInfo()
+			getAboutMe()
 				.unwrap()
 				.then(info => {
-					dispatch(
-						allData({
-							name: user.firstname,
-							surName: user.lastname,
-							patronymic: user.middleName,
-							phone: user.phone,
-							email: user.email,
-							birthDay: user.birthday,
-							gender: info.gender,
-							countryId: info.countryId,
-							isPatronymicSet:
-								user.middleName === null || user.middleName === undefined || user.middleName === '' ? false : true,
-							isBirthDaySet:
-								user.birthday === null || user.birthday === undefined || user.birthday === '' ? false : true,
-							isGenderSet: info.gender === null || info.gender === undefined ? false : true
+					getCountries(i18next.language)
+						.unwrap()
+						.then(countries => {
+							dispatch(
+								allData({
+									name: user.firstname,
+									surName: user.lastname,
+									patronymic: user.middleName,
+									phone: user.phone,
+									email: user.email,
+									birthDay: user.birthday,
+									gender: info.SEX === 'm' ? 'M' : 'W',
+									countryId:
+										i18next.language === 'ru'
+											? countries.find(country => country.shortName === info.CITIZENSHIP_COUNTRY)
+												? countries.find(country => country.shortName === info.CITIZENSHIP_COUNTRY)?.id
+												: user.countryId
+											: user.countryId,
+									isPatronymicSet:
+										user.middleName === null || user.middleName === undefined || user.middleName === '' ? false : true,
+									isBirthDaySet:
+										user.birthday === null || user.birthday === undefined || user.birthday === '' ? false : true,
+									isGenderSet: info.SEX === null || info.SEX === undefined ? false : true
+								})
+							)
+							dispatch(setData(true))
 						})
-					)
-					dispatch(setData(true))
 				})
 		}
 	}, [])
@@ -96,7 +106,7 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 	let conditionsArr: RegExpMatchArray | null = null
 
 	if (currentVacancy !== null) {
-		responsibilities = currentVacancy.acf.responsibilities
+		responsibilities = currentVacancy.acf.responsibilities ? currentVacancy.acf.responsibilities : ''
 
 		responsibilities = responsibilities
 			.replace(/<strong>/g, '')
@@ -116,7 +126,7 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 		// 	/<li>[a-zA-Zа-яА-ЯёЁ0-9\s\:\,\.\/\–\—\(\)\+\-]+/g
 		// )
 
-		skills = currentVacancy.acf.skills
+		skills = currentVacancy.acf.skills ? currentVacancy.acf.skills : ''
 
 		skills = skills
 			.replace(/<strong>/g, '')
@@ -130,7 +140,7 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 
 		skillsArr = skills.match(/<li>[a-zA-Zа-яА-ЯёЁ0-9\s\:\,\.\/\–\—\(\)\+\-]+/g)
 
-		conditions = currentVacancy.acf.conditions
+		conditions = currentVacancy.acf.conditions ? currentVacancy.acf.conditions : ''
 
 		conditions = conditions
 			.replace(/<strong>/g, '')
@@ -145,7 +155,7 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 		conditionsArr = conditions.match(/<li>[a-zA-Zа-яА-ЯёЁ0-9\s\:\,\.\/\–\—\(\)\+\-]+/g)
 	}
 
-	if (isLoading || getRelationStatus.isLoading || getInfoStatus.isLoading) {
+	if (isLoading || getRelationStatus.isLoading || getAboutMeStatus.isLoading || checkboxesLoading) {
 		return (
 			<>
 				<div className="w-full h-full flex items-center">
@@ -174,19 +184,20 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 					</p>
 				</div>
 				<div className="w-[50%] mt-[52px] grid grid-cols-[repeat(3,_minmax(106px,_auto))_143px] gap-x-[120px] gap-y-[16px]">
-					<p className="w-[106px] font-content-font font-bold text-black text-[18px]/[21px]">Требуемый опыт работы</p>
-					<p className="w-[106px] font-content-font font-bold text-black text-[18px]/[21px]">Тип занятости</p>
-					<p className="w-[106px] font-content-font font-bold text-black text-[18px]/[21px]">Заработная плата</p>
+					<p className="w-[106px] font-content-font font-bold text-black text-[18px]/[21px]">{t('workExperience')}</p>
+					<p className="w-[106px] font-content-font font-bold text-black text-[18px]/[21px]">{t('employmentType')}</p>
+					<p className="w-[106px] font-content-font font-bold text-black text-[18px]/[21px]">{t('salary')}</p>
 					{props.type === 'CATALOG' ? (
-						<ResponseForm canRespond={canRespond} />
+						<ResponseForm
+							canRespond={canRespond}
+							personalData={checkboxes ? checkboxes.IS_CHECKED_PERS_DATA === 1 : true}
+						/>
 					) : (
 						<>
 							<div className="w-[143px]"></div>
 						</>
 					)}
-					<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-nowrap">
-						{data?.acf.experience}
-					</p>
+					<p className="font-content-font font-normal text-black text-[18px]/[21px]">{data?.acf.experience}</p>
 					<p className="font-content-font font-normal text-black text-[18px]/[21px] whitespace-nowrap">
 						{data?.acf.employment}
 					</p>
@@ -195,7 +206,9 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 					</p>
 				</div>
 				<div className="w-[60%] mt-[60px] mb-[86px] grid grid-cols-[9%_auto] gap-x-[160px] gap-y-[40px]">
-					<p className="font-content-font font-bold text-black text-[18px]/[21px] whitespace-nowrap">Задачи:</p>
+					<p className="font-content-font font-bold text-black text-[18px]/[21px] whitespace-nowrap">
+						{t('emplTasks')}:
+					</p>
 					{responsibilities.includes('<li>') ? (
 						<ul className="list-disc">
 							{responsibilitiesArr !== null &&
@@ -208,7 +221,9 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 							{data?.acf.responsibilities}
 						</p>
 					)}
-					<p className="font-content-font font-bold text-black text-[18px]/[21px] whitespace-nowrap">Требования:</p>
+					<p className="font-content-font font-bold text-black text-[18px]/[21px] whitespace-nowrap">
+						{t('requirements')}:
+					</p>
 					{skills.includes('<li>') ? (
 						<ul className="list-disc">
 							{skillsArr !== null &&
@@ -223,7 +238,9 @@ export default function VacancyView(props: { type: 'CATALOG' | 'CHAT' }) {
 							{data?.acf.skills}
 						</p>
 					)}
-					<p className="font-content-font font-bold text-black text-[18px]/[21px] whitespace-nowrap">Условия:</p>
+					<p className="font-content-font font-bold text-black text-[18px]/[21px] whitespace-nowrap">
+						{t('conditions')}:
+					</p>
 					{conditions.includes('<li>') ? (
 						<ul className="list-disc">
 							{conditionsArr !== null &&

@@ -69,7 +69,7 @@ export const Footer = () => {
 	
 	return (
 		<footer className="w-full min-h-[200px] bg-white">
-			<div className="max-w-[1650px] mx-auto px-4 sm:px-6 lg:px-10 py-8 sm:py-10 lg:py-14">
+			<div className=" sm:max-w-[1650px] mx-auto px-12 sm:px-6 lg:px-10 py-8 sm:py-10 lg:py-14">
 				<div className="flex flex-col lg:flex-row lg:justify-between gap-8 lg:gap-12">
 					{/* Левая секция с логотипом и контактами */}
 					<div className="flex flex-col">
@@ -101,45 +101,45 @@ export const Footer = () => {
 						<span className="text-sm sm:text-base mb-4 sm:mb-5">
 							<strong className="font-semibold">{t('soc')}:</strong>
 						</span>
-						<div className="grid grid-cols-3 sm:flex gap-3 sm:gap-4">
+						<div className="grid grid-cols-3 sm:flex gap-3 sm:gap-4 ">
 							<a 
 								href='https://vk.com/kazan_federal_university' 
-								className="flex items-center justify-center p-2 hover:opacity-80 transition-opacity"
+								className="flex items-center   hover:opacity-80 transition-opacity"
 								aria-label="VKontakte"
 							>
 								<VkSvg />
 							</a>
 							<a 
 								href='https://rutube.ru/u/univertv/' 
-								className="flex items-center justify-center p-2 hover:opacity-80 transition-opacity"
+								className="flex items-center justify-center  hover:opacity-80 transition-opacity"
 								aria-label="Rutube"
 							>
 								<RutubeSvg />
 							</a>
 							<a 
 								href='https://www.youtube.com/univertv' 
-								className="flex items-center justify-center p-2 hover:opacity-80 transition-opacity"
+								className="flex items-center justify-end   hover:opacity-80 transition-opacity"
 								aria-label="YouTube"
 							>
 								<YoutubeSvg />
 							</a>
 							<a 
 								href='https://dzen.ru/kazan_federal_university' 
-								className="flex items-center justify-center p-2 hover:opacity-80 transition-opacity"
+								className="flex items-center   hover:opacity-80 transition-opacity"
 								aria-label="Dzen"
 							>
 								<DzenSvg />
 							</a>
 							<a 
 								href='https://ok.ru/kznuniversity' 
-								className="flex items-center justify-center p-2 hover:opacity-80 transition-opacity"
+								className="flex items-center justify-center   hover:opacity-80 transition-opacity"
 								aria-label="Odnoklassniki"
 							>
 								<OkSvg />
 							</a>
 							<a 
 								href='https://t.me/s/kznuniversity' 
-								className="flex items-center justify-center p-2 hover:opacity-80 transition-opacity"
+								className="flex items-center justify-end   hover:opacity-80 transition-opacity"
 								aria-label="Telegram"
 							>
 								<TelegramSvg />

@@ -884,6 +884,8 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 				<Select
 					defaultValue={paramValue === 'eng' ? 'en' : i18n.language}
 					style={{ width: '100%' }}
+					dropdownMatchSelectWidth={false}
+
 					onChange={e => changeLanguage(e.valueOf())} // changeLanguage уже вызывает onCloseMobileBurgerMenu
 					options={[
 						{ value: 'ru', label: 'Рус' },

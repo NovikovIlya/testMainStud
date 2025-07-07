@@ -581,6 +581,7 @@ import { useGetRoleQuery } from '../../store/api/serviceApi'
 import { getBaseUrlShelly } from '../../store/api/studentPractice/getBaseUrlShelly'
 import { logOut } from '../../store/reducers/authSlice'
 import AccessibilityHelper from '../AccessibilityHelper/AccessibilityHelper'
+import { QrCode } from '../../assets/svg/QrCode'
 
 // import { ModalNav } from '../service/ModalNav'; // Если ModalNav не используется, можно удалить
 
@@ -1060,6 +1061,22 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 								</span>
 							</a>
 						)}
+						{<div className="hidden sm:flex relative inline-block h-full">
+							<div
+								className={`cursor-pointer p-3 h-full flex items-center ${
+									// Увеличил немного паддинг
+									type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'
+								}`}
+								onClick={e => {
+									e.stopPropagation()
+									setIsOpenAccessibility(!isOpenAccessibility) // Управляем состоянием для AccessibilityHelper
+								}}
+							>
+								<QrCode white={type === 'service'} />
+							</div>
+							
+						</div>}
+
 
 						<div
 							id="messagesForTest"

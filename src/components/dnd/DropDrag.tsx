@@ -26,6 +26,7 @@ import { TemplateCard } from '../cards/Template'
 
 import CookieConsent from './CookieConsent'
 import { block } from './constant'
+import QrCodeDesktop from '../QrCodeDesktop'
 
 const studentKeys = [
 	'Schedule',
@@ -1243,6 +1244,9 @@ const DropDrag = () => {
 			return (
 				<>
 					{mainRole === 'STUD' && <InfoStudent />}
+
+					<QrCodeDesktop/>
+
 					<div className="grid grid-cols-2 gap-4 mb-10 sm:grid-cols-2 ">
 						{generateDOM.map((card: any, index: any) => {
 							console.log('card', card)

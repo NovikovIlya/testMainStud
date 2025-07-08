@@ -1108,7 +1108,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 								<EyeSvg white={type === 'service'} />
 							</div>
 							<div className="h-full ">
-								<AccessibilityHelper ref={accessibilityRef} isOpen={isOpenAccessibility} lang={i18n.language} />
+								<AccessibilityHelper ref={accessibilityRef} isOpen={isOpenAccessibility} lang={i18n.language}  onClose={() => setIsOpenAccessibility(false)} />
 							</div>
 						</div>
 					</div>

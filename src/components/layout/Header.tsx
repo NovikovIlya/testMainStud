@@ -816,9 +816,8 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 		setIsModalOpen(false)
 	}
 
-	const commonItemClass =
-		'text-[16px] flex items-center gap-x-3 px-4 py-3 cursor-pointer w-full text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100'
-	const iconWrapperClass = 'text-xl text-gray-500 w-6 h-6 flex items-center justify-center' // Для консистентности размеров иконок
+	const commonItemClass = 'text-[16px] h-[61px] flex items-center gap-x-3 px-4 py-3 cursor-pointer w-full text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100'
+	const iconWrapperClass = 'text-xl text-gray-500 w-6 h-6 flex items-center justify-center' 
 
 	const renderMobileMenuItems = () => (
 		<>
@@ -937,12 +936,12 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 				<Badge count={unreadChatsCount || null} size="small" className={iconWrapperClass}>
 					<MessageModuleSvg white={false} />
 				</Badge>
-				<span>{t('messages.title', 'Мессенджер')}</span>
+				<span>{t('messages')}</span>
 			</div>
 			<Divider className="my-0" />
 
 			{/* Глазик */}
-			{/* <div
+			<div
 				className={commonItemClass}
 				onClick={handleAccessibilityItemClick} // Используем новую функцию
 				role="menuitem"
@@ -954,9 +953,9 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 				<span className={iconWrapperClass}>
 					<EyeSvg white={false} />
 				</span>
-				<span>{t('accessibility.title', 'Версия для слабовидящих')}</span>
+				<span>{t('Accessability')}</span>
 			</div> 
-			<Divider className="my-0" /> */}
+			<Divider className="my-0" />
 
 			{/* Profile items */}
 			{profileMenuItems.map((item: any) => {
@@ -1075,7 +1074,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 								}`}
 								onClick={e => {
 									e.stopPropagation()
-									setIsOpenAccessibility(!isOpenAccessibility) // Управляем состоянием для AccessibilityHelper
+									
 								}}
 							>
 								<QrCode white={type === 'service'} />

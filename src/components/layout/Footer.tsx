@@ -68,8 +68,8 @@ export const Footer = () => {
 	const { t, i18n } = useTranslation()
 	
 	return (
-		<footer className="w-full min-h-[200px] bg-white">
-			<div className=" sm:max-w-[1650px] mx-auto px-12 sm:px-6 lg:px-10 py-8 sm:py-10 lg:py-14">
+		<footer className="w-full min-h-[200px] bg-white ">
+			<div className=" sm:max-w-[1650px] mx-auto px-7  sm:px-6 lg:px-10 py-8 sm:py-10 lg:py-14">
 				<div className="flex flex-col lg:flex-row lg:justify-between gap-8 lg:gap-12">
 					{/* Левая секция с логотипом и контактами */}
 					<div className="flex flex-col">

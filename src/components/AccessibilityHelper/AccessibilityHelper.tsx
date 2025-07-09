@@ -129,7 +129,15 @@ const AccessibilityHelper: React.FC<AccessibilityHelperProps> = forwardRef(({ la
 
   const content = (
     <div className={`grid gap-${isMobile ? '3' : '4'}`}>
-      {options.map(({ icon: Icon, text: optionText, option }) => (
+      {options
+       .filter(({ option }) => {
+        // Скрываем курсоры только на мобильных
+        if (isMobile && (option === 'helper-core-blmouse' || option === 'helper-core-whmouse')) {
+          return false;
+        }
+        return true;
+      })
+      .map(({ icon: Icon, text: optionText, option }) => (
         <Button
           key={option}
           onClick={() => toggleOption(option)}
@@ -179,13 +187,13 @@ const AccessibilityHelper: React.FC<AccessibilityHelperProps> = forwardRef(({ la
   if (isMobile) {
     return (
       <Modal
-        title={text?.accessibility}
+        title={''}
         open={isOpen}
         onCancel={onClose}
         footer={null}
         width="95%"
         centered
-        wrapClassName='!h-[100%] !top-[200px] flex '
+        wrapClassName='!h-[100%] !top-[100px] flex '
         className="accessibility-modal-mobile "
         bodyStyle={{ padding: '16px' }}
       >

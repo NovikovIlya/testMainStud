@@ -817,7 +817,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	}
 
 	const commonItemClass =
-		'flex items-center gap-x-3 px-4 py-3 cursor-pointer w-full text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100'
+		'text-[16px] flex items-center gap-x-3 px-4 py-3 cursor-pointer w-full text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100'
 	const iconWrapperClass = 'text-xl text-gray-500 w-6 h-6 flex items-center justify-center' // Для консистентности размеров иконок
 
 	const renderMobileMenuItems = () => (
@@ -878,12 +878,12 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 				</div>
 			</Space>
 			{/* Выбор языка */}
-			<div className="px-4 py-3">
+			<div className="px-4 py-3 mb-2 mt-2">
 				{' '}
 				{/* Контейнер для Select не должен быть сам по себе кликабельным как пункт меню */}
 				<Select
 					defaultValue={paramValue === 'eng' ? 'en' : i18n.language}
-					style={{ width: '100%' }}
+					style={{ width: '98%' }}
 					dropdownMatchSelectWidth={false}
 
 					onChange={e => changeLanguage(e.valueOf())} // changeLanguage уже вызывает onCloseMobileBurgerMenu
@@ -893,7 +893,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 					]}
 				/>
 			</div>
-			<Divider className="my-0" />
+			{/* <Divider className="my-0" /> */}
 
 			{/* В старый ЛК */}
 			{maiRole !== 'ABITUR' && maiRole !== 'OTHER' && (
@@ -955,7 +955,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 					<EyeSvg white={false} />
 				</span>
 				<span>{t('accessibility.title', 'Версия для слабовидящих')}</span>
-			</div>
+			</div> 
 			<Divider className="my-0" /> */}
 
 			{/* Profile items */}
@@ -972,6 +972,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 					const contentChildren = item.label.props.children // Это [ <Icon/>, "Текст" ]
 
 					return (
+						<>
 						<div
 							key={item.key}
 							className={commonItemClass} // Применяем общий стиль
@@ -988,7 +989,10 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						>
 							{/* Рендерим детей напрямую, они уже содержат иконку и текст */}
 							{contentChildren}
+							
 						</div>
+						<Divider className="my-0" />
+						</>
 					)
 				}
 				// Резервный вариант, если структура item.label неожиданная (не должен срабатывать с текущими profileMenuItems)
@@ -1009,7 +1013,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			)}
 		>
 			<div
-				className={`w-screen flex h-full justify-between px-10 max-sm:px-5 ${
+				className={`w-screen flex h-full justify-between px-5 sm:px-10 max-sm:px-5 ${
 					type === 'main' ? 'max-w-[1680px] animate-fade-in' : 'animate-fade-in'
 				} `}
 			>

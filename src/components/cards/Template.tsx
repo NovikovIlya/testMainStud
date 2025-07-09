@@ -65,14 +65,14 @@ export const TemplateCard = ({
 						/>
 						{/* Мобильная версия */}
 
-						<div className='flex items-center justify-center '>
+						<div className='flex items-center justify-center  '>
 							<img
 							src={img}
 							width={isMobile ? width * 0.5 : width} // Уменьшаем размер на 50% для мобильных
     						height={isMobile ? height * 0.5 : height}
 							alt=""
 							className={clsx(
-								'',
+								'mr-0 ',
 								isRounded ? 'rounded-full' : 'rounded-3xl',
 								`${positionImage}`,
 								`${isMobile ? 'flex items-center justify-center' : 'hidden'}`

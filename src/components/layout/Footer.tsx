@@ -117,11 +117,11 @@ export const Footer = () => {
 								<RutubeSvg />
 							</a>
 							<a 
-								href='https://www.youtube.com/univertv' 
+								href='https://t.me/s/kznuniversity' 
 								className="flex items-center justify-end   hover:opacity-80 transition-opacity"
 								aria-label="YouTube"
 							>
-								<YoutubeSvg />
+								<TelegramSvg />
 							</a>
 							<a 
 								href='https://dzen.ru/kazan_federal_university' 
@@ -137,13 +137,13 @@ export const Footer = () => {
 							>
 								<OkSvg />
 							</a>
-							<a 
+							{/* <a 
 								href='https://t.me/s/kznuniversity' 
 								className="flex items-center justify-end   hover:opacity-80 transition-opacity"
 								aria-label="Telegram"
 							>
 								<TelegramSvg />
-							</a>
+							</a> */}
 						</div>
 					</div>
 				</div>

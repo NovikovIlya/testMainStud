@@ -149,7 +149,7 @@ const AccessibilityHelper: React.FC<AccessibilityHelperProps> = forwardRef(({ la
           <span>{optionText}</span>
         </Button>
       ))}
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center space-x-2 justify-between">
         <span>{text?.textSize.text}:</span>
         <Button 
           onClick={() => changeTextSize('15px')} 

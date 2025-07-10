@@ -700,6 +700,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const onCloseMobileBurgerMenu = () => {
 		setIsMobileDrawerOpen(false)
 	}
+	
 
 	const profileMenuItems: MenuProps['items'] = [
 		...(maiRole === 'OTHER'
@@ -790,29 +791,25 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 		}
 	}
 
-	const handleVisibleInspired = () => {
-		setIsOpenAccessibility(!isOpenAccessibility)
-		// Закрываем бургер меню, если открыли "глазик" из него
-		if (isMobileDrawerOpen) {
-			onCloseMobileBurgerMenu()
-		}
-	}
+	// const handleVisibleInspired = () => {
+	// 	setIsOpenAccessibility(!isOpenAccessibility)
+	// 	if (isMobileDrawerOpen) {
+	// 		onCloseMobileBurgerMenu()
+	// 	}
+	// }
 
 	const handleAccessibilityItemClick = () => {
 		setIsOpenAccessibility(!isOpenAccessibility)
 		onCloseMobileBurgerMenu() // Закрыть бургер меню
 	}
 
-	const showRoleChangeModal = () => {
-		// Renamed for clarity
-		setIsModalOpen(true)
-	}
+	// const showRoleChangeModal = () => {
+	// 	setIsModalOpen(true)
+	// }
 	const handleRoleChangeOk = () => {
-		// Renamed for clarity
 		setIsModalOpen(false)
 	}
 	const handleRoleChangeCancel = () => {
-		// Renamed for clarity
 		setIsModalOpen(false)
 	}
 
@@ -824,7 +821,6 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 			{/* Профиль */}
 			<Space className="mt-12 mb-2 ml-2">
 				{' '}
-				{/* Уменьшил gap до gap-3, добавил items-center h-full */}
 				{!isAvatarLoading && avatarLocal && (
 					<Avatar
 						key={avatarUrlLocal?.id || 'avatar'}
@@ -854,7 +850,6 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 					</div>
 					<div className="text-xs ">
 						{' '}
-						{/* Уменьшил размер шрифта для ролей */}
 						{user?.roles && user?.roles?.length > 1
 							? user?.roles
 									.filter(
@@ -959,7 +954,6 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 
 			{/* Profile items */}
 			{profileMenuItems.map((item: any) => {
-				// Используем Menu.ItemType или any для упрощения
 				if (!item || item.type === 'divider') {
 					// Добавил проверку на !item для безопасности
 					return <Divider key={item?.key || Math.random()} className="my-0" />

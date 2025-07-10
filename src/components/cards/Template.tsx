@@ -72,7 +72,7 @@ export const TemplateCard = ({
     						height={isMobile ? height * 0.5 : height}
 							alt=""
 							className={clsx(
-								'mr-0 ',
+								'!mr-0 ',
 								isRounded ? 'rounded-full' : 'rounded-3xl',
 								`${positionImage}`,
 								`${isMobile ? 'flex items-center justify-center' : 'hidden'}`

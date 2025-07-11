@@ -1,10 +1,12 @@
 import React from 'react'
 
 export const TelegramSvg = () => {
+	const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+	const size = isMobile ? 40 : 28;
 	return (
 		<svg
-			width="29"
-			height="29"
+			width={size}
+     		 height={size}
 			viewBox="0 0 29 29"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"

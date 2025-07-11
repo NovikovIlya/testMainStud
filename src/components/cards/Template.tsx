@@ -31,7 +31,7 @@ export const TemplateCard = ({
 					window.open(href)
 				}
 			}}
-			className="transform transition hover:scale-[101%]  duration-300 hover:shadow-lg  shadow-md flex w-full bg-white rounded-3xl sm:h-[320px] flex-col px-7 py-8 justify-between h-full max-[874px]:p-0 max-[874px]:py-3 max-[874px]:items-center "
+			className="transform transition hover:scale-[101%]  duration-300 hover:shadow-lg  shadow-md flex w-full bg-white rounded-3xl sm:h-[320px] flex-col px-2 sm:px-7 py-8 justify-between h-full max-[874px]:p-0 max-[874px]:py-3 max-[874px]:items-center "
 		>
 			<div
 				className={` flex ${
@@ -39,7 +39,7 @@ export const TemplateCard = ({
 				} max-[874px]:flex-col max-[874px]:h-full max-[874px]:w-full max-[874px]:items-center h-full `}
 			>
 				<div className="!w-[100%]  text-left ">
-					<div className="text-[10px] sm:leading-7 md:text-xl font-bold h-10">{t(title)}</div>
+					<div className="text-[14px] text-center sm:text-start sm:text-[10px] sm:leading-7 md:text-xl font-bold h-10">{t(title)}</div>
 					<div className="hidden sm:block text-xs sm:text-base w-full font-normal leading-relaxed mt-7 max-[870px]:hidden">
 						{t(info)}
 					</div>
@@ -53,16 +53,32 @@ export const TemplateCard = ({
 						/>
 						<img
 							src={img}
-							width={isMobile ? '50px' : width}
-							height={isMobile ? '60px' : height}
+							width={isMobile ? width * 0.5 : width} // Уменьшаем размер на 50% для мобильных
+    						height={isMobile ? height * 0.5 : height}
 							alt=""
 							className={clsx(
 								'',
 								isRounded ? 'rounded-full' : 'rounded-3xl',
 								`${positionImage}`,
-								`${isMobile ? '!mt-0' : ''}`
+								`${isMobile ? ' items-center justify-center hidden' : ''}`
 							)}
 						/>
+						{/* Мобильная версия */}
+
+						<div className='flex items-center justify-center  '>
+							<img
+							src={img}
+							width={isMobile ? width * 0.5 : width} // Уменьшаем размер на 50% для мобильных
+    						height={isMobile ? height * 0.5 : height}
+							alt=""
+							className={clsx(
+								'!mr-0 ',
+								isRounded ? 'rounded-full' : 'rounded-3xl',
+								`${positionImage}`,
+								`${isMobile ? 'flex items-center justify-center' : 'hidden'}`
+							)}
+						/>
+						</div>
 					</div>
 				)}
 			</div>

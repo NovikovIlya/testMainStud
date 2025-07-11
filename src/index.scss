@@ -343,6 +343,8 @@ body {
 .helper-core-invert {
 	-webkit-filter: invert(100%);
 	filter: invert(100%);
+	-webkit-filter: invert(100%);
+	scroll-behavior: auto;
 }
 
 .helper-core-grey {

@@ -422,7 +422,7 @@
 // }
 
 // export default TableLanguages
-import { DeleteTwoTone, EditTwoTone, EyeInvisibleTwoTone, EyeTwoTone, UploadOutlined, PlusOutlined, MinusCircleOutlined } from '@ant-design/icons'
+import { DeleteTwoTone, EditTwoTone, EyeInvisibleTwoTone, EyeTwoTone, UploadOutlined, PlusOutlined, MinusCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
 import {
 	Button,
 	Checkbox,
@@ -475,11 +475,13 @@ const TableLanguages = ({
 	const [changeGlaz, { isLoading: isLoadingGlaz }] = useIsPublishedMutation()
 	const [certificateFiles, setCertificateFiles] = useState<{[key: number]: any}>({})
 	const [updatingCertificates, setUpdatingCertificates] = useState([])
+	const [isFormDirty, setIsFormDirty] = useState(false)
+	const [initialFormValues, setInitialFormValues] = useState<any>(null) // Для сравнения с изначальными значениями
 
-		// Определяем локаль на основе текущего языка
-		const getAntdLocale = () => {
-			return i18n.language === 'ru' ? ruRU : enUS
-		}
+	// Определяем локаль на основе текущего языка
+	const getAntdLocale = () => {
+		return i18n.language === 'ru' ? ruRU : enUS
+	}
 
 	const columns: TableProps<LanguageData>['columns'] = [
 		{
@@ -602,18 +604,75 @@ const TableLanguages = ({
 				}
 			})) || []
 
-			form2.setFieldsValue({
+			const formValues = {
 				languageCode: selectInfo.language,
 				languageLevelCode: selectInfo.languageLevelCode,
 				isPublished: selectInfo.isPublished,
 				certificates: certificates.length > 0 ? certificates : [{}]
-			})
+			}
+
+			form2.setFieldsValue(formValues)
+			setInitialFormValues(formValues) // Сохраняем начальные значения
 
 			// Сброс файлов при открытии модального окна
 			setCertificateFiles({})
 			setUpdatingCertificates([])
+			setIsFormDirty(false) // Сбрасываем флаг при открытии
 		}
 	}, [selectInfo, form2])
+
+	// Отслеживание изменений в форме
+	const handleFormChange = () => {
+		const currentValues = form2.getFieldsValue()
+		
+		// Проверяем, изменились ли значения по сравнению с начальными
+		const hasChangedLevel = currentValues.languageLevelCode !== initialFormValues?.languageLevelCode
+		const hasChangedPublished = currentValues.isPublished !== initialFormValues?.isPublished
+		
+		// Проверяем изменения в сертификатах
+		const hasChangedCertificates = JSON.stringify(currentValues.certificates) !== JSON.stringify(initialFormValues?.certificates)
+		const hasNewFiles = Object.keys(certificateFiles).length > 0
+		const hasDeletedCerts = deleteCert.length > 0
+		const hasUpdatedCerts = updatingCertificates.length > 0
+
+		setIsFormDirty(
+			hasChangedLevel || 
+			hasChangedPublished || 
+			hasChangedCertificates || 
+			hasNewFiles || 
+			hasDeletedCerts || 
+			hasUpdatedCerts
+		)
+	}
+
+	// Функция для безопасного закрытия модального окна
+	const handleSafeCancel = () => {
+		if (isFormDirty) {
+			Modal.confirm({
+				title: t('confirmExit') || 'Вы действительно хотите выйти?',
+				content: t('progressWillBeLost') || 'Весь прогресс не сохранится',
+				icon: <ExclamationCircleOutlined />,
+				okText: t('yes') || 'Да',
+				cancelText: t('no') || 'Нет',
+				onOk: () => {
+					resetModalState()
+				}
+			})
+		} else {
+			resetModalState()
+		}
+	}
+
+	// Функция для сброса состояния модального окна
+	const resetModalState = () => {
+		setIsModalOpenEdit(false)
+		setDeleteCert([])
+		setCertificateFiles({})
+		form2.resetFields()
+		setUpdatingCertificates([])
+		setIsFormDirty(false)
+		setInitialFormValues(null)
+	}
 
 	const handleDelete = (record: any) => {
 		console.log('recordDelete', record)
@@ -630,11 +689,7 @@ const TableLanguages = ({
 	}
 
 	const handleCancelEdit = () => {
-		setIsModalOpenEdit(false)
-		setDeleteCert([])
-		setCertificateFiles({})
-		form2.resetFields()
-		setUpdatingCertificates([])
+		handleSafeCancel() // Используем безопасное закрытие
 	}
 
 	const onFinishForm2 = async (values: any) => {
@@ -686,7 +741,8 @@ const TableLanguages = ({
 
 		try {
 			await editForeign(requestData).unwrap()
-			handleCancelEdit()
+			setIsFormDirty(false) // Сбрасываем флаг после успешного сохранения
+			resetModalState()
 			// message.success(t('success'))
 		} catch (error) {
 			console.error('Ошибка при сохранении данных:', error)
@@ -712,40 +768,42 @@ const TableLanguages = ({
 		}
 		form2.setFieldsValue({ certificates })
 
-		
+		handleFormChange() // Отмечаем форму как измененную
 	}
 
 	const beforeUpload = (file: File, fieldIndex: number) => {
-    // Поддерживаемые форматы
-    const supportedFormats = [
-        'application/pdf',
-        'image/jpeg',
-        'image/jpg',
-        'image/png',
-        'image/gif'
-    ]
-    
-    const isValidFormat = supportedFormats.includes(file.type)
-    const isLt5M = file.size / 1024 / 1024 < 5
+		// Поддерживаемые форматы
+		const supportedFormats = [
+			'application/pdf',
+			'image/jpeg',
+			'image/jpg',
+			'image/png',
+			'image/gif'
+		]
+		
+		const isValidFormat = supportedFormats.includes(file.type)
+		const isLt5M = file.size / 1024 / 1024 < 5
 
-    if (!isValidFormat) {
-        message.error('Можно загружать только PDF, JPEG/JPG, PNG или GIF!')
-        return false
-    }
+		if (!isValidFormat) {
+			message.error('Можно загружать только PDF, JPEG/JPG, PNG или GIF!')
+			return false
+		}
 
-    if (!isLt5M) {
-        message.error('Файл должен быть меньше 5MB!')
-        return false
-    }
+		if (!isLt5M) {
+			message.error('Файл должен быть меньше 5MB!')
+			return false
+		}
 
-    // Сохраняем файл для конкретного индекса
-    setCertificateFiles(prev => ({
-        ...prev,
-        [fieldIndex]: file
-    }))
+		// Сохраняем файл для конкретного индекса
+		setCertificateFiles(prev => ({
+			...prev,
+			[fieldIndex]: file
+		}))
 
-    return false
-}
+		handleFormChange() // Отмечаем форму как измененную
+
+		return false
+	}
 
 	const handleFileRemove = (fieldIndex: number) => {
 		setCertificateFiles(prev => {
@@ -763,6 +821,8 @@ const TableLanguages = ({
 			}
 			form2.setFieldsValue({ certificates })
 		}
+
+		handleFormChange() // Проверяем состояние формы после удаления
 	}
 
 	// Обработчик изменения типа сертификата
@@ -787,14 +847,14 @@ const TableLanguages = ({
 				}])
 			}
 		}
+		
+		handleFormChange() // Отмечаем форму как измененную
 	}
-
-	
 
 	return (
 		<>
 			<ConfigProvider
-			locale={getAntdLocale()}
+				locale={getAntdLocale()}
 				theme={{
 					components: {
 						Table: {
@@ -809,10 +869,15 @@ const TableLanguages = ({
 					title={t('langZnan')}
 					open={isModalOpenEdit}
 					onOk={handleOkEdit}
-					onCancel={handleCancelEdit}
+					onCancel={handleSafeCancel} // Используем безопасное закрытие
 					width={600}
 				>
-					<Form className="mt-4" form={form2} onFinish={onFinishForm2}>
+					<Form 
+						className="mt-4" 
+						form={form2} 
+						onFinish={onFinishForm2}
+						onValuesChange={handleFormChange} // Отслеживаем изменения
+					>
 						<Form.Item
 							label={<div className="">{t('language')}</div>}
 							name="languageCode"
@@ -871,6 +936,7 @@ const TableLanguages = ({
 														}
 														remove(name)
 														handleFileRemove(index)
+														handleFormChange() // Отмечаем форму как измененную
 													}}
 												/>
 											)}
@@ -901,31 +967,34 @@ const TableLanguages = ({
 														value: item.id,
 														label: item.certificateName
 													}))}
-													onChange={value=>{
-																 handleCertificateTypeChange(value, index)										}}
-													
+													onChange={value => {
+														handleCertificateTypeChange(value, index)
+													}}
 													placeholder={t('zagrFile')}
 												/>
 											</Form.Item>
 
 											<Form.Item
-												label={<div>{t('prikrep')}
-													<Tooltip
-														color='white'
-														title={
-															<>
-																<div  className="text-black p-2">{t('suda')} </div>
-															</>
-														}
-													>
-													<img className=" " src="/GroupVop.svg" />
-													</Tooltip>
-												</div>}
+												label={
+													<div>
+														{t('prikrep')}
+														<Tooltip
+															color='white'
+															title={
+																<>
+																	<div className="text-black p-2">{t('suda')}</div>
+																</>
+															}
+														>
+															<img className=" " src="/GroupVop.svg" />
+														</Tooltip>
+													</div>
+												}
 											>
 												{form2.getFieldValue(['certificates', name, 'existingFile']) && !certificateFiles[index] ? (
 													<div className="flex items-center gap-2">
 														<a 
-															 href={`${getBaseUrl()}activities/languages/foreign/certificate?certificateId=${form2.getFieldValue(['certificates', name, 'existingCertId'])}`}
+															href={`${getBaseUrl()}activities/languages/foreign/certificate?certificateId=${form2.getFieldValue(['certificates', name, 'existingCertId'])}`}
 															target="_blank"
 															rel="noopener noreferrer"
 														>
@@ -952,7 +1021,6 @@ const TableLanguages = ({
 															name: certificateFiles[index].name,
 															status: 'done'
 														}] : []}
-														
 													>
 														<Button icon={<UploadOutlined />}>
 															{t('add')}
@@ -966,11 +1034,25 @@ const TableLanguages = ({
 									<Form.Item>
 										<Button 
 											type="dashed" 
-											onClick={() => add()} 
+											onClick={() => {
+												// Проверка последней записи
+												const lastIndex = fields.length - 1
+												const lastCertificate = form2.getFieldValue(['certificates', lastIndex])
+												const hasFile = certificateFiles[lastIndex]
+												const hasType = lastCertificate?.certificateTypeId
+												console.log("lastCertificate", lastCertificate)
+												if (!lastCertificate?.certificateTypeId && (!hasFile || !hasType)) {
+													message.warning(t('addNewSertAlert'))
+													return
+												}
+												
+												add()
+												handleFormChange() // Отмечаем форму как измененную
+											}} 
 											block 
 											icon={<PlusOutlined />}
 										>
-											{t('add')}
+											{t('addSert')}
 										</Button>
 									</Form.Item>
 								</>
@@ -985,7 +1067,7 @@ const TableLanguages = ({
 							{t('save')}
 						</Button>
 					</Form>
-									</Modal>
+				</Modal>
 
 				<div className={'registerContracts animate-fade-in w-full'}>
 					<Spin className="w-full" spinning={isLoadingDelete || isLoadingGlaz || isLoadingEdit}>

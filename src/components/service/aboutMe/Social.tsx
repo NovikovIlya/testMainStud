@@ -12,24 +12,24 @@ const { TextArea } = Input
 
 const Social = () => {
 	const { t } = useTranslation()
-	const { data: socialData ,isLoading:isLoadingData} = useGetSocQuery()
-	const [putSoc,{isLoading:isLoadingPut}] = usePutSocMutation()
-	const [postSoc,{}] = usePostSocMutation()
+	const { data: socialData, isLoading: isLoadingData } = useGetSocQuery()
+	const [putSoc, { isLoading: isLoadingPut }] = usePutSocMutation()
+	const [postSoc, {}] = usePostSocMutation()
 	const [form] = Form.useForm()
 	const [isExpanded, setIsExpanded] = useState(false)
 
 	useEffect(() => {
-		if(socialData){
+		if (socialData) {
 			form.setFieldsValue({
 				socialWork: socialData?.socialWork || '',
 				creativeEvents: socialData?.creativeEvents || '',
 				sportEvents: socialData?.sportEvents || '',
-				sectionsAndClubs: socialData?.sectionsAndClubs || '',
+				sectionsAndClubs: socialData?.sectionsAndClubs || ''
 			})
 		}
 	}, [form, socialData])
 
-	const onFinish = (values:any) => {
+	const onFinish = (values: any) => {
 		putSoc(values)
 	}
 
@@ -39,26 +39,18 @@ const Social = () => {
 				<Title className="!text-[28px]">{t('socialTitle')}</Title>
 				<Form form={form} onFinish={onFinish} className="w-full pt-10" layout="vertical">
 					<Form.Item name="socialWork" label={<Text strong>{t('socialWork')}</Text>} className="mb-4">
-						<TextArea 
-						 placeholder={t('placeholdSoc')}
-						 rows={isExpanded ? 6 : 3} />
+						<TextArea placeholder={t('placeholdSoc')} maxLength={4000} rows={isExpanded ? 6 : 3} />
 					</Form.Item>
 					<Form.Item name="creativeEvents" label={<Text strong>{t('creativeEvents')}</Text>} className="mb-4">
-						<TextArea 
-						 placeholder={t('placeholdCreative')}
-						 rows={isExpanded ? 6 : 3} />
+						<TextArea placeholder={t('placeholdCreative')} maxLength={4000} rows={isExpanded ? 6 : 3} />
 					</Form.Item>
 					<Form.Item name="sportEvents" label={<Text strong>{t('sportEvents')}</Text>} className="mb-4">
-						<TextArea
-						 placeholder={t('placesportEvents')}
-						 
-						 rows={isExpanded ? 6 : 3} />
+						<TextArea placeholder={t('placesportEvents')} maxLength={4000} rows={isExpanded ? 6 : 3} />
 					</Form.Item>
 					<Form.Item name="sectionsAndClubs" label={<Text strong>{t('sectionsAndClubs')}</Text>} className="mb-4">
-						<TextArea 
-						 placeholder={t('placesectionsAndClubs')}
-						rows={isExpanded ? 6 : 3} />
+						<TextArea maxLength={4000} placeholder={t('placesectionsAndClubs')} rows={isExpanded ? 6 : 3} />
 					</Form.Item>
+
 					<Form.Item>
 						<Button type="primary" htmlType="submit">
 							{t('saveButton')}

@@ -1,5 +1,6 @@
 import { EditOutlined, EyeOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
+import { t } from 'i18next';
 import React, { useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -18,6 +19,7 @@ function QuillComponents({ content, setContent }: any ) {
  
       ['clean']
     ],
+    
   };
 
   return (
@@ -33,6 +35,7 @@ function QuillComponents({ content, setContent }: any ) {
             />
         </div>
       </div>
+      {content.length > 4000 ? <div className='mt-2 mb-2 text-red-400'>{t('text4000')}</div> : ''}
     </div>
   );
 }

@@ -17,7 +17,9 @@ import { useGetEmploymentPossibleRolesQuery, useGetRoleQuery } from '../../store
 import { getBaseUrlShelly } from '../../store/api/studentPractice/getBaseUrlShelly'
 import { changeLayout, removeCard } from '../../store/reducers/LayoutsSlice'
 import InfoEmployment from '../InfoEmployment'
+import InfoScammers from '../InfoScammers'
 import InfoStudent from '../InfoStudent'
+import QrCodeDesktop from '../QrCodeDesktop'
 import { AboutUniversityCard } from '../aboutUniversity/AboutUniversityCard'
 import { Apply } from '../apply/Apply'
 import { DirectResume } from '../cards/DirectResume'
@@ -27,7 +29,6 @@ import { TemplateCard } from '../cards/Template'
 
 import CookieConsent from './CookieConsent'
 import { block } from './constant'
-import QrCodeDesktop from '../QrCodeDesktop'
 
 const studentKeys = [
 	'Schedule',
@@ -1303,8 +1304,8 @@ const DropDrag = () => {
 			return (
 				<>
 					{mainRole === 'STUD' && <InfoStudent />}
+					<InfoScammers />
 					{/* {mainRole === 'STUD' && <QrCodeDesktop />} */}
-					
 
 					<div className="grid grid-cols-2 gap-4 mb-10 sm:grid-cols-2 ">
 						{generateDOM.map((card: any, index: any) => {
@@ -1330,6 +1331,7 @@ const DropDrag = () => {
 		return (
 			<>
 				{mainRole === 'STUD' ? <InfoStudent /> : ''}
+				<InfoScammers />
 				<ResponsiveReactGridLayout
 					className="layout mb-10 !height-full"
 					cols={{ lg: isMobile ? 2 : 3, md: 2, sm: 2, xs: 2, xxs: 1 }}

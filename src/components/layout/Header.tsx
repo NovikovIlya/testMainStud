@@ -1060,7 +1060,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 								</span>
 							</a>
 						)}
-						{<div className="hidden sm:flex relative inline-block h-full">
+						{maiRole === 'STUD' ? <div className="hidden sm:flex relative inline-block h-full">
 							<div
 								className={`cursor-pointer p-3 h-full flex items-center ${
 									// Увеличил немного паддинг
@@ -1074,7 +1074,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 								<QrCode white={type === 'service'} />
 							</div>
 							
-						</div>}
+						</div>: ''}
 
 
 						<div

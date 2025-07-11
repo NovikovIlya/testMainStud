@@ -174,12 +174,12 @@ const Scientific = () => {
 
 							<div className="mt-12 mb-1"> <span className="text-red-500 mr-[4px] font-[14px] !font-[SimSun,sans-serif]">*</span>{t('theme')}</div>
 							<Form.Item name="theme" className=" mb-6" rules={[{ required: true, message: t('validTheme') }]}>
-								<Input.TextArea rows={4} placeholder={t('inputMessage2')} maxLength={100} />
+								<Input.TextArea rows={4} placeholder={t('inputMessage2')} maxLength={1000} />
 							</Form.Item>
 
 							<div className="mb-1"><span className="text-red-500 mr-[4px] font-[14px] !font-[SimSun,sans-serif]">*</span>{t('direction')}</div>
 							<Form.Item name="direction" className=" h-[35px]" rules={[{ required: true, message: t('validTNap') }]}>
-								<Input.TextArea rows={4} placeholder={t("inputMessage2")} maxLength={100} />
+								<Input.TextArea rows={4} placeholder={t("inputMessage2")} maxLength={1000} />
 							</Form.Item>
 
 							<Form.Item

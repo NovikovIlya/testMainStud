@@ -1303,7 +1303,7 @@ const DropDrag = () => {
 			return (
 				<>
 					{mainRole === 'STUD' && <InfoStudent />}
-					{mainRole === 'STUD' && <QrCodeDesktop />}
+					{/* {mainRole === 'STUD' && <QrCodeDesktop />} */}
 					
 
 					<div className="grid grid-cols-2 gap-4 mb-10 sm:grid-cols-2 ">

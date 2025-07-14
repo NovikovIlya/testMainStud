@@ -572,6 +572,7 @@ import { ArrowLeftBackInOldAccount } from '../../assets/svg/ArrowLeftBackInOldAc
 // import { LogoIasSvgEn } from '../../assets/svg/LogoIasSvgEn' // Убедитесь, что этот импорт нужен или удалите
 import { LogoSvgNew } from '../../assets/svg/LogoSvgNew'
 import { MessageModuleSvg } from '../../assets/svg/MessagesModuleSvg'
+import { QrCode } from '../../assets/svg/QrCode'
 import { TypeHeaderProps } from '../../models/layout'
 import { useAppSelector } from '../../store'
 import { useGetAvatarQuery } from '../../store/api/aboutMe/forAboutMe'
@@ -581,7 +582,6 @@ import { useGetRoleQuery } from '../../store/api/serviceApi'
 import { getBaseUrlShelly } from '../../store/api/studentPractice/getBaseUrlShelly'
 import { logOut } from '../../store/reducers/authSlice'
 import AccessibilityHelper from '../AccessibilityHelper/AccessibilityHelper'
-import { QrCode } from '../../assets/svg/QrCode'
 
 // import { ModalNav } from '../service/ModalNav'; // Если ModalNav не используется, можно удалить
 
@@ -700,7 +700,6 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 	const onCloseMobileBurgerMenu = () => {
 		setIsMobileDrawerOpen(false)
 	}
-	
 
 	const profileMenuItems: MenuProps['items'] = [
 		...(maiRole === 'OTHER'
@@ -813,8 +812,9 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 		setIsModalOpen(false)
 	}
 
-	const commonItemClass = 'text-[16px] h-[61px] flex items-center gap-x-3 px-4 py-3 cursor-pointer w-full text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100'
-	const iconWrapperClass = 'text-xl text-gray-500 w-6 h-6 flex items-center justify-center' 
+	const commonItemClass =
+		'text-[16px] h-[61px] flex items-center gap-x-3 px-4 py-3 cursor-pointer w-full text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100'
+	const iconWrapperClass = 'text-xl text-gray-500 w-6 h-6 flex items-center justify-center'
 
 	const renderMobileMenuItems = () => (
 		<>
@@ -879,7 +879,6 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 					defaultValue={paramValue === 'eng' ? 'en' : i18n.language}
 					style={{ width: '98%' }}
 					dropdownMatchSelectWidth={false}
-
 					onChange={e => changeLanguage(e.valueOf())} // changeLanguage уже вызывает onCloseMobileBurgerMenu
 					options={[
 						{ value: 'ru', label: 'Рус' },
@@ -949,7 +948,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 					<EyeSvg white={false} />
 				</span>
 				<span>{t('Accessability')}</span>
-			</div> 
+			</div>
 			<Divider className="my-0" />
 
 			{/* Profile items */}
@@ -966,25 +965,24 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 
 					return (
 						<>
-						<div
-							key={item.key}
-							className={commonItemClass} // Применяем общий стиль
-							onClick={() => {
-								if (action) action() // Вызываем действие, которое уже содержит onCloseMobileBurgerMenu
-							}}
-							role="menuitem"
-							tabIndex={0}
-							onKeyDown={e => {
-								if (e.key === 'Enter' || e.key === ' ') {
-									if (action) action()
-								}
-							}}
-						>
-							{/* Рендерим детей напрямую, они уже содержат иконку и текст */}
-							{contentChildren}
-							
-						</div>
-						<Divider className="my-0" />
+							<div
+								key={item.key}
+								className={commonItemClass} // Применяем общий стиль
+								onClick={() => {
+									if (action) action() // Вызываем действие, которое уже содержит onCloseMobileBurgerMenu
+								}}
+								role="menuitem"
+								tabIndex={0}
+								onKeyDown={e => {
+									if (e.key === 'Enter' || e.key === ' ') {
+										if (action) action()
+									}
+								}}
+							>
+								{/* Рендерим детей напрямую, они уже содержат иконку и текст */}
+								{contentChildren}
+							</div>
+							<Divider className="my-0" />
 						</>
 					)
 				}
@@ -1042,6 +1040,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 					<div className="flex h-full items-center ">
 						{maiRole !== 'ABITUR' && maiRole !== 'OTHER' && (
 							<a
+								id="backToOldKFU"
 								className={clsx(
 									'h-full flex gap-2 items-center px-3 cursor-pointer no-underline',
 									type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'
@@ -1076,7 +1075,6 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 							
 						</div>: ''} */}
 
-
 						<div
 							id="messagesForTest"
 							className={`cursor-pointer h-full p-3 flex items-center ${
@@ -1093,6 +1091,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						</div>
 						<div className="relative inline-block h-full">
 							<div
+								id="accessibilityEye"
 								className={`cursor-pointer p-3 h-full flex items-center ${
 									// Увеличил немного паддинг
 									type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'
@@ -1105,7 +1104,12 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 								<EyeSvg white={type === 'service'} />
 							</div>
 							<div className="h-full ">
-								<AccessibilityHelper ref={accessibilityRef} isOpen={isOpenAccessibility} lang={i18n.language}  onClose={() => setIsOpenAccessibility(false)} />
+								<AccessibilityHelper
+									ref={accessibilityRef}
+									isOpen={isOpenAccessibility}
+									lang={i18n.language}
+									onClose={() => setIsOpenAccessibility(false)}
+								/>
 							</div>
 						</div>
 					</div>
@@ -1126,6 +1130,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						]}
 					/>
 					<div
+						id="aboutMeBlock"
 						className={clsx(
 							'h-full flex items-center cursor-pointer w-fit',
 							type === 'main' && openMenu && 'bg-[#E3E8ED]',

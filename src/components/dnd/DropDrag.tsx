@@ -1,6 +1,6 @@
 import { DeleteOutlined, LoadingOutlined } from '@ant-design/icons'
 import { useLocalStorageState } from 'ahooks'
-import { Button, Col, Row, Spin } from 'antd'
+import { Button, Col, Row, Spin, Tour, TourProps } from 'antd'
 import { useEffect, useMemo, useState } from 'react'
 import { Responsive, WidthProvider } from 'react-grid-layout'
 import 'react-grid-layout/css/styles.css'
@@ -140,6 +140,89 @@ const DropDrag = () => {
 				return '' // или любое другое значение по умолчанию
 		}
 	}, [href])
+
+	const [isTourOpen, setIsTourOpen] = useState<boolean>(false)
+
+	const steps: TourProps['steps'] = [
+		...(maiRole === 'EMPL'
+			? [
+					{
+						title: 'Практики для преподавателя',
+						description: 'Практики для преподавателя',
+						target: () => document.getElementById('mainScreenpracticeTeacher')!
+					}
+			  ]
+			: []),
+		...(maiRole === 'EMPL'
+			? [
+					{
+						title: 'Практики',
+						description: 'Практики',
+						target: () => document.getElementById('mainScreenPractices')!
+					}
+			  ]
+			: []),
+		...(maiRole === 'EMPL'
+			? [
+					{
+						title: 'Преподавателю',
+						description: 'Преподавателю',
+						target: () => document.getElementById('mainScreenforTeachers')!
+					}
+			  ]
+			: []),
+		...(maiRole === 'STUD'
+			? [
+					{
+						title: 'Расписание',
+						description: 'Расписание',
+						target: () => document.getElementById('mainScreenSchedule')!
+					}
+			  ]
+			: []),
+		{
+			title: 'Мессенджер',
+			description: 'Мессенджер',
+			target: () => document.getElementById('messagesForTest')!
+		},
+		{
+			title: 'Версия для слабовидящих',
+			description: 'Версия для слабовидящих',
+			target: () => document.getElementById('accessibilityEye')!
+		},
+		{
+			title: 'Блок «обо мне»',
+			description: 'Блок «обо мне»',
+			target: () => document.getElementById('aboutMeBlock')!
+		},
+		...(maiRole === 'STUD'
+			? [
+					{
+						title: 'Сессия',
+						description: 'Сессия',
+						target: () => document.getElementById('mainScreenSession')!
+					}
+			  ]
+			: []),
+		...(maiRole === 'STUD'
+			? [
+					{
+						title: 'Электронная зачётная книжка',
+						description: 'Электронная зачётная книжка',
+						target: () => document.getElementById('mainScreenElectronicBook')!
+					}
+			  ]
+			: []),
+		...(maiRole === 'STUD' || maiRole === 'EMPL'
+			? [
+					{
+						title: 'Вернуться в старый ЛК',
+						description: 'Вернуться в старый ЛК',
+						target: () => document.getElementById('backToOldKFU')!
+					}
+			  ]
+			: [])
+	]
 
 	const jsxElements = [
 		{
@@ -1178,7 +1261,7 @@ const DropDrag = () => {
 	const generateDOM = layoutValid
 		.map(item => {
 			return (
-				<div key={item.i} className="bg-white/70 backdrop-blur-sm rounded-[20px] shadow-md ">
+				<div key={item.i} className="bg-white/70 backdrop-blur-sm rounded-[20px] shadow-md " id={`mainScreen${item.i}`}>
 					<div className="w-full h-full">
 						{/* {edit && item.i !== 'Schedule' && (
 						<div
@@ -1330,6 +1413,13 @@ const DropDrag = () => {
 		}
 		return (
 			<>
+				<Button
+					onClick={() => {
+						setIsTourOpen(true)
+					}}
+				>
+					Ознакомиться с сайтом
+				</Button>
 				{mainRole === 'STUD' ? <InfoStudent /> : ''}
 				<InfoScammers />
 				<ResponsiveReactGridLayout
@@ -1350,6 +1440,13 @@ const DropDrag = () => {
 				>
 					{generateDOM}
 				</ResponsiveReactGridLayout>
+				<Tour
+					open={isTourOpen}
+					onClose={() => {
+						setIsTourOpen(false)
+					}}
+					steps={steps}
+				></Tour>
 			</>
 		)
 

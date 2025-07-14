@@ -13,12 +13,12 @@ const InfoScammers = () => {
 				<Card className="border-l-rose-500  sm:mt-5 mb-5 sm:mb-14 rounded-3xl text-xs sm:text-base shadow-md ">
 					<p>{t('scammersNoticeText1')}</p>
 					<br />
-					<p> {t('scammersNoticeText2')}</p>
+					<p className="font-bold"> {t('scammersNoticeText2')}</p>
 					<p>{t('scammersNoticeText3')} </p>
 					<p>{t('scammersNoticeText4')}</p>
 					<p>{t('scammersNoticeText5')}</p>
 					<br />
-					<p>{t('scammersNoticeText6')}</p>
+					<p className="font-bold">{t('scammersNoticeText6')}</p>
 					<div>
 						{Array.from({ length: 8 }).map((_, i) => (
 							<p>

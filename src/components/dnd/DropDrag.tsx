@@ -180,6 +180,25 @@ const DropDrag = () => {
 					}
 			  ]
 			: []),
+		...(maiRole === 'ABITUR' || (maiRole === 'OTHER' && (subRole === 'ABIT' || subRole === 'SCHOOL'))
+			? [
+					{
+						title: 'Поступление в университет',
+						description: 'Поступление в университет',
+						target: () => document.getElementById('applyWidget')!
+					}
+			  ]
+			: []),
+		...(maiRole === 'ABITUR' ||
+		(maiRole === 'OTHER' && (subRole === 'ABIT' || subRole === 'SCHOOL' || subRole === 'GUEST'))
+			? [
+					{
+						title: 'Об университете',
+						description: 'Об университете',
+						target: () => document.getElementById('aboutUniversityWidget')!
+					}
+			  ]
+			: []),
 		{
 			title: 'Мессенджер',
 			description: 'Мессенджер',
@@ -1301,12 +1320,26 @@ const DropDrag = () => {
 				)
 			return (
 				<>
+					<Button
+						onClick={() => {
+							setIsTourOpen(true)
+						}}
+					>
+						Ознакомиться с сайтом
+					</Button>
 					<Apply />
 					<Row className="mb-10">
 						<Col span={8}>
 							<AboutUniversityCard />
 						</Col>
 					</Row>
+					<Tour
+						open={isTourOpen}
+						onClose={() => {
+							setIsTourOpen(false)
+						}}
+						steps={steps}
+					></Tour>
 				</>
 			)
 		}
@@ -1321,11 +1354,26 @@ const DropDrag = () => {
 			if (subRole === 'SCHOOL') {
 				return (
 					<>
+						<Button
+							onClick={() => {
+								setIsTourOpen(true)
+							}}
+						>
+							Ознакомиться с сайтом
+						</Button>
+						<Apply />
 						<Row>
 							<Col span={8}>
 								<AboutUniversityCard />
 							</Col>
 						</Row>
+						<Tour
+							open={isTourOpen}
+							onClose={() => {
+								setIsTourOpen(false)
+							}}
+							steps={steps}
+						></Tour>
 					</>
 				)
 			}

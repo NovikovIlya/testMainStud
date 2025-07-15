@@ -1218,6 +1218,7 @@ const DropDrag = () => {
 				)
 			return (
 				<>
+					<InfoScammers />
 					<Apply />
 					<Row className="mb-10">
 						<Col span={8}>
@@ -1238,6 +1239,7 @@ const DropDrag = () => {
 			if (subRole === 'SCHOOL') {
 				return (
 					<>
+						<InfoScammers />
 						<Row>
 							<Col span={8}>
 								<AboutUniversityCard />
@@ -1250,6 +1252,7 @@ const DropDrag = () => {
 			if (subRole === 'ATTEND' || subRole === 'GUEST') {
 				return (
 					<>
+						<InfoScammers />
 						<Row>
 							<Col span={8}>
 								<AboutUniversityCard />
@@ -1261,6 +1264,7 @@ const DropDrag = () => {
 			if (subRole === 'SEEKER') {
 				return (
 					<>
+						<InfoScammers />
 						<ResponsiveReactGridLayout
 							className="layout mb-10 !height-full"
 							cols={{ lg: isMobile ? 2 : 3, md: 2, sm: 2, xs: 2, xxs: 1 }}

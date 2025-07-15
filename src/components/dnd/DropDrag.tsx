@@ -1,6 +1,6 @@
 import { DeleteOutlined, LoadingOutlined } from '@ant-design/icons'
 import { useLocalStorageState } from 'ahooks'
-import { Button, Col, Row, Spin } from 'antd'
+import { Button, Col, Modal, Row, Spin } from 'antd'
 import { useEffect, useMemo, useState } from 'react'
 import { Responsive, WidthProvider } from 'react-grid-layout'
 import 'react-grid-layout/css/styles.css'
@@ -29,6 +29,7 @@ import { TemplateCard } from '../cards/Template'
 
 import CookieConsent from './CookieConsent'
 import { block } from './constant'
+import QrCodeComponent from '../QrCode/QrCodeComponent'
 
 const studentKeys = [
 	'Schedule',
@@ -124,6 +125,19 @@ const DropDrag = () => {
 	const [href, setHref] = useLocalStorageState<any>('href', {
 		defaultValue: ''
 	})
+	const [isModalOpen, setIsModalOpen] = useState(false)
+
+	const showModal = () => {
+		setIsModalOpen(true)
+	}
+
+	const handleOk = () => {
+		setIsModalOpen(false)
+	}
+
+	const handleCancel = () => {
+		setIsModalOpen(false)
+	}
 	const urlObrProgram = useMemo(() => {
 		switch (href) {
 			case 'KAZAN':
@@ -1305,7 +1319,25 @@ const DropDrag = () => {
 				<>
 					{mainRole === 'STUD' && <InfoStudent />}
 					<InfoScammers />
-					{/* {mainRole === 'STUD' && <QrCodeDesktop />} */}
+					{mainRole === 'STUD' && (
+						<div onClick={showModal}>
+							<QrCodeDesktop />
+						</div>
+					)}
+					
+					{/* <Modal
+						title="Basic Modal"
+						closable={{ 'aria-label': 'Custom Close Button' }}
+						open={isModalOpen}
+						onOk={handleOk}
+						onCancel={handleCancel}
+					>
+						<p>Some contents...</p>
+						<p>Some contents...</p>
+						<p>Some contents...</p>
+					</Modal> */}
+					{/* В виде модального окна */}
+					<QrCodeComponent isModalOpen={isModalOpen} handleOk={handleOk} handleCancel={handleCancel} />
 
 					<div className="grid grid-cols-2 gap-4 mb-10 sm:grid-cols-2 ">
 						{generateDOM.map((card: any, index: any) => {

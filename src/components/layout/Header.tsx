@@ -582,6 +582,7 @@ import { getBaseUrlShelly } from '../../store/api/studentPractice/getBaseUrlShel
 import { logOut } from '../../store/reducers/authSlice'
 import AccessibilityHelper from '../AccessibilityHelper/AccessibilityHelper'
 import { QrCode } from '../../assets/svg/QrCode'
+import QrCodeComponent from '../QrCode/QrCodeComponent'
 
 // import { ModalNav } from '../service/ModalNav'; // Если ModalNav не используется, можно удалить
 
@@ -629,6 +630,19 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 		url: null,
 		id: null
 	})
+		const [isModalOpenQr, setIsModalOpenQr] = useState(false)
+	
+		const showModal = () => {
+			setIsModalOpenQr(true)
+		}
+	
+		const handleOk = () => {
+			setIsModalOpenQr(false)
+		}
+	
+		const handleCancel = () => {
+			setIsModalOpenQr(false)
+		}
 
 	useEffect(() => {
 		if (isSuccesAvatar && avatarUrl) {
@@ -1060,7 +1074,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 								</span>
 							</a>
 						)}
-						{/* {maiRole === 'STUD' ? <div className="hidden sm:flex relative inline-block h-full">
+						 {maiRole === 'STUD' ? <div className="hidden sm:flex relative inline-block h-full">
 							<div
 								className={`cursor-pointer p-3 h-full flex items-center ${
 									// Увеличил немного паддинг
@@ -1068,13 +1082,15 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 								}`}
 								onClick={e => {
 									e.stopPropagation()
-									
+									showModal()
 								}}
 							>
-								<QrCode white={type === 'service'} />
+								<QrCode  white={type === 'service'} />
 							</div>
 							
-						</div>: ''} */}
+						</div>: ''} 
+						{/* В виде модального окна */}
+						<QrCodeComponent isModalOpen={isModalOpenQr} handleOk={handleOk} handleCancel={handleCancel} />
 
 
 						<div

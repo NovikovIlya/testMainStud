@@ -44,8 +44,9 @@ const AboutMeNew = () => {
 
 	useEffect(() => {
 		// Добавляем доп сведения
-		if (dataAboutMe?.employeeAddedDto?.COMMENT) {
-			setContent(dataAboutMe?.employeeAddedDto?.COMMENT)
+		
+		if (dataAboutMe?.COMMENT) {
+			setContent(dataAboutMe?.COMMENT)
 		}
 
 		// Активируем свитчер

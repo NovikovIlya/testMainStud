@@ -29,6 +29,7 @@ import { TemplateCard } from '../cards/Template'
 
 import CookieConsent from './CookieConsent'
 import { block } from './constant'
+import './maintour.scss'
 
 const studentKeys = [
 	'Schedule',
@@ -143,13 +144,22 @@ const DropDrag = () => {
 
 	const [isTourOpen, setIsTourOpen] = useState<boolean>(false)
 
+	const [currentTourItem, setCurrentTourItem] = useState<number>(0)
+
 	const steps: TourProps['steps'] = [
 		...(maiRole === 'EMPL'
 			? [
 					{
 						title: 'Практики для преподавателя',
-						description: 'Практики для преподавателя',
-						target: () => document.getElementById('mainScreenpracticeTeacher')!
+						description:
+							'Удобное управление практиками студентов! Контролируйте выполнение, оставляйте обратную связь и оценивайте работы в одном разделе.',
+						target: () => document.getElementById('mainScreenpracticeTeacher')!,
+						onNext: () => {
+							setCurrentTourItem(prev => prev + 1)
+						},
+						onPrev: () => {
+							setCurrentTourItem(prev => prev - 1)
+						}
 					}
 			  ]
 			: []),
@@ -157,8 +167,15 @@ const DropDrag = () => {
 			? [
 					{
 						title: 'Практики',
-						description: 'Практики',
-						target: () => document.getElementById('mainScreenPractices')!
+						description:
+							'Организация практик под контролем! Координируйте места прохождения, составляйте графики, взаимодействуйте с компаниями-партнерами и студентами.',
+						target: () => document.getElementById('mainScreenPractices')!,
+						onNext: () => {
+							setCurrentTourItem(prev => prev + 1)
+						},
+						onPrev: () => {
+							setCurrentTourItem(prev => prev - 1)
+						}
 					}
 			  ]
 			: []),
@@ -166,8 +183,15 @@ const DropDrag = () => {
 			? [
 					{
 						title: 'Преподавателю',
-						description: 'Преподавателю',
-						target: () => document.getElementById('mainScreenforTeachers')!
+						description:
+							'Ваш инструмент для работы! Редактируйте учебные материалы, управляйте курсами, общайтесь с коллегами и получайте актуальную информацию от администрации.',
+						target: () => document.getElementById('mainScreenforTeachers')!,
+						onNext: () => {
+							setCurrentTourItem(prev => prev + 1)
+						},
+						onPrev: () => {
+							setCurrentTourItem(prev => prev - 1)
+						}
 					}
 			  ]
 			: []),
@@ -175,8 +199,15 @@ const DropDrag = () => {
 			? [
 					{
 						title: 'Расписание',
-						description: 'Расписание',
-						target: () => document.getElementById('mainScreenSchedule')!
+						description:
+							'Все твои занятия под рукой! Узнавай расписание лекций, семинаров и консультаций в этом разделе. Больше не нужно искать его на сайте или спрашивать у старосты!',
+						target: () => document.getElementById('mainScreenSchedule')!,
+						onNext: () => {
+							setCurrentTourItem(prev => prev + 1)
+						},
+						onPrev: () => {
+							setCurrentTourItem(prev => prev - 1)
+						}
 					}
 			  ]
 			: []),
@@ -184,8 +215,15 @@ const DropDrag = () => {
 			? [
 					{
 						title: 'Поступление в университет',
-						description: 'Поступление в университет',
-						target: () => document.getElementById('applyWidget')!
+						description:
+							'Мечтаешь учиться у нас? Узнай все о поступлении в университет, подай заявку и следи за своим статусом.',
+						target: () => document.getElementById('applyWidget')!,
+						onNext: () => {
+							setCurrentTourItem(prev => prev + 1)
+						},
+						onPrev: () => {
+							setCurrentTourItem(prev => prev - 1)
+						}
 					}
 			  ]
 			: []),
@@ -194,32 +232,67 @@ const DropDrag = () => {
 			? [
 					{
 						title: 'Об университете',
-						description: 'Об университете',
-						target: () => document.getElementById('aboutUniversityWidget')!
+						description:
+							'Твой университет – это больше, чем просто место учебы! Узнай его историю, познакомься с его достижениями и будь в курсе всех новостей.',
+						target: () => document.getElementById('aboutUniversityWidget')!,
+						onNext: () => {
+							setCurrentTourItem(prev => prev + 1)
+						},
+						onPrev: () => {
+							setCurrentTourItem(prev => prev - 1)
+						}
 					}
 			  ]
 			: []),
 		{
 			title: 'Мессенджер',
-			description: 'Мессенджер',
-			target: () => document.getElementById('messagesForTest')!
+			description:
+				'Теперь не нужно искать контакты! Общайтесь с сотрудниками университета и студентами прямо в личном кабинете с помощью удобного встроенного мессенджера.',
+			target: () => document.getElementById('messagesForTest')!,
+			onNext: () => {
+				setCurrentTourItem(prev => prev + 1)
+			},
+			onPrev: () => {
+				setCurrentTourItem(prev => prev - 1)
+			}
 		},
 		{
 			title: 'Версия для слабовидящих',
-			description: 'Версия для слабовидящих',
-			target: () => document.getElementById('accessibilityEye')!
+			description:
+				'Забота о каждом! Включите версию для слабовидящих, чтобы адаптировать интерфейс для комфортной работы с личным кабинетом.',
+			target: () => document.getElementById('accessibilityEye')!,
+			onNext: () => {
+				setCurrentTourItem(prev => prev + 1)
+			},
+			onPrev: () => {
+				setCurrentTourItem(prev => prev - 1)
+			}
 		},
 		{
 			title: 'Блок «обо мне»',
-			description: 'Блок «обо мне»',
-			target: () => document.getElementById('aboutMeBlock')!
+			description:
+				'Твоя личная информация в одном месте! Проверь свои данные, контакты и другую важную информацию. Если что-то изменилось – обнови ее прямо здесь.',
+			target: () => document.getElementById('aboutMeBlock')!,
+			onNext: () => {
+				setCurrentTourItem(prev => prev + 1)
+			},
+			onPrev: () => {
+				setCurrentTourItem(prev => prev - 1)
+			}
 		},
 		...(maiRole === 'STUD'
 			? [
 					{
 						title: 'Сессия',
-						description: 'Сессия',
-						target: () => document.getElementById('mainScreenSession')!
+						description:
+							'Всё для успешной сдачи экзаменов! Просматривай расписание сессии, отслеживай результаты и уточняй учебный план.',
+						target: () => document.getElementById('mainScreenSession')!,
+						onNext: () => {
+							setCurrentTourItem(prev => prev + 1)
+						},
+						onPrev: () => {
+							setCurrentTourItem(prev => prev - 1)
+						}
 					}
 			  ]
 			: []),
@@ -227,8 +300,15 @@ const DropDrag = () => {
 			? [
 					{
 						title: 'Электронная зачётная книжка',
-						description: 'Электронная зачётная книжка',
-						target: () => document.getElementById('mainScreenElectronicBook')!
+						description:
+							'Твоя успеваемость онлайн! Отслеживай свои оценки, смотри средний балл и всегда будь в курсе своих академических успехов.',
+						target: () => document.getElementById('mainScreenElectronicBook')!,
+						onNext: () => {
+							setCurrentTourItem(prev => prev + 1)
+						},
+						onPrev: () => {
+							setCurrentTourItem(prev => prev - 1)
+						}
 					}
 			  ]
 			: []),
@@ -236,8 +316,14 @@ const DropDrag = () => {
 			? [
 					{
 						title: 'Вернуться в старый ЛК',
-						description: 'Вернуться в старый ЛК',
-						target: () => document.getElementById('backToOldKFU')!
+						description: 'Что-то не получается? Вернитесь в привычный старый личный кабинет одним кликом.',
+						target: () => document.getElementById('backToOldKFU')!,
+						onNext: () => {
+							setCurrentTourItem(prev => prev + 1)
+						},
+						onPrev: () => {
+							setCurrentTourItem(prev => prev - 1)
+						}
 					}
 			  ]
 			: [])
@@ -1336,9 +1422,25 @@ const DropDrag = () => {
 					<Tour
 						open={isTourOpen}
 						onClose={() => {
+							setCurrentTourItem(0)
 							setIsTourOpen(false)
 						}}
 						steps={steps}
+						current={currentTourItem}
+						indicatorsRender={(current, total) => (
+							<div className={`flex justify-between items-center`}>
+								{[...Array(total)].map((_, i) => (
+									<p
+										className={`cursor-pointer rounded p-1 ${current === i && 'bg-blue-500 text-white'}`}
+										onClick={() => {
+											setCurrentTourItem(i)
+										}}
+									>
+										{i + 1}
+									</p>
+								))}
+							</div>
+						)}
 					></Tour>
 				</>
 			)
@@ -1370,9 +1472,25 @@ const DropDrag = () => {
 						<Tour
 							open={isTourOpen}
 							onClose={() => {
+								setCurrentTourItem(0)
 								setIsTourOpen(false)
 							}}
 							steps={steps}
+							current={currentTourItem}
+							indicatorsRender={(current, total) => (
+								<div className={`flex justify-between items-center`}>
+									{[...Array(total)].map((_, i) => (
+										<p
+											className={`cursor-pointer rounded p-1 ${current === i && 'bg-blue-500 text-white'}`}
+											onClick={() => {
+												setCurrentTourItem(i)
+											}}
+										>
+											{i + 1}
+										</p>
+									))}
+								</div>
+							)}
 						></Tour>
 					</>
 				)
@@ -1434,6 +1552,13 @@ const DropDrag = () => {
 		if (isMobile) {
 			return (
 				<>
+					<Button
+						onClick={() => {
+							setIsTourOpen(true)
+						}}
+					>
+						Ознакомиться с сайтом
+					</Button>
 					{mainRole === 'STUD' && <InfoStudent />}
 					<InfoScammers />
 					{/* {mainRole === 'STUD' && <QrCodeDesktop />} */}
@@ -1456,6 +1581,29 @@ const DropDrag = () => {
 							}
 						})}
 					</div>
+					<Tour
+						open={isTourOpen}
+						onClose={() => {
+							setCurrentTourItem(0)
+							setIsTourOpen(false)
+						}}
+						steps={steps}
+						current={currentTourItem}
+						indicatorsRender={(current, total) => (
+							<div className={`flex justify-between items-center`}>
+								{[...Array(total)].map((_, i) => (
+									<p
+										className={`cursor-pointer rounded p-1 ${current === i && 'bg-blue-500 text-white'}`}
+										onClick={() => {
+											setCurrentTourItem(i)
+										}}
+									>
+										{i + 1}
+									</p>
+								))}
+							</div>
+						)}
+					></Tour>
 				</>
 			)
 		}
@@ -1491,9 +1639,25 @@ const DropDrag = () => {
 				<Tour
 					open={isTourOpen}
 					onClose={() => {
+						setCurrentTourItem(0)
 						setIsTourOpen(false)
 					}}
 					steps={steps}
+					current={currentTourItem}
+					indicatorsRender={(current, total) => (
+						<div className={`flex justify-between items-center`}>
+							{[...Array(total)].map((_, i) => (
+								<p
+									className={`cursor-pointer rounded p-1 ${current === i && 'bg-blue-500 text-white'}`}
+									onClick={() => {
+										setCurrentTourItem(i)
+									}}
+								>
+									{i + 1}
+								</p>
+							))}
+						</div>
+					)}
 				></Tour>
 			</>
 		)

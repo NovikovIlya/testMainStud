@@ -128,7 +128,7 @@ const AccessibilityHelper: React.FC<AccessibilityHelperProps> = forwardRef(({ la
   ];
 
   const content = (
-    <div className={`grid gap-${isMobile ? '3' : '4'}`}>
+    <div className={` grid gap-${isMobile ? '3  ' : '4'}`}>
       {options
        .filter(({ option }) => {
         // Скрываем курсоры только на мобильных
@@ -141,7 +141,7 @@ const AccessibilityHelper: React.FC<AccessibilityHelperProps> = forwardRef(({ la
         <Button
           key={option}
           onClick={() => toggleOption(option)}
-          className={`flex justify-start items-center space-x-2 ${isMobile ? 'p-4 text-sm' : 'p-5'} rounded-xl ${
+          className={`flex justify-start items-center space-x-2 ${isMobile ? 'p-4 text-[13px] whitespace-normal text-left ' : 'p-5'} rounded-xl ${
             activeOptions.includes(option) ? 'bg-blue-500 text-white' : 'bg-gray-100'
           }`}
         >

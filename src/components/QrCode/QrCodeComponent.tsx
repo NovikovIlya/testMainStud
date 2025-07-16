@@ -17,6 +17,7 @@ const QrCodeComponent = ({ isModalOpen, handleOk, handleCancel, phone }: any) =>
     const handleRefresh = () => {
         refetch()
     }
+   
 
     return (
         <Modal

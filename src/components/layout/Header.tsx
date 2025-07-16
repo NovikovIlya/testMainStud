@@ -1207,10 +1207,10 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 															key={idx}
 															className={`${
 																item.type === mainRole
-																	? type === 'service'
+																	? (type === 'service'
 																		? 'text-white'
 																		: 'text-gray-800'
-																	: 'text-gray-400'
+																	) : type === 'service'? 'text-gray-300' : 'text-gray-400'
 															}`}
 														>
 															{getRole(item.type)}
@@ -1218,7 +1218,9 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 													))
 											: String(user?.roles?.map((item: any) => getRole(item.type)))}
 									</div>
-									{subRole && <div className="text-xs">{getRole(subRole)}</div>} {/* Отображаем subRole если есть */}
+									{subRole && <div className={`text-xs ${type === 'service'
+																		? 'text-white'
+																		: 'text-white'}`}>{getRole(subRole)}</div>} {/* Отображаем subRole если есть */}
 								</div>
 							</Space>
 						</Dropdown>

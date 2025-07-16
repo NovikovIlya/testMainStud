@@ -12,6 +12,7 @@ import i18n from '../../18n'
 import { TourAboutMeSvg } from '../../assets/svg/TourAboutMeSvg'
 import { TourBackToOldELKSvg } from '../../assets/svg/TourBackToOldELKSvg'
 import { TourBadVisionSvg } from '../../assets/svg/TourBadVisionSvg'
+import { TourBusSvg } from '../../assets/svg/TourBusSvg'
 import { TourMessengerSvg } from '../../assets/svg/TourMessengerSvg'
 import { useAppSelector } from '../../store'
 import { useGetInfoUserQuery } from '../../store/api/formApi'
@@ -1415,11 +1416,14 @@ const DropDrag = () => {
 			return (
 				<>
 					<Button
+						type="primary"
+						className="rounded-[30px] font-bold fixed right-[1%] bottom-[3%] z-50 py-[10px] px-[20px] sm:px-[36px] h-[40px]"
+						icon={<TourBusSvg />}
 						onClick={() => {
 							setIsTourOpen(true)
 						}}
 					>
-						Ознакомиться с сайтом
+						<p className="hidden sm:block">Тур по кабинету</p>
 					</Button>
 					<Apply />
 					<Row className="mb-10">
@@ -1465,11 +1469,14 @@ const DropDrag = () => {
 				return (
 					<>
 						<Button
+							type="primary"
+							className="rounded-[30px] font-bold fixed right-[1%] bottom-[3%] z-50 py-[10px] px-[20px] sm:px-[36px] h-[40px]"
+							icon={<TourBusSvg />}
 							onClick={() => {
 								setIsTourOpen(true)
 							}}
 						>
-							Ознакомиться с сайтом
+							<p className="hidden sm:block">Тур по кабинету</p>
 						</Button>
 						<Apply />
 						<Row>
@@ -1561,11 +1568,14 @@ const DropDrag = () => {
 			return (
 				<>
 					<Button
+						type="primary"
+						className="rounded-[30px] font-bold fixed right-[1%] bottom-[3%] z-50 py-[10px] px-[20px] sm:px-[36px] h-[40px]"
+						icon={<TourBusSvg />}
 						onClick={() => {
 							setIsTourOpen(true)
 						}}
 					>
-						Ознакомиться с сайтом
+						<p className="hidden sm:block">Тур по кабинету</p>
 					</Button>
 					{mainRole === 'STUD' && <InfoStudent />}
 					<InfoScammers />
@@ -1618,11 +1628,14 @@ const DropDrag = () => {
 		return (
 			<>
 				<Button
+					type="primary"
+					className="rounded-[30px] font-bold fixed right-[1%] bottom-[3%] z-50 py-[10px] px-[20px] sm:px-[36px] h-[40px]"
+					icon={<TourBusSvg />}
 					onClick={() => {
 						setIsTourOpen(true)
 					}}
 				>
-					Ознакомиться с сайтом
+					<p className="hidden sm:block">Тур по кабинету</p>
 				</Button>
 				{mainRole === 'STUD' ? <InfoStudent /> : ''}
 				<InfoScammers />

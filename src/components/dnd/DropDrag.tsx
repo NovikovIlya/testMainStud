@@ -151,193 +151,6 @@ const DropDrag = () => {
 
 	const [currentTourItem, setCurrentTourItem] = useState<number>(0)
 
-	const steps: TourProps['steps'] = [
-		...(maiRole === 'EMPL'
-			? [
-					{
-						title: 'Практики для преподавателя',
-						description:
-							'Удобное управление практиками студентов! Контролируйте выполнение, оставляйте обратную связь и оценивайте работы в одном разделе.',
-						target: () => document.getElementById('mainScreenpracticeTeacher')!,
-						onNext: () => {
-							setCurrentTourItem(prev => prev + 1)
-						},
-						onPrev: () => {
-							setCurrentTourItem(prev => prev - 1)
-						}
-					}
-			  ]
-			: []),
-		...(maiRole === 'EMPL'
-			? [
-					{
-						title: 'Практики',
-						description:
-							'Организация практик под контролем! Координируйте места прохождения, составляйте графики, взаимодействуйте с компаниями-партнерами и студентами.',
-						target: () => document.getElementById('mainScreenPractices')!,
-						onNext: () => {
-							setCurrentTourItem(prev => prev + 1)
-						},
-						onPrev: () => {
-							setCurrentTourItem(prev => prev - 1)
-						}
-					}
-			  ]
-			: []),
-		...(maiRole === 'EMPL'
-			? [
-					{
-						title: 'Преподавателю',
-						description:
-							'Ваш инструмент для работы! Редактируйте учебные материалы, управляйте курсами, общайтесь с коллегами и получайте актуальную информацию от администрации.',
-						target: () => document.getElementById('mainScreenforTeachers')!,
-						onNext: () => {
-							setCurrentTourItem(prev => prev + 1)
-						},
-						onPrev: () => {
-							setCurrentTourItem(prev => prev - 1)
-						}
-					}
-			  ]
-			: []),
-		...(maiRole === 'STUD'
-			? [
-					{
-						title: 'Расписание',
-						description:
-							'Все твои занятия под рукой! Узнавай расписание лекций, семинаров и консультаций в этом разделе. Больше не нужно искать его на сайте или спрашивать у старосты!',
-						target: () => document.getElementById('mainScreenSchedule')!,
-						onNext: () => {
-							setCurrentTourItem(prev => prev + 1)
-						},
-						onPrev: () => {
-							setCurrentTourItem(prev => prev - 1)
-						}
-					}
-			  ]
-			: []),
-		...(maiRole === 'ABITUR' || (maiRole === 'OTHER' && (subRole === 'ABIT' || subRole === 'SCHOOL'))
-			? [
-					{
-						title: 'Поступление в университет',
-						description:
-							'Мечтаешь учиться у нас? Узнай все о поступлении в университет, подай заявку и следи за своим статусом.',
-						target: () => document.getElementById('applyWidget')!,
-						onNext: () => {
-							setCurrentTourItem(prev => prev + 1)
-						},
-						onPrev: () => {
-							setCurrentTourItem(prev => prev - 1)
-						}
-					}
-			  ]
-			: []),
-		...(maiRole === 'ABITUR' ||
-		(maiRole === 'OTHER' && (subRole === 'ABIT' || subRole === 'SCHOOL' || subRole === 'GUEST'))
-			? [
-					{
-						title: 'Об университете',
-						description:
-							'Твой университет – это больше, чем просто место учебы! Узнай его историю, познакомься с его достижениями и будь в курсе всех новостей.',
-						target: () => document.getElementById('aboutUniversityWidget')!,
-						onNext: () => {
-							setCurrentTourItem(prev => prev + 1)
-						},
-						onPrev: () => {
-							setCurrentTourItem(prev => prev - 1)
-						}
-					}
-			  ]
-			: []),
-		{
-			title: 'Мессенджер',
-			description:
-				'Теперь не нужно искать контакты! Общайтесь с сотрудниками университета и студентами прямо в личном кабинете с помощью удобного встроенного мессенджера.',
-			target: () => document.getElementById('messagesForTest')!,
-			onNext: () => {
-				setCurrentTourItem(prev => prev + 1)
-			},
-			onPrev: () => {
-				setCurrentTourItem(prev => prev - 1)
-			},
-			cover: <TourMessengerSvg />
-		},
-		{
-			title: 'Версия для слабовидящих',
-			description:
-				'Забота о каждом! Включите версию для слабовидящих, чтобы адаптировать интерфейс для комфортной работы с личным кабинетом.',
-			target: () => document.getElementById('accessibilityEye')!,
-			onNext: () => {
-				setCurrentTourItem(prev => prev + 1)
-			},
-			onPrev: () => {
-				setCurrentTourItem(prev => prev - 1)
-			},
-			cover: <TourBadVisionSvg />
-		},
-		{
-			title: 'Блок «обо мне»',
-			description:
-				'Твоя личная информация в одном месте! Проверь свои данные, контакты и другую важную информацию. Если что-то изменилось – обнови ее прямо здесь.',
-			target: () => document.getElementById('aboutMeBlock')!,
-			onNext: () => {
-				setCurrentTourItem(prev => prev + 1)
-			},
-			onPrev: () => {
-				setCurrentTourItem(prev => prev - 1)
-			},
-			cover: <TourAboutMeSvg />
-		},
-		...(maiRole === 'STUD'
-			? [
-					{
-						title: 'Сессия',
-						description:
-							'Всё для успешной сдачи экзаменов! Просматривай расписание сессии, отслеживай результаты и уточняй учебный план.',
-						target: () => document.getElementById('mainScreenSession')!,
-						onNext: () => {
-							setCurrentTourItem(prev => prev + 1)
-						},
-						onPrev: () => {
-							setCurrentTourItem(prev => prev - 1)
-						}
-					}
-			  ]
-			: []),
-		...(maiRole === 'STUD'
-			? [
-					{
-						title: 'Электронная зачётная книжка',
-						description:
-							'Твоя успеваемость онлайн! Отслеживай свои оценки, смотри средний балл и всегда будь в курсе своих академических успехов.',
-						target: () => document.getElementById('mainScreenElectronicBook')!,
-						onNext: () => {
-							setCurrentTourItem(prev => prev + 1)
-						},
-						onPrev: () => {
-							setCurrentTourItem(prev => prev - 1)
-						}
-					}
-			  ]
-			: []),
-		...(maiRole === 'STUD' || maiRole === 'EMPL'
-			? [
-					{
-						title: 'Вернуться в старый ЛК',
-						description: 'Что-то не получается? Вернитесь в привычный старый личный кабинет одним кликом.',
-						target: () => document.getElementById('backToOldKFU')!,
-						onNext: () => {
-							setCurrentTourItem(prev => prev + 1)
-						},
-						onPrev: () => {
-							setCurrentTourItem(prev => prev - 1)
-						},
-						cover: <TourBackToOldELKSvg />
-					}
-			  ]
-			: [])
-	]
-
 	const jsxElements = [
 		{
 			key: 'jobSeeker',
@@ -1358,6 +1171,205 @@ const DropDrag = () => {
 		dispatch(changeLayout(layouts))
 	}
 	const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+
+	const steps: TourProps['steps'] = [
+		...(maiRole === 'EMPL'
+			? [
+					{
+						title: 'Практики для преподавателя',
+						description:
+							'Удобное управление практиками студентов! Контролируйте выполнение, оставляйте обратную связь и оценивайте работы в одном разделе.',
+						target: () => document.getElementById('mainScreenpracticeTeacher')!,
+						onNext: () => {
+							setCurrentTourItem(prev => prev + 1)
+						},
+						onPrev: () => {
+							setCurrentTourItem(prev => prev - 1)
+						}
+					}
+			  ]
+			: []),
+		...(maiRole === 'EMPL'
+			? [
+					{
+						title: 'Практики',
+						description:
+							'Организация практик под контролем! Координируйте места прохождения, составляйте графики, взаимодействуйте с компаниями-партнерами и студентами.',
+						target: () => document.getElementById('mainScreenPractices')!,
+						onNext: () => {
+							setCurrentTourItem(prev => prev + 1)
+						},
+						onPrev: () => {
+							setCurrentTourItem(prev => prev - 1)
+						}
+					}
+			  ]
+			: []),
+		...(maiRole === 'EMPL'
+			? [
+					{
+						title: 'Преподавателю',
+						description:
+							'Ваш инструмент для работы! Редактируйте учебные материалы, управляйте курсами, общайтесь с коллегами и получайте актуальную информацию от администрации.',
+						target: () => document.getElementById('mainScreenforTeachers')!,
+						onNext: () => {
+							setCurrentTourItem(prev => prev + 1)
+						},
+						onPrev: () => {
+							setCurrentTourItem(prev => prev - 1)
+						}
+					}
+			  ]
+			: []),
+		...(maiRole === 'STUD'
+			? [
+					{
+						title: 'Расписание',
+						description:
+							'Все твои занятия под рукой! Узнавай расписание лекций, семинаров и консультаций в этом разделе. Больше не нужно искать его на сайте или спрашивать у старосты!',
+						target: () => document.getElementById('mainScreenSchedule')!,
+						onNext: () => {
+							setCurrentTourItem(prev => prev + 1)
+						},
+						onPrev: () => {
+							setCurrentTourItem(prev => prev - 1)
+						}
+					}
+			  ]
+			: []),
+		...(maiRole === 'ABITUR' || (maiRole === 'OTHER' && (subRole === 'ABIT' || subRole === 'SCHOOL'))
+			? [
+					{
+						title: 'Поступление в университет',
+						description:
+							'Мечтаешь учиться у нас? Узнай все о поступлении в университет, подай заявку и следи за своим статусом.',
+						target: () => document.getElementById('applyWidget')!,
+						onNext: () => {
+							setCurrentTourItem(prev => prev + 1)
+						},
+						onPrev: () => {
+							setCurrentTourItem(prev => prev - 1)
+						}
+					}
+			  ]
+			: []),
+		...(maiRole === 'ABITUR' ||
+		(maiRole === 'OTHER' && (subRole === 'ABIT' || subRole === 'SCHOOL' || subRole === 'GUEST'))
+			? [
+					{
+						title: 'Об университете',
+						description:
+							'Твой университет – это больше, чем просто место учебы! Узнай его историю, познакомься с его достижениями и будь в курсе всех новостей.',
+						target: () => document.getElementById('aboutUniversityWidget')!,
+						onNext: () => {
+							setCurrentTourItem(prev => prev + 1)
+						},
+						onPrev: () => {
+							setCurrentTourItem(prev => prev - 1)
+						}
+					}
+			  ]
+			: []),
+		...(!isMobile
+			? [
+					{
+						title: 'Мессенджер',
+						description:
+							'Теперь не нужно искать контакты! Общайтесь с сотрудниками университета и студентами прямо в личном кабинете с помощью удобного встроенного мессенджера.',
+						target: () => document.getElementById('messagesForTest')!,
+						onNext: () => {
+							setCurrentTourItem(prev => prev + 1)
+						},
+						onPrev: () => {
+							setCurrentTourItem(prev => prev - 1)
+						},
+						cover: <TourMessengerSvg />
+					}
+			  ]
+			: []),
+		...(!isMobile
+			? [
+					{
+						title: 'Версия для слабовидящих',
+						description:
+							'Забота о каждом! Включите версию для слабовидящих, чтобы адаптировать интерфейс для комфортной работы с личным кабинетом.',
+						target: () => document.getElementById('accessibilityEye')!,
+						onNext: () => {
+							setCurrentTourItem(prev => prev + 1)
+						},
+						onPrev: () => {
+							setCurrentTourItem(prev => prev - 1)
+						},
+						cover: <TourBadVisionSvg />
+					}
+			  ]
+			: []),
+		...(!isMobile
+			? [
+					{
+						title: 'Блок «обо мне»',
+						description:
+							'Твоя личная информация в одном месте! Проверь свои данные, контакты и другую важную информацию. Если что-то изменилось – обнови ее прямо здесь.',
+						target: () => document.getElementById('aboutMeBlock')!,
+						onNext: () => {
+							setCurrentTourItem(prev => prev + 1)
+						},
+						onPrev: () => {
+							setCurrentTourItem(prev => prev - 1)
+						},
+						cover: <TourAboutMeSvg />
+					}
+			  ]
+			: []),
+		...(maiRole === 'STUD'
+			? [
+					{
+						title: 'Сессия',
+						description:
+							'Всё для успешной сдачи экзаменов! Просматривай расписание сессии, отслеживай результаты и уточняй учебный план.',
+						target: () => document.getElementById('mainScreenSession')!,
+						onNext: () => {
+							setCurrentTourItem(prev => prev + 1)
+						},
+						onPrev: () => {
+							setCurrentTourItem(prev => prev - 1)
+						}
+					}
+			  ]
+			: []),
+		...(maiRole === 'STUD'
+			? [
+					{
+						title: 'Электронная зачётная книжка',
+						description:
+							'Твоя успеваемость онлайн! Отслеживай свои оценки, смотри средний балл и всегда будь в курсе своих академических успехов.',
+						target: () => document.getElementById('mainScreenElectronicBook')!,
+						onNext: () => {
+							setCurrentTourItem(prev => prev + 1)
+						},
+						onPrev: () => {
+							setCurrentTourItem(prev => prev - 1)
+						}
+					}
+			  ]
+			: []),
+		...(!isMobile && (maiRole === 'STUD' || maiRole === 'EMPL')
+			? [
+					{
+						title: 'Вернуться в старый ЛК',
+						description: 'Что-то не получается? Вернитесь в привычный старый личный кабинет одним кликом.',
+						target: () => document.getElementById('backToOldKFU')!,
+						onNext: () => {
+							setCurrentTourItem(prev => prev + 1)
+						},
+						onPrev: () => {
+							setCurrentTourItem(prev => prev - 1)
+						},
+						cover: <TourBackToOldELKSvg />
+					}
+			  ]
+			: [])
+	]
 
 	const layoutValid = layout.lg.filter(obj1 =>
 		jsxElements.filter(item => {

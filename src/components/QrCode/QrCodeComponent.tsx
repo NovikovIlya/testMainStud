@@ -8,13 +8,11 @@ import { t } from 'i18next'
 const QrCodeComponent = ({ isModalOpen, handleOk, handleCancel, phone }: any) => {
     const user = useAppSelector(state => state.auth.user)
     const phoneWithoutPlus = user?.phone ? user.phone.replace("+", "") : "";
-    console.log('user', user)
     
     const { data, refetch,isFetching } = useGetQrCodeQuery(phoneWithoutPlus, {
         // pollingInterval: 20000,
         // skipPollingIfUnfocused: true,
     })
-    console.log('data', data)
 
     const handleRefresh = () => {
         refetch()
@@ -23,18 +21,18 @@ const QrCodeComponent = ({ isModalOpen, handleOk, handleCancel, phone }: any) =>
     return (
         <Modal
             footer={null}
-          
+            centered 
             closable={{ 'aria-label': 'Custom Close Button' }}
             open={isModalOpen}
             onOk={handleOk}
             onCancel={handleCancel}
         >
-            <div className='flex justify-center m'><Title level={1}>{t('qrcode1')}</Title></div>
-            <div className='%'><img className='max-w-[100%]' src={data} /></div>
+            <div className='flex justify-center mt-[20px]'><Title level={1}>{t('qrcode1')}</Title></div>
+            <div className='flex justify-center'><img alt='qrcode'  className='max-w-[100%] ' src={data} /></div>
             <div className='flex px-6 mb-2'>
                 <Button 
                     loading={isFetching}
-                    className='w-full !rounded-[20px]' 
+                    className='w-full !rounded-[20px] mb-[12px]' 
                     type='primary' 
                     size='large'
                     onClick={handleRefresh}

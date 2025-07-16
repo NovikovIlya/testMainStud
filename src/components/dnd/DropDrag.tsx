@@ -9,6 +9,10 @@ import 'react-resizable/css/styles.css'
 import { Link } from 'react-router-dom'
 
 import i18n from '../../18n'
+import { TourAboutMeSvg } from '../../assets/svg/TourAboutMeSvg'
+import { TourBackToOldELKSvg } from '../../assets/svg/TourBackToOldELKSvg'
+import { TourBadVisionSvg } from '../../assets/svg/TourBadVisionSvg'
+import { TourMessengerSvg } from '../../assets/svg/TourMessengerSvg'
 import { useAppSelector } from '../../store'
 import { useGetInfoUserQuery } from '../../store/api/formApi'
 import { useCheckIsEmployeeQuery } from '../../store/api/practiceApi/contracts'
@@ -254,7 +258,8 @@ const DropDrag = () => {
 			},
 			onPrev: () => {
 				setCurrentTourItem(prev => prev - 1)
-			}
+			},
+			cover: <TourMessengerSvg />
 		},
 		{
 			title: 'Версия для слабовидящих',
@@ -266,7 +271,8 @@ const DropDrag = () => {
 			},
 			onPrev: () => {
 				setCurrentTourItem(prev => prev - 1)
-			}
+			},
+			cover: <TourBadVisionSvg />
 		},
 		{
 			title: 'Блок «обо мне»',
@@ -278,7 +284,8 @@ const DropDrag = () => {
 			},
 			onPrev: () => {
 				setCurrentTourItem(prev => prev - 1)
-			}
+			},
+			cover: <TourAboutMeSvg />
 		},
 		...(maiRole === 'STUD'
 			? [
@@ -323,7 +330,8 @@ const DropDrag = () => {
 						},
 						onPrev: () => {
 							setCurrentTourItem(prev => prev - 1)
-						}
+						},
+						cover: <TourBackToOldELKSvg />
 					}
 			  ]
 			: [])

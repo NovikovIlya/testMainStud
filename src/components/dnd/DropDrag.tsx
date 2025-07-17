@@ -1,6 +1,7 @@
 import { DeleteOutlined, LoadingOutlined } from '@ant-design/icons'
 import { useLocalStorageState } from 'ahooks'
-import { Button, Col, Modal, Row, Spin } from 'antd'
+import { Button, Col, Modal, Row, Spin, Tour, TourProps } from 'antd'
+import { t } from 'i18next'
 import { useEffect, useMemo, useState } from 'react'
 import { Responsive, WidthProvider } from 'react-grid-layout'
 import 'react-grid-layout/css/styles.css'
@@ -9,6 +10,11 @@ import 'react-resizable/css/styles.css'
 import { Link } from 'react-router-dom'
 
 import i18n from '../../18n'
+import { TourAboutMeSvg } from '../../assets/svg/TourAboutMeSvg'
+import { TourBackToOldELKSvg } from '../../assets/svg/TourBackToOldELKSvg'
+import { TourBadVisionSvg } from '../../assets/svg/TourBadVisionSvg'
+import { TourBusSvg } from '../../assets/svg/TourBusSvg'
+import { TourMessengerSvg } from '../../assets/svg/TourMessengerSvg'
 import { useAppSelector } from '../../store'
 import { useGetInfoUserQuery } from '../../store/api/formApi'
 import { useCheckIsEmployeeQuery } from '../../store/api/practiceApi/contracts'
@@ -29,6 +35,7 @@ import { TemplateCard } from '../cards/Template'
 
 import CookieConsent from './CookieConsent'
 import { block } from './constant'
+import './maintour.scss'
 import QrCodeComponent from '../QrCode/QrCodeComponent'
 
 const studentKeys = [
@@ -154,6 +161,10 @@ const DropDrag = () => {
 				return '' // или любое другое значение по умолчанию
 		}
 	}, [href])
+
+	const [isTourOpen, setIsTourOpen] = useState<boolean>(false)
+
+	const [currentTourItem, setCurrentTourItem] = useState<number>(0)
 
 	const jsxElements = [
 		{
@@ -1176,6 +1187,194 @@ const DropDrag = () => {
 	}
 	const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 
+	const steps: TourProps['steps'] = [
+		...(maiRole === 'EMPL'
+			? [
+					{
+						title: t('practiceForTeacher'),
+						description: t('tourPracticeTeacherDescription'),
+						target: () => document.getElementById('mainScreenpracticeTeacher')!,
+						onNext: () => {
+							setCurrentTourItem(prev => prev + 1)
+						},
+						onPrev: () => {
+							setCurrentTourItem(prev => prev - 1)
+						}
+					}
+			  ]
+			: []),
+		...(maiRole === 'EMPL'
+			? [
+					{
+						title: t('Practices'),
+						description: t('tourPracticesDescription'),
+						target: () => document.getElementById('mainScreenPractices')!,
+						onNext: () => {
+							setCurrentTourItem(prev => prev + 1)
+						},
+						onPrev: () => {
+							setCurrentTourItem(prev => prev - 1)
+						}
+					}
+			  ]
+			: []),
+		...(maiRole === 'EMPL'
+			? [
+					{
+						title: t('ToTeacher'),
+						description: t('tourToTeacherDescription'),
+						target: () => document.getElementById('mainScreenforTeachers')!,
+						onNext: () => {
+							setCurrentTourItem(prev => prev + 1)
+						},
+						onPrev: () => {
+							setCurrentTourItem(prev => prev - 1)
+						}
+					}
+			  ]
+			: []),
+		...(maiRole === 'STUD'
+			? [
+					{
+						title: t('Schedule'),
+						description: t('tourScheduleDescription'),
+						target: () => document.getElementById('mainScreenSchedule')!,
+						onNext: () => {
+							setCurrentTourItem(prev => prev + 1)
+						},
+						onPrev: () => {
+							setCurrentTourItem(prev => prev - 1)
+						}
+					}
+			  ]
+			: []),
+		...(maiRole === 'ABITUR' || (maiRole === 'OTHER' && (subRole === 'ABIT' || subRole === 'SCHOOL'))
+			? [
+					{
+						title: t('ApplyText'),
+						description: t('tourApplyDescription'),
+						target: () => document.getElementById('applyWidget')!,
+						onNext: () => {
+							setCurrentTourItem(prev => prev + 1)
+						},
+						onPrev: () => {
+							setCurrentTourItem(prev => prev - 1)
+						}
+					}
+			  ]
+			: []),
+		...(maiRole === 'ABITUR' ||
+		(maiRole === 'OTHER' && (subRole === 'ABIT' || subRole === 'SCHOOL' || subRole === 'GUEST'))
+			? [
+					{
+						title: t('AboutUniversity'),
+						description: t('tourAboutUniversityDescription'),
+						target: () => document.getElementById('aboutUniversityWidget')!,
+						onNext: () => {
+							setCurrentTourItem(prev => prev + 1)
+						},
+						onPrev: () => {
+							setCurrentTourItem(prev => prev - 1)
+						}
+					}
+			  ]
+			: []),
+		...(!isMobile
+			? [
+					{
+						title: t('tourMessengerTitle'),
+						description: t('tourMessengerDescription'),
+						target: () => document.getElementById('messagesForTest')!,
+						onNext: () => {
+							setCurrentTourItem(prev => prev + 1)
+						},
+						onPrev: () => {
+							setCurrentTourItem(prev => prev - 1)
+						},
+						cover: <TourMessengerSvg />
+					}
+			  ]
+			: []),
+		...(!isMobile
+			? [
+					{
+						title: t('Accessability'),
+						description: t('tourAccessabilityDescription'),
+						target: () => document.getElementById('accessibilityEye')!,
+						onNext: () => {
+							setCurrentTourItem(prev => prev + 1)
+						},
+						onPrev: () => {
+							setCurrentTourItem(prev => prev - 1)
+						},
+						cover: <TourBadVisionSvg />
+					}
+			  ]
+			: []),
+		...(!isMobile
+			? [
+					{
+						title: t('tourAboutMeTitle'),
+						description: t('tourAboutMeDescription'),
+						target: () => document.getElementById('aboutMeBlock')!,
+						onNext: () => {
+							setCurrentTourItem(prev => prev + 1)
+						},
+						onPrev: () => {
+							setCurrentTourItem(prev => prev - 1)
+						},
+						cover: <TourAboutMeSvg />
+					}
+			  ]
+			: []),
+		...(maiRole === 'STUD'
+			? [
+					{
+						title: 'Session',
+						description: t('tourSessionDescription'),
+						target: () => document.getElementById('mainScreenSession')!,
+						onNext: () => {
+							setCurrentTourItem(prev => prev + 1)
+						},
+						onPrev: () => {
+							setCurrentTourItem(prev => prev - 1)
+						}
+					}
+			  ]
+			: []),
+		...(maiRole === 'STUD'
+			? [
+					{
+						title: t('ElectronicBook'),
+						description: t('tourElectronicBookDescription'),
+						target: () => document.getElementById('mainScreenElectronicBook')!,
+						onNext: () => {
+							setCurrentTourItem(prev => prev + 1)
+						},
+						onPrev: () => {
+							setCurrentTourItem(prev => prev - 1)
+						}
+					}
+			  ]
+			: []),
+		...(!isMobile && (maiRole === 'STUD' || maiRole === 'EMPL')
+			? [
+					{
+						title: t('tourBackToOldELKTitle'),
+						description: t('tourBackToOldELKDescription'),
+						target: () => document.getElementById('backToOldKFU')!,
+						onNext: () => {
+							setCurrentTourItem(prev => prev + 1)
+						},
+						onPrev: () => {
+							setCurrentTourItem(prev => prev - 1)
+						},
+						cover: <TourBackToOldELKSvg />
+					}
+			  ]
+			: [])
+	]
+
 	const layoutValid = layout.lg.filter(obj1 =>
 		jsxElements.filter(item => {
 			if (mainRole === 'STUD') {
@@ -1192,7 +1391,7 @@ const DropDrag = () => {
 	const generateDOM = layoutValid
 		.map(item => {
 			return (
-				<div key={item.i} className="bg-white/70 backdrop-blur-sm rounded-[20px] shadow-md ">
+				<div key={item.i} className="bg-white/70 backdrop-blur-sm rounded-[20px] shadow-md " id={`mainScreen${item.i}`}>
 					<div className="w-full h-full">
 						{/* {edit && item.i !== 'Schedule' && (
 						<div
@@ -1232,6 +1431,16 @@ const DropDrag = () => {
 				)
 			return (
 				<>
+					<Button
+						type="primary"
+						className="rounded-[30px] font-bold fixed right-[1%] bottom-[3%] z-50 py-[10px] px-[20px] sm:px-[36px] h-[40px]"
+						icon={<TourBusSvg />}
+						onClick={() => {
+							setIsTourOpen(true)
+						}}
+					>
+						<p className="hidden sm:block">{t('tourButtonText')}</p>
+					</Button>
 					<InfoScammers />
 					<Apply />
 					<Row className="mb-10">
@@ -1239,6 +1448,29 @@ const DropDrag = () => {
 							<AboutUniversityCard />
 						</Col>
 					</Row>
+					<Tour
+						open={isTourOpen}
+						onClose={() => {
+							setCurrentTourItem(0)
+							setIsTourOpen(false)
+						}}
+						steps={steps}
+						current={currentTourItem}
+						indicatorsRender={(current, total) => (
+							<div className={`flex justify-between items-center`}>
+								{[...Array(total)].map((_, i) => (
+									<p
+										className={`cursor-pointer rounded p-1 ${current === i && 'bg-blue-500 text-white'}`}
+										onClick={() => {
+											setCurrentTourItem(i)
+										}}
+									>
+										{i + 1}
+									</p>
+								))}
+							</div>
+						)}
+					></Tour>
 				</>
 			)
 		}
@@ -1253,12 +1485,46 @@ const DropDrag = () => {
 			if (subRole === 'SCHOOL') {
 				return (
 					<>
+						<Button
+							type="primary"
+							className="rounded-[30px] font-bold fixed right-[1%] bottom-[3%] z-50 py-[10px] px-[20px] sm:px-[36px] h-[40px]"
+							icon={<TourBusSvg />}
+							onClick={() => {
+								setIsTourOpen(true)
+							}}
+						>
+							<p className="hidden sm:block">{t('tourButtonText')}</p>
+						</Button>
 						<InfoScammers />
+						<Apply />
 						<Row>
 							<Col span={8}>
 								<AboutUniversityCard />
 							</Col>
 						</Row>
+						<Tour
+							open={isTourOpen}
+							onClose={() => {
+								setCurrentTourItem(0)
+								setIsTourOpen(false)
+							}}
+							steps={steps}
+							current={currentTourItem}
+							indicatorsRender={(current, total) => (
+								<div className={`flex justify-between items-center`}>
+									{[...Array(total)].map((_, i) => (
+										<p
+											className={`cursor-pointer rounded p-1 ${current === i && 'bg-blue-500 text-white'}`}
+											onClick={() => {
+												setCurrentTourItem(i)
+											}}
+										>
+											{i + 1}
+										</p>
+									))}
+								</div>
+							)}
+						></Tour>
 					</>
 				)
 			}
@@ -1321,6 +1587,16 @@ const DropDrag = () => {
 		if (isMobile) {
 			return (
 				<>
+					<Button
+						type="primary"
+						className="rounded-[30px] font-bold fixed right-[1%] bottom-[3%] z-50 py-[10px] px-[20px] sm:px-[36px] h-[40px]"
+						icon={<TourBusSvg />}
+						onClick={() => {
+							setIsTourOpen(true)
+						}}
+					>
+						<p className="hidden sm:block">{t('tourButtonText')}</p>
+					</Button>
 					{mainRole === 'STUD' && <InfoStudent />}
 					<InfoScammers />
 					{mainRole === 'STUD' && (
@@ -1361,11 +1637,44 @@ const DropDrag = () => {
 							}
 						})}
 					</div>
+					<Tour
+						open={isTourOpen}
+						onClose={() => {
+							setCurrentTourItem(0)
+							setIsTourOpen(false)
+						}}
+						steps={steps}
+						current={currentTourItem}
+						indicatorsRender={(current, total) => (
+							<div className={`flex justify-between items-center`}>
+								{[...Array(total)].map((_, i) => (
+									<p
+										className={`cursor-pointer rounded p-1 ${current === i && 'bg-blue-500 text-white'}`}
+										onClick={() => {
+											setCurrentTourItem(i)
+										}}
+									>
+										{i + 1}
+									</p>
+								))}
+							</div>
+						)}
+					></Tour>
 				</>
 			)
 		}
 		return (
 			<>
+				<Button
+					type="primary"
+					className="rounded-[30px] font-bold fixed right-[1%] bottom-[3%] z-50 py-[10px] px-[20px] sm:px-[36px] h-[40px]"
+					icon={<TourBusSvg />}
+					onClick={() => {
+						setIsTourOpen(true)
+					}}
+				>
+					<p className="hidden sm:block">{t('tourButtonText')}</p>
+				</Button>
 				{mainRole === 'STUD' ? <InfoStudent /> : ''}
 				<InfoScammers />
 				<ResponsiveReactGridLayout
@@ -1386,6 +1695,29 @@ const DropDrag = () => {
 				>
 					{generateDOM}
 				</ResponsiveReactGridLayout>
+				<Tour
+					open={isTourOpen}
+					onClose={() => {
+						setCurrentTourItem(0)
+						setIsTourOpen(false)
+					}}
+					steps={steps}
+					current={currentTourItem}
+					indicatorsRender={(current, total) => (
+						<div className={`flex justify-between items-center`}>
+							{[...Array(total)].map((_, i) => (
+								<p
+									className={`cursor-pointer rounded p-1 ${current === i && 'bg-blue-500 text-white'}`}
+									onClick={() => {
+										setCurrentTourItem(i)
+									}}
+								>
+									{i + 1}
+								</p>
+							))}
+						</div>
+					)}
+				></Tour>
 			</>
 		)
 

@@ -1,6 +1,6 @@
 import { DeleteOutlined, LoadingOutlined } from '@ant-design/icons'
 import { useLocalStorageState } from 'ahooks'
-import { Button, Col, Row, Spin, Tour, TourProps } from 'antd'
+import { Button, Col, Modal, Row, Spin, Tour, TourProps } from 'antd'
 import { t } from 'i18next'
 import { useEffect, useMemo, useState } from 'react'
 import { Responsive, WidthProvider } from 'react-grid-layout'
@@ -36,6 +36,7 @@ import { TemplateCard } from '../cards/Template'
 import CookieConsent from './CookieConsent'
 import { block } from './constant'
 import './maintour.scss'
+import QrCodeComponent from '../QrCode/QrCodeComponent'
 
 const studentKeys = [
 	'Schedule',
@@ -131,6 +132,19 @@ const DropDrag = () => {
 	const [href, setHref] = useLocalStorageState<any>('href', {
 		defaultValue: ''
 	})
+	const [isModalOpen, setIsModalOpen] = useState(false)
+
+	const showModal = () => {
+		setIsModalOpen(true)
+	}
+
+	const handleOk = () => {
+		setIsModalOpen(false)
+	}
+
+	const handleCancel = () => {
+		setIsModalOpen(false)
+	}
 	const urlObrProgram = useMemo(() => {
 		switch (href) {
 			case 'KAZAN':
@@ -1427,6 +1441,7 @@ const DropDrag = () => {
 					>
 						<p className="hidden sm:block">{t('tourButtonText')}</p>
 					</Button>
+					<InfoScammers />
 					<Apply />
 					<Row className="mb-10">
 						<Col span={8}>
@@ -1480,6 +1495,7 @@ const DropDrag = () => {
 						>
 							<p className="hidden sm:block">{t('tourButtonText')}</p>
 						</Button>
+						<InfoScammers />
 						<Apply />
 						<Row>
 							<Col span={8}>
@@ -1516,6 +1532,7 @@ const DropDrag = () => {
 			if (subRole === 'ATTEND' || subRole === 'GUEST') {
 				return (
 					<>
+						<InfoScammers />
 						<Row>
 							<Col span={8}>
 								<AboutUniversityCard />
@@ -1527,6 +1544,7 @@ const DropDrag = () => {
 			if (subRole === 'SEEKER') {
 				return (
 					<>
+						<InfoScammers />
 						<ResponsiveReactGridLayout
 							className="layout mb-10 !height-full"
 							cols={{ lg: isMobile ? 2 : 3, md: 2, sm: 2, xs: 2, xxs: 1 }}
@@ -1581,7 +1599,25 @@ const DropDrag = () => {
 					</Button>
 					{mainRole === 'STUD' && <InfoStudent />}
 					<InfoScammers />
-					{/* {mainRole === 'STUD' && <QrCodeDesktop />} */}
+					{mainRole === 'STUD' && (
+						<div onClick={showModal}>
+							<QrCodeDesktop />
+						</div>
+					)}
+					
+					{/* <Modal
+						title="Basic Modal"
+						closable={{ 'aria-label': 'Custom Close Button' }}
+						open={isModalOpen}
+						onOk={handleOk}
+						onCancel={handleCancel}
+					>
+						<p>Some contents...</p>
+						<p>Some contents...</p>
+						<p>Some contents...</p>
+					</Modal> */}
+					{/* В виде модального окна */}
+					<QrCodeComponent isModalOpen={isModalOpen} handleOk={handleOk} handleCancel={handleCancel} />
 
 					<div className="grid grid-cols-2 gap-4 mb-10 sm:grid-cols-2 ">
 						{generateDOM.map((card: any, index: any) => {

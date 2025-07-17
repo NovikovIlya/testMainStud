@@ -582,6 +582,8 @@ import { useGetRoleQuery } from '../../store/api/serviceApi'
 import { getBaseUrlShelly } from '../../store/api/studentPractice/getBaseUrlShelly'
 import { logOut } from '../../store/reducers/authSlice'
 import AccessibilityHelper from '../AccessibilityHelper/AccessibilityHelper'
+import { QrCode } from '../../assets/svg/QrCode'
+import QrCodeComponent from '../QrCode/QrCodeComponent'
 
 // import { ModalNav } from '../service/ModalNav'; // Если ModalNav не используется, можно удалить
 
@@ -629,6 +631,19 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 		url: null,
 		id: null
 	})
+		const [isModalOpenQr, setIsModalOpenQr] = useState(false)
+	
+		const showModal = () => {
+			setIsModalOpenQr(true)
+		}
+	
+		const handleOk = () => {
+			setIsModalOpenQr(false)
+		}
+	
+		const handleCancel = () => {
+			setIsModalOpenQr(false)
+		}
 
 	useEffect(() => {
 		if (isSuccesAvatar && avatarUrl) {
@@ -1059,7 +1074,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 								</span>
 							</a>
 						)}
-						{/* {maiRole === 'STUD' ? <div className="hidden sm:flex relative inline-block h-full">
+						 {maiRole === 'STUD' ? <div className="hidden sm:flex relative inline-block h-full">
 							<div
 								className={`cursor-pointer p-3 h-full flex items-center ${
 									// Увеличил немного паддинг
@@ -1067,13 +1082,15 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 								}`}
 								onClick={e => {
 									e.stopPropagation()
-									
+									showModal()
 								}}
 							>
-								<QrCode white={type === 'service'} />
+								<QrCode  white={type === 'service'} />
 							</div>
 							
-						</div>: ''} */}
+						</div>: ''} 
+						{/* В виде модального окна */}
+						<QrCodeComponent isModalOpen={isModalOpenQr} handleOk={handleOk} handleCancel={handleCancel} />
 
 						<div
 							id="messagesForTest"
@@ -1196,10 +1213,10 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 															key={idx}
 															className={`${
 																item.type === mainRole
-																	? type === 'service'
+																	? (type === 'service'
 																		? 'text-white'
 																		: 'text-gray-800'
-																	: 'text-gray-400'
+																	) : type === 'service'? 'text-gray-300' : 'text-gray-400'
 															}`}
 														>
 															{getRole(item.type)}
@@ -1207,7 +1224,9 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 													))
 											: String(user?.roles?.map((item: any) => getRole(item.type)))}
 									</div>
-									{subRole && <div className="text-xs">{getRole(subRole)}</div>} {/* Отображаем subRole если есть */}
+									{subRole && <div className={`text-xs ${type === 'service'
+																		? 'text-white'
+																		: 'text-white'}`}>{getRole(subRole)}</div>} {/* Отображаем subRole если есть */}
 								</div>
 							</Space>
 						</Dropdown>

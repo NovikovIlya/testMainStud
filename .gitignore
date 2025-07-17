@@ -26,3 +26,5 @@ yarn-error.log*
 .idea
 .qodo
 .lingma/rules/project_rule.md
+.lingma/rules/language.md
+.lingma/rules/commit.md

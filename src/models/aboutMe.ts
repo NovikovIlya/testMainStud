@@ -34,6 +34,7 @@ export interface StudentAddedDto {
     CITIZENSHIP_COUNTRY: string;
     BIRTH_CITY: string;
     BIRTH_PLACE: string | null;
+    COMMENT: string | null;
   }
 
 export interface CheckedFlags {

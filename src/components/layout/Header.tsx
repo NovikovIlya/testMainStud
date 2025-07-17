@@ -1054,6 +1054,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 					<div className="flex h-full items-center ">
 						{maiRole !== 'ABITUR' && maiRole !== 'OTHER' && (
 							<a
+								id="backToOldKFU"
 								className={clsx(
 									'h-full flex gap-2 items-center px-3 cursor-pointer no-underline',
 									type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'
@@ -1109,6 +1110,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						</div>
 						<div className="relative inline-block h-full">
 							<div
+								id="accessibilityEye"
 								className={`cursor-pointer p-3 h-full flex items-center ${
 									// Увеличил немного паддинг
 									type === 'main' ? 'hover:bg-[#E3E8ED]' : 'hover:bg-blue307'
@@ -1147,6 +1149,7 @@ export const Header = ({ type = 'main', service }: TypeHeaderProps) => {
 						]}
 					/>
 					<div
+						id="aboutMeBlock"
 						className={clsx(
 							'h-full flex items-center cursor-pointer w-fit',
 							type === 'main' && openMenu && 'bg-[#E3E8ED]',

@@ -631,7 +631,7 @@ const Languages = () => {
 		try {
 			await setForeign(requestData).unwrap()
 			setIsFormDirty(false) // Сбрасываем флаг после успешного сохранения
-			handleCancel()
+			handleDirectClose() 
 			// message.success(t('success'))
 		} catch (error) {
 			console.error('Ошибка при сохранении данных:', error)
@@ -655,6 +655,12 @@ const Languages = () => {
 	const handleCancel = () => {
 		handleSafeCancel() // Используем безопасное закрытие
 	}
+	const handleDirectClose = () => {
+    setIsModalOpen(false)
+    form2.resetFields()
+    setCertificateFiles({})
+    setIsFormDirty(false)
+}
 
 	const beforeUpload = (file: File, fieldIndex: number) => {
 		// Поддерживаемые форматы
@@ -822,7 +828,7 @@ const Languages = () => {
 						</div>
 					</Row>
 				</Spin>
-				{isLoadingSetForeign ? '' :
+				{
 				<Modal
 					className="!z-[10000000]"
 					footer={null}
@@ -832,6 +838,7 @@ const Languages = () => {
 					onCancel={handleSafeCancel} // Используем безопасное закрытие
 					width={600}
 				>
+					<Spin spinning={isLoadingSetForeign}>
 					<Form 
 						className="mt-4" 
 						form={form2} 
@@ -1003,6 +1010,7 @@ const Languages = () => {
 							{t('add')}
 						</Button>
 					</Form>
+					</Spin>
 				</Modal>}
 			</div>
 		</div>

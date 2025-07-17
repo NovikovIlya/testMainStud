@@ -19,6 +19,7 @@
 	"error_foreign_number": "Probability of a foreign number",
 	"error_not_kfu_number": "The number is not a phone number of a KFU user",
 	"error_loading_qr": "Error loading QR code",
+	"onlyOneCertificateType": "You can add only one type of certificate",
 	"refresh" : "Refresh",
 	"passwordLength": "Password must be between 8 and 256 characters",
 	"confirmExit": "Are you sure you want to exit?",

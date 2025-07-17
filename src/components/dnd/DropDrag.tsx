@@ -1,6 +1,7 @@
 import { DeleteOutlined, LoadingOutlined } from '@ant-design/icons'
 import { useLocalStorageState } from 'ahooks'
 import { Button, Col, Row, Spin, Tour, TourProps } from 'antd'
+import { t } from 'i18next'
 import { useEffect, useMemo, useState } from 'react'
 import { Responsive, WidthProvider } from 'react-grid-layout'
 import 'react-grid-layout/css/styles.css'
@@ -1176,9 +1177,8 @@ const DropDrag = () => {
 		...(maiRole === 'EMPL'
 			? [
 					{
-						title: 'Практики для преподавателя',
-						description:
-							'Удобное управление практиками студентов! Контролируйте выполнение, оставляйте обратную связь и оценивайте работы в одном разделе.',
+						title: t('practiceForTeacher'),
+						description: t('tourPracticeTeacherDescription'),
 						target: () => document.getElementById('mainScreenpracticeTeacher')!,
 						onNext: () => {
 							setCurrentTourItem(prev => prev + 1)
@@ -1192,9 +1192,8 @@ const DropDrag = () => {
 		...(maiRole === 'EMPL'
 			? [
 					{
-						title: 'Практики',
-						description:
-							'Организация практик под контролем! Координируйте места прохождения, составляйте графики, взаимодействуйте с компаниями-партнерами и студентами.',
+						title: t('Practices'),
+						description: t('tourPracticesDescription'),
 						target: () => document.getElementById('mainScreenPractices')!,
 						onNext: () => {
 							setCurrentTourItem(prev => prev + 1)
@@ -1208,9 +1207,8 @@ const DropDrag = () => {
 		...(maiRole === 'EMPL'
 			? [
 					{
-						title: 'Преподавателю',
-						description:
-							'Ваш инструмент для работы! Редактируйте учебные материалы, управляйте курсами, общайтесь с коллегами и получайте актуальную информацию от администрации.',
+						title: t('ToTeacher'),
+						description: t('tourToTeacherDescription'),
 						target: () => document.getElementById('mainScreenforTeachers')!,
 						onNext: () => {
 							setCurrentTourItem(prev => prev + 1)
@@ -1224,9 +1222,8 @@ const DropDrag = () => {
 		...(maiRole === 'STUD'
 			? [
 					{
-						title: 'Расписание',
-						description:
-							'Все твои занятия под рукой! Узнавай расписание лекций, семинаров и консультаций в этом разделе. Больше не нужно искать его на сайте или спрашивать у старосты!',
+						title: t('Schedule'),
+						description: t('tourScheduleDescription'),
 						target: () => document.getElementById('mainScreenSchedule')!,
 						onNext: () => {
 							setCurrentTourItem(prev => prev + 1)
@@ -1240,9 +1237,8 @@ const DropDrag = () => {
 		...(maiRole === 'ABITUR' || (maiRole === 'OTHER' && (subRole === 'ABIT' || subRole === 'SCHOOL'))
 			? [
 					{
-						title: 'Поступление в университет',
-						description:
-							'Мечтаешь учиться у нас? Узнай все о поступлении в университет, подай заявку и следи за своим статусом.',
+						title: t('ApplyText'),
+						description: t('tourApplyDescription'),
 						target: () => document.getElementById('applyWidget')!,
 						onNext: () => {
 							setCurrentTourItem(prev => prev + 1)
@@ -1257,9 +1253,8 @@ const DropDrag = () => {
 		(maiRole === 'OTHER' && (subRole === 'ABIT' || subRole === 'SCHOOL' || subRole === 'GUEST'))
 			? [
 					{
-						title: 'Об университете',
-						description:
-							'Твой университет – это больше, чем просто место учебы! Узнай его историю, познакомься с его достижениями и будь в курсе всех новостей.',
+						title: t('AboutUniversity'),
+						description: t('tourAboutUniversityDescription'),
 						target: () => document.getElementById('aboutUniversityWidget')!,
 						onNext: () => {
 							setCurrentTourItem(prev => prev + 1)
@@ -1273,9 +1268,8 @@ const DropDrag = () => {
 		...(!isMobile
 			? [
 					{
-						title: 'Мессенджер',
-						description:
-							'Теперь не нужно искать контакты! Общайтесь с сотрудниками университета и студентами прямо в личном кабинете с помощью удобного встроенного мессенджера.',
+						title: t('tourMessengerTitle'),
+						description: t('tourMessengerDescription'),
 						target: () => document.getElementById('messagesForTest')!,
 						onNext: () => {
 							setCurrentTourItem(prev => prev + 1)
@@ -1290,9 +1284,8 @@ const DropDrag = () => {
 		...(!isMobile
 			? [
 					{
-						title: 'Версия для слабовидящих',
-						description:
-							'Забота о каждом! Включите версию для слабовидящих, чтобы адаптировать интерфейс для комфортной работы с личным кабинетом.',
+						title: t('Accessability'),
+						description: t('tourAccessabilityDescription'),
 						target: () => document.getElementById('accessibilityEye')!,
 						onNext: () => {
 							setCurrentTourItem(prev => prev + 1)
@@ -1307,9 +1300,8 @@ const DropDrag = () => {
 		...(!isMobile
 			? [
 					{
-						title: 'Блок «обо мне»',
-						description:
-							'Твоя личная информация в одном месте! Проверь свои данные, контакты и другую важную информацию. Если что-то изменилось – обнови ее прямо здесь.',
+						title: t('tourAboutMeTitle'),
+						description: t('tourAboutMeDescription'),
 						target: () => document.getElementById('aboutMeBlock')!,
 						onNext: () => {
 							setCurrentTourItem(prev => prev + 1)
@@ -1324,9 +1316,8 @@ const DropDrag = () => {
 		...(maiRole === 'STUD'
 			? [
 					{
-						title: 'Сессия',
-						description:
-							'Всё для успешной сдачи экзаменов! Просматривай расписание сессии, отслеживай результаты и уточняй учебный план.',
+						title: 'Session',
+						description: t('tourSessionDescription'),
 						target: () => document.getElementById('mainScreenSession')!,
 						onNext: () => {
 							setCurrentTourItem(prev => prev + 1)
@@ -1340,9 +1331,8 @@ const DropDrag = () => {
 		...(maiRole === 'STUD'
 			? [
 					{
-						title: 'Электронная зачётная книжка',
-						description:
-							'Твоя успеваемость онлайн! Отслеживай свои оценки, смотри средний балл и всегда будь в курсе своих академических успехов.',
+						title: t('ElectronicBook'),
+						description: t('tourElectronicBookDescription'),
 						target: () => document.getElementById('mainScreenElectronicBook')!,
 						onNext: () => {
 							setCurrentTourItem(prev => prev + 1)
@@ -1356,8 +1346,8 @@ const DropDrag = () => {
 		...(!isMobile && (maiRole === 'STUD' || maiRole === 'EMPL')
 			? [
 					{
-						title: 'Вернуться в старый ЛК',
-						description: 'Что-то не получается? Вернитесь в привычный старый личный кабинет одним кликом.',
+						title: t('tourBackToOldELKTitle'),
+						description: t('tourBackToOldELKDescription'),
 						target: () => document.getElementById('backToOldKFU')!,
 						onNext: () => {
 							setCurrentTourItem(prev => prev + 1)
@@ -1435,7 +1425,7 @@ const DropDrag = () => {
 							setIsTourOpen(true)
 						}}
 					>
-						<p className="hidden sm:block">Тур по кабинету</p>
+						<p className="hidden sm:block">{t('tourButtonText')}</p>
 					</Button>
 					<Apply />
 					<Row className="mb-10">
@@ -1488,7 +1478,7 @@ const DropDrag = () => {
 								setIsTourOpen(true)
 							}}
 						>
-							<p className="hidden sm:block">Тур по кабинету</p>
+							<p className="hidden sm:block">{t('tourButtonText')}</p>
 						</Button>
 						<Apply />
 						<Row>
@@ -1587,7 +1577,7 @@ const DropDrag = () => {
 							setIsTourOpen(true)
 						}}
 					>
-						<p className="hidden sm:block">Тур по кабинету</p>
+						<p className="hidden sm:block">{t('tourButtonText')}</p>
 					</Button>
 					{mainRole === 'STUD' && <InfoStudent />}
 					<InfoScammers />
@@ -1647,7 +1637,7 @@ const DropDrag = () => {
 						setIsTourOpen(true)
 					}}
 				>
-					<p className="hidden sm:block">Тур по кабинету</p>
+					<p className="hidden sm:block">{t('tourButtonText')}</p>
 				</Button>
 				{mainRole === 'STUD' ? <InfoStudent /> : ''}
 				<InfoScammers />

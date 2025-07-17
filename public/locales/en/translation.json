@@ -1173,5 +1173,21 @@
 	"scammersNoticeSteps6": "If you detect suspicious behavior or if you have doubts about communicating with possible attackers posing as university employees in instant messengers or during phone calls, confirm received instructions through other communication channels.",
 	"scammersNoticeSteps7": "Do not open or download attachments from emails with topics not related to the organization’s activities.",
 	"scammersNoticeSteps8": "Do not transmit personal and official information through channels that have not passed official verification.",
-	"dontShowAnymore": "Don't show again"
+	"dontShowAnymore": "Don't show again",
+	"tourPracticeTeacherDescription": "Convenient management of students' practices! Monitor their performance, leave feedback and evaluate their work in one section.",
+	"tourPracticesDescription": "Organization of internships under control! Coordinate locations, create schedules, interact with partner companies and students.",
+	"tourToTeacherDescription": "Your tool for work! Edit educational materials, manage courses, communicate with colleagues and receive up-to-date information from the administration.",
+	"tourScheduleDescription": "All your classes at your fingertips! Find out the schedule of lectures, seminars and consultations in this section. No need to search for it on the website or ask the head of the class!",
+	"tourApplyDescription": "Do you dream of studying with us? Find out everything about admission to the university, apply and track your status.",
+	"tourAboutUniversityDescription": "Your university is more than just a place to study! Learn about its history, get to know its achievements, and stay up to date with all the latest news.",
+	"tourElectronicBookDescription": "Your academic performance online! Track your grades, see your GPA and always be aware of your academic progress.",
+	"tourSessionDescription": "Everything for successful passing of exams! View the session schedule, track results and clarify the curriculum.",
+	"tourAccessabilityDescription": "Caring for everyone! Enable the version for the visually impaired to adapt the interface for comfortable work with your personal account.",
+	"tourMessengerTitle": "Messenger",
+	"tourMessengerDescription": "Now you don't need to search for contacts! Communicate with university staff and students directly in your personal account using a convenient built-in messenger.",
+	"tourAboutMeTitle": "«About me» block",
+	"tourAboutMeDescription": "Your personal information in one place! Check your data, contacts and other important information. If something has changed – update it right here.",
+	"tourBackToOldELKTitle": "Back to the old version",
+	"tourBackToOldELKDescription": "Something doesn't work? Go back to your old, familiar personal account with one click.",
+	"tourButtonText": "Website tour"
 }
